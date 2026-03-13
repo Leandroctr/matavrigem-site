@@ -3,6 +3,7 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -23,6 +24,7 @@ background:#08170e;
 padding:15px;
 position:sticky;
 top:0;
+z-index:10;
 text-align:center;
 }
 
@@ -41,40 +43,46 @@ padding:140px 20px;
 text-align:center;
 }
 
+header h1{
+font-size:40px;
+margin:0;
+color:#f1c40f;
+}
+
 header img{
 width:230px;
 margin-top:20px;
 }
 
-header h1{
-color:#f1c40f;
-font-size:40px;
-margin:0;
-}
-
 section{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 padding:60px 20px;
 }
 
 h2{
 color:#f1c40f;
+margin-bottom:20px;
 border-bottom:2px solid #f1c40f;
 padding-bottom:10px;
 }
 
-.agenda{
-margin-top:30px;
+#proximaGira{
+text-align:center;
 }
 
-.evento{
-background:#0b2214;
-padding:20px;
-border-radius:10px;
-border-left:4px solid #f1c40f;
-margin-bottom:15px;
-font-size:18px;
+.tituloProxima{
+font-size:42px;
+letter-spacing:4px;
+color:#f1c40f;
+margin-bottom:30px;
+}
+
+.bannerProxima img,
+.bannerProxima video{
+width:100%;
+border-radius:12px;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
 }
 
 .galeria{
@@ -90,8 +98,8 @@ border-radius:10px;
 
 iframe{
 width:100%;
-border:0;
 border-radius:10px;
+border:0;
 margin-top:20px;
 }
 
@@ -105,12 +113,30 @@ padding:16px 22px;
 border-radius:30px;
 text-decoration:none;
 font-weight:bold;
+box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 
 footer{
 background:#08170e;
 text-align:center;
 padding:40px;
+margin-top:40px;
+}
+
+@media(max-width:700px){
+
+header h1{
+font-size:30px;
+}
+
+header img{
+width:180px;
+}
+
+.tituloProxima{
+font-size:30px;
+}
+
 }
 
 </style>
@@ -120,21 +146,40 @@ padding:40px;
 <body>
 
 <nav>
-<a href="#sobre">Sobre</a>
-<a href="#agenda">Agenda</a>
-<a href="#fotos">Fotos</a>
-<a href="#local">Localização</a>
-<a href="#contato">Contato</a>
+
+<a href="#sobre">Sobre</a> <a href="#proximaGira">Próxima Gira</a> <a href="#agenda">Agenda</a> <a href="#fotos">Fotos</a> <a href="#local">Localização</a> <a href="#contato">Contato</a>
+
 </nav>
 
 <header>
 
 <h1>Templo Escola Aruanda de Mata Virgem</h1>
+
 <img src="logo.png">
 
 <p>Ensino • Trabalho • Fé</p>
 
 </header>
+
+<section id="proximaGira">
+
+<h2 class="tituloProxima">PRÓXIMA GIRA</h2>
+
+<div class="bannerProxima">
+
+<img src="proxima.jpeg">
+
+<!-- opção vídeo -->
+
+<!--
+<video autoplay muted loop playsinline>
+<source src="proxima.mp4" type="video/mp4">
+</video>
+-->
+
+</div>
+
+</section>
 
 <section id="sobre">
 
@@ -142,7 +187,8 @@ padding:40px;
 
 <p>
 Casa espiritual dedicada ao estudo e prática da Umbanda e da Jurema Sagrada.
-Orientação espiritual, desenvolvimento mediúnico e fortalecimento da fé.
+Realizamos trabalhos espirituais voltados à caridade, orientação espiritual,
+desenvolvimento mediúnico e fortalecimento da fé.
 </p>
 
 <p>
@@ -156,9 +202,10 @@ e evolução através da prática e do conhecimento.
 
 <h2>Agenda de Giras</h2>
 
-<div id="listaAgenda" class="agenda">
-Carregando agenda...
-</div>
+<iframe
+src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showTabs=0&showCalendars=0&showPrint=0&src=c_c9152bbc54d3c12e71ec1a0261b0e4746222ce1b777c2ece43f3f0c451637b9c%40group.calendar.google.com&ctz=America%2FSao_Paulo"
+height="500">
+</iframe>
 
 </section>
 
@@ -191,7 +238,11 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.073346563076!2d-
 
 <h2>Contato</h2>
 
-<p>Email: <a href="mailto:contato@matavirgem.com">contato@matavirgem.com</a></p>
+<p>Email:
+<a href="mailto:contato@matavirgem.org">
+contato@matavirgem.org
+</a>
+</p>
 
 </section>
 
@@ -206,51 +257,10 @@ WhatsApp
 <footer>
 
 Templo Escola Aruanda de Mata Virgem<br><br>
-Ensino • Tradição • Umbanda
+Ensino • Caridade • Espiritualidade
 
 </footer>
 
-<script>
-
-const url = "https://api.allorigins.win/raw?url=https://calendar.google.com/calendar/ical/c_c9152bbc54d3c12e71ec1a0261b0e4746222ce1b777c2ece43f3f0c451637b9c%40group.calendar.google.com/public/basic.ics";
-
-fetch(url)
-.then(r => r.text())
-.then(data => {
-
-const eventos = data.split("BEGIN:VEVENT");
-let html = "";
-
-eventos.forEach(ev => {
-
-const titulo = (ev.match(/SUMMARY:(.*)/)||[])[1];
-const dataEvento = (ev.match(/DTSTART.*:(.*)/)||[])[1];
-
-if(titulo && dataEvento){
-
-const y=dataEvento.slice(0,4);
-const m=dataEvento.slice(4,6);
-const d=dataEvento.slice(6,8);
-const h=dataEvento.slice(9,11)||"00";
-const mi=dataEvento.slice(11,13)||"00";
-
-const dataObj = new Date(`${y}-${m}-${d}T${h}:${mi}:00`);
-
-const dia = dataObj.toLocaleDateString("pt-BR",{weekday:"long"});
-const dataFmt = dataObj.toLocaleDateString("pt-BR");
-const hora = dataObj.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-
-html += `<div class="evento"><b>${titulo}</b><br>${dia} • ${dataFmt} • ${hora}</div>`;
-
-}
-
-});
-
-document.getElementById("listaAgenda").innerHTML = html;
-
-});
-
-</script>
-
 </body>
+
 </html>
