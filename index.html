@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Templo Escola Aruanda de Mata Virgem</title>
 
 <style>
@@ -34,11 +33,10 @@ font-weight:bold;
 }
 
 header{
-background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
+background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url("capa.jpg");
 background-size:cover;
 background-position:center;
-padding:120px 20px;
+padding:140px 20px;
 text-align:center;
 }
 
@@ -49,12 +47,13 @@ color:#f1c40f;
 }
 
 header img{
-margin-top:20px;
-width:120px;
+width:220px;
+margin-top:25px;
 }
 
 header p{
 font-size:20px;
+margin-top:15px;
 }
 
 section{
@@ -74,13 +73,6 @@ p{
 line-height:1.6;
 }
 
-iframe{
-width:100%;
-border:0;
-border-radius:10px;
-margin-top:20px;
-}
-
 .galeria{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -90,6 +82,19 @@ gap:15px;
 .galeria img{
 width:100%;
 border-radius:10px;
+}
+
+.agenda{
+margin-top:30px;
+}
+
+.evento{
+background:#0b2214;
+padding:20px;
+border-radius:10px;
+border-left:4px solid #f1c40f;
+margin-bottom:15px;
+font-size:18px;
 }
 
 .whatsapp{
@@ -120,14 +125,6 @@ background:#08170e;
 text-align:center;
 padding:40px;
 color:#aaa;
-}
-
-@media(max-width:700px){
-
-header h1{
-font-size:30px;
-}
-
 }
 
 </style>
@@ -177,11 +174,9 @@ Visitar Instagram
 
 <h2>Agenda de Giras</h2>
 
-<iframe
-src="https://calendar.google.com/calendar/embed?mode=AGENDA&src=c_c9152bbc54d3c12e71ec1a0261b0e4746222ce1b777c2ece43f3f0c451637b9c%40group.calendar.google.com&ctz=America%2FSao_Paulo"
-height="600"
-scrolling="no">
-</iframe>
+<div id="agendaEventos" class="agenda">
+Carregando agenda...
+</div>
 
 </section>
 
@@ -192,11 +187,8 @@ scrolling="no">
 <div class="galeria">
 
 <img src="altar.jpeg">
-
 <img src="povo.jpeg">
-
 <img src="caldeirao.jpeg">
-
 <img src="esq.jpeg">
 
 </div>
@@ -222,10 +214,46 @@ WhatsApp </a>
 
 <footer>
 
-Templo Escola Aruanda de Mata Virgem <br><br>
+Templo Escola Aruanda de Mata Virgem<br><br>
 Ensino • Tradição • Umbanda
 
 </footer>
+
+<script>
+
+const API_KEY = "AIzaSyBKSq0rWflX71sMcC0Oz1zTEhsWLrZmJPA";
+const CALENDAR_ID = "c_c9152bbc54d3c12e71ec1a0261b0e4746222ce1b777c2ece43f3f0c451637b9c@group.calendar.google.com";
+
+const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&singleEvents=true&orderBy=startTime&maxResults=6`;
+
+fetch(url)
+.then(res => res.json())
+.then(data => {
+
+let html = "";
+
+data.items.forEach(event => {
+
+const dataEvento = new Date(event.start.dateTime || event.start.date);
+
+const diaSemana = dataEvento.toLocaleDateString("pt-BR",{weekday:"long"});
+const dataFormatada = dataEvento.toLocaleDateString("pt-BR");
+const hora = dataEvento.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+
+html += `
+<div class="evento">
+<b>${event.summary}</b><br>
+${diaSemana} • ${dataFormatada} • ${hora}
+</div>
+`;
+
+});
+
+document.getElementById("agendaEventos").innerHTML = html;
+
+});
+
+</script>
 
 </body>
 </html>
