@@ -139,56 +139,29 @@ padding:14px 20px;
 border-radius:30px;
 border:2px solid #f1c40f;
 font-weight:bold;
-cursor:pointer;
+text-decoration:none;
 z-index:1000;
 }
 
-/* FORMULÁRIO */
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-align-items:center;
-justify-content:center;
-}
-
-.modalConteudo{
-background:#08170e;
-padding:30px;
-border-radius:10px;
-width:90%;
-max-width:400px;
-text-align:center;
-}
-
-.modalConteudo input{
-width:90%;
-padding:10px;
-margin:10px 0;
-border-radius:5px;
-border:none;
-}
-
-.modalConteudo button{
+.botaoFlutuante:hover{
 background:#f1c40f;
 color:#08170e;
-padding:10px 20px;
-border:none;
-border-radius:5px;
-font-weight:bold;
-cursor:pointer;
 }
 
-.mensagem{
-display:none;
-margin-top:15px;
-color:#f1c40f;
-font-weight:bold;
+@media(max-width:700px){
+
+header img{
+width:220px;
+}
+
+header h1{
+font-size:28px;
+}
+
+.bannerProxima{
+max-width:90%;
+}
+
 }
 
 </style>
@@ -341,43 +314,13 @@ Ensino • Caridade • Espiritualidade
 
 <!-- BOTÃO FLUTUANTE -->
 
-<div class="botaoFlutuante" onclick="abrirFormulario()">
+<a class="botaoFlutuante"
+href="https://docs.google.com/forms/d/e/1FAIpQLSduPbXNlLQlUoFTDP8ktRtE2vMchGeiXEpG9EAIDzVq1-NdtA/viewform?usp=header"
+target="_blank">
+
 Quero saber das próximas giras
-</div>
 
-<!-- FORMULÁRIO -->
-
-<div class="modal" id="formulario">
-
-<div class="modalConteudo">
-
-<h3>Receber avisos das giras</h3>
-
-<input type="text" placeholder="Seu nome">
-
-<input type="email" placeholder="Seu email">
-
-<button onclick="enviar()">Enviar</button>
-
-<div class="mensagem" id="mensagem">
-Você receberá emails com nossas programações.
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-function abrirFormulario(){
-document.getElementById("formulario").style.display="flex";
-}
-
-function enviar(){
-document.getElementById("mensagem").style.display="block";
-}
-
-</script>
+</a>
 
 </body>
 </html>
