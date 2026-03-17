@@ -16,11 +16,11 @@ font-family:Arial, sans-serif;
 color:#eee;
 scroll-behavior:smooth;
 
-/* FUNDO COM TEXTURA ESPIRITUAL */
+background:#0f2e1a;
 
-background-color:#0f2e1a;
+/* TEXTURA ESTRELA DE 6 PONTAS */
 
-background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 61,38 95,38 67,59 78,91 50,70 22,91 33,59 5,38 39,38' fill='none' stroke='%23f1c40f' stroke-width='1' opacity='0.06'/%3E%3C/svg%3E");
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Cpolygon points='50,10 60,40 90,40 65,60 75,90 50,70 25,90 35,60 10,40 40,40' fill='none' stroke='%23f1c40f' stroke-width='1' opacity='0.05'/%3E%3Cpolygon points='50,90 60,60 90,60 65,40 75,10 50,30 25,10 35,40 10,60 40,60' fill='none' stroke='%23f1c40f' stroke-width='1' opacity='0.05'/%3E%3C/svg%3E");
 
 background-size:140px;
 
@@ -99,30 +99,6 @@ border-bottom:2px solid #f1c40f;
 padding-bottom:10px;
 }
 
-/* PROXIMA GIRA */
-
-#proximaGira{
-text-align:center;
-}
-
-.tituloProxima{
-font-size:36px;
-letter-spacing:3px;
-color:#f1c40f;
-margin-bottom:30px;
-}
-
-.bannerProxima{
-max-width:240px;
-margin:auto;
-}
-
-.bannerProxima img{
-width:100%;
-border-radius:12px;
-box-shadow:0 0 20px rgba(0,0,0,0.6);
-}
-
 /* EVENTOS */
 
 .evento{
@@ -139,12 +115,69 @@ font-size:18px;
 .galeria{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
+gap:18px;
 }
 
 .galeria img{
 width:100%;
-border-radius:10px;
+border-radius:12px;
+cursor:pointer;
+transition:0.35s;
+box-shadow:0 0 15px rgba(0,0,0,0.6);
+}
+
+.galeria img:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(241,196,15,0.5);
+}
+
+/* LIGHTBOX */
+
+.lightbox{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+.lightbox img{
+max-width:90%;
+max-height:90%;
+border-radius:12px;
+}
+
+.fechar{
+position:absolute;
+top:25px;
+right:40px;
+font-size:40px;
+color:white;
+cursor:pointer;
+}
+
+/* BOTAO INSTAGRAM */
+
+.botaoInstagram{
+display:inline-block;
+margin-top:35px;
+padding:14px 26px;
+border:2px solid #f1c40f;
+border-radius:30px;
+color:#f1c40f;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.botaoInstagram:hover{
+background:#f1c40f;
+color:#08170e;
 }
 
 /* MAPA */
@@ -165,11 +198,6 @@ gap:10px;
 margin-top:15px;
 }
 
-.contatoItem svg{
-width:24px;
-height:24px;
-}
-
 /* FOOTER */
 
 footer{
@@ -179,7 +207,7 @@ padding:40px;
 margin-top:40px;
 }
 
-/* BOTÃO CANAL */
+/* BOTAO CANAL */
 
 .botaoFlutuante{
 position:fixed;
@@ -216,22 +244,6 @@ transform:translateY(0);
 
 }
 
-@media(max-width:700px){
-
-header img{
-width:220px;
-}
-
-header h1{
-font-size:28px;
-}
-
-.bannerProxima{
-max-width:90%;
-}
-
-}
-
 </style>
 
 </head>
@@ -240,22 +252,14 @@ max-width:90%;
 
 <nav>
 
-<a href="#sobre">Sobre</a> <a href="#proximaGira">Próxima Gira</a> <a href="#agenda">Agenda</a> <a href="#fotos">Fotos</a> <a href="#local">Localização</a> <a href="#contato">Contato</a>
+<a href="#agenda">Agenda</a> <a href="#fotos">Fotos</a> <a href="#local">Localização</a> <a href="#contato">Contato</a>
 
 <div class="redesTopo">
 
 <a href="https://instagram.com/te.aruanda" target="_blank">
 
 <svg fill="#E4405F" viewBox="0 0 24 24">
-<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.2A4.8 4.8 0 1112 17a4.8 4.8 0 010-9.8zm6.4-.8a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z"/>
-</svg>
-
-</a>
-
-<a href="https://wa.me/5511969444666" target="_blank">
-
-<svg fill="#25D366" viewBox="0 0 24 24">
-<path d="M20 3.5A11.94 11.94 0 0012.05 0C5.48 0 .15 5.33.15 11.9c0 2.1.55 4.16 1.6 5.98L0 24l6.29-1.64A11.9 11.9 0 0012.05 24C18.62 24 24 18.67 24 12.1c0-3.18-1.24-6.17-3.5-8.6z"/>
+<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7z"/>
 </svg>
 
 </a>
@@ -274,54 +278,52 @@ max-width:90%;
 
 </header>
 
-<section id="proximaGira">
-
-<h2 class="tituloProxima">PRÓXIMA GIRA</h2>
-
-<div class="bannerProxima">
-<img src="proxima.jpg">
-</div>
-
-</section>
-
 <section id="agenda">
 
 <h2>Agenda de Giras</h2>
 
-<div class="evento">
-21/03 • Sábado • 15:00<br>
-<b>Jurema Sagrada – Gira de Mestres</b>
+<div class="evento">27/03 • Sexta • 20:30<br><b>Gira das Almas – Pretos Velhos</b></div>
+
+<div class="evento">02/04 • Quinta • 20:30<br><b>Exu e Pombogira</b></div>
+
+<div class="evento">17/04 • Sexta<br><b>Baianos e Boiadeiros</b></div>
+
+<div class="evento">24/04 • Sexta<br><b>Festa de Ogum – Gira de Caboclos</b></div>
+
+</section>
+
+<section id="fotos">
+
+<h2>Galeria</h2>
+
+<div class="galeria">
+
+<img src="altar.jpeg" onclick="abrirImagem(this.src)">
+<img src="povo.jpeg" onclick="abrirImagem(this.src)">
+<img src="caldeirao.jpeg" onclick="abrirImagem(this.src)">
+<img src="esq.jpeg" onclick="abrirImagem(this.src)">
+
 </div>
 
-<div class="evento">
-27/03 • Sexta • 20:30<br>
-<b>Gira das Almas – Pretos Velhos</b>
-</div>
+<center>
 
-<div class="evento">
-02/04 • Quinta (véspera de feriado) • 20:30<br>
-<b>Exu e Pombogira</b>
-</div>
+<a class="botaoInstagram"
+href="https://instagram.com/te.aruanda"
+target="_blank">
 
-<div class="evento">
-10/04 • Sexta<br>
-<b>EVENTO INTERNO – Terreiro fechado</b>
-</div>
+Ver mais fotos no Instagram
 
-<div class="evento">
-17/04 • Sexta<br>
-<b>Baianos e Boiadeiros</b>
-</div>
+</a>
 
-<div class="evento">
-24/04 • Sexta<br>
-<b>Festa de Ogum – Gira de Caboclos</b>
-</div>
+</center>
 
-<div class="evento">
-26/04 • Domingo<br>
-<b>EVENTO – Samba e Feijoada de Ogum</b>
-</div>
+</section>
+
+<section id="local">
+
+<h2>Localização</h2>
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.073346563076!2d-46.52112472488836!3d-23.637544178747557"></iframe>
 
 </section>
 
@@ -332,28 +334,12 @@ max-width:90%;
 <div class="contatoItem">
 
 <a href="https://wa.me/5511969444666" target="_blank">
-
-<svg fill="#25D366" viewBox="0 0 24 24">
-<path d="M20 3.5A11.94 11.94 0 0012.05 0C5.48 0 .15 5.33.15 11.9c0 2.1.55 4.16 1.6 5.98L0 24l6.29-1.64A11.9 11.9 0 0012.05 24C18.62 24 24 18.67 24 12.1c0-3.18-1.24-6.17-3.5-8.6z"/>
-</svg>
-
-</a>
-
-<a href="https://wa.me/5511969444666" target="_blank">
 Dúvidas? Falar no WhatsApp
 </a>
 
 </div>
 
 <div class="contatoItem">
-
-<a href="https://instagram.com/te.aruanda" target="_blank">
-
-<svg fill="#E4405F" viewBox="0 0 24 24">
-<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.2A4.8 4.8 0 1112 17a4.8 4.8 0 010-9.8zm6.4-.8a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z"/>
-</svg>
-
-</a>
 
 <a href="https://instagram.com/te.aruanda" target="_blank">
 @te.aruanda
@@ -370,6 +356,14 @@ Ensino • Caridade • Espiritualidade
 
 </footer>
 
+<div class="lightbox" id="lightbox">
+
+<span class="fechar" onclick="fecharImagem()">×</span>
+
+<img id="imagemGrande">
+
+</div>
+
 <a id="botaoCanal" class="botaoFlutuante"
 href="https://whatsapp.com/channel/0029VbBrPIcDp2Q3Wj8J9q22"
 target="_blank">
@@ -380,15 +374,28 @@ Entre no canal para receber avisos das giras
 
 <script>
 
-window.addEventListener("scroll", function(){
+function abrirImagem(src){
 
-let botao = document.getElementById("botaoCanal");
+document.getElementById("lightbox").style.display="flex"
+document.getElementById("imagemGrande").src=src
 
-if(window.scrollY > 300){
-botao.classList.add("mostrar");
 }
 
-});
+function fecharImagem(){
+
+document.getElementById("lightbox").style.display="none"
+
+}
+
+window.addEventListener("scroll", function(){
+
+let botao = document.getElementById("botaoCanal")
+
+if(window.scrollY > 300){
+botao.classList.add("mostrar")
+}
+
+})
 
 </script>
 
