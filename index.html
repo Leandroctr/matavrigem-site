@@ -16,14 +16,14 @@ font-family:Arial, sans-serif;
 color:#eee;
 scroll-behavior:smooth;
 
-background-color:#0f2e1a;
+background:#0f2e1a;
 
-/* TEXTURA ESTRELA */
+/* textura estrela de davi */
 
-background-image:url("estrela.png");
-background-repeat:repeat;
-background-size:140px;
-background-attachment:fixed;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Cpolygon points='50,10 90,75 10,75' fill='none' stroke='%23f1c40f' stroke-width='1' opacity='0.05'/%3E%3Cpolygon points='50,90 10,25 90,25' fill='none' stroke='%23f1c40f' stroke-width='1' opacity='0.05'/%3E%3C/svg%3E");
+
+background-size:120px;
+
 }
 
 /* NAV */
@@ -198,6 +198,17 @@ gap:10px;
 margin-top:15px;
 }
 
+.contatoItem a{
+color:#f1c40f;
+text-decoration:none;
+font-weight:bold;
+}
+
+.contatoItem svg{
+width:24px;
+height:24px;
+}
+
 /* FOOTER */
 
 footer{
@@ -283,11 +294,8 @@ transform:translateY(0);
 <h2>Agenda de Giras</h2>
 
 <div class="evento">27/03 • Sexta • 20:30<br><b>Gira das Almas – Pretos Velhos</b></div>
-
 <div class="evento">02/04 • Quinta • 20:30<br><b>Exu e Pombogira</b></div>
-
 <div class="evento">17/04 • Sexta<br><b>Baianos e Boiadeiros</b></div>
-
 <div class="evento">24/04 • Sexta<br><b>Festa de Ogum – Gira de Caboclos</b></div>
 
 </section>
@@ -323,7 +331,9 @@ Ver mais fotos no Instagram
 
 <h2>Localização</h2>
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.073346563076!2d-46.52112472488836!3d-23.637544178747557"></iframe>
+<iframe
+src="https://www.google.com/maps?q=Rua%20Espanha%201178%20Santo%20Andre&output=embed">
+</iframe>
 
 </section>
 
@@ -332,15 +342,35 @@ Ver mais fotos no Instagram
 <h2>Contato</h2>
 
 <div class="contatoItem">
+
+<a href="https://wa.me/5511969444666" target="_blank">
+
+<svg fill="#25D366" viewBox="0 0 24 24">
+<path d="M20 3.5A11.94 11.94 0 0012.05 0C5.48 0 .15 5.33.15 11.9c0 2.1.55 4.16 1.6 5.98L0 24l6.29-1.64A11.9 11.9 0 0012.05 24C18.62 24 24 18.67 24 12.1c0-3.18-1.24-6.17-3.5-8.6z"/>
+</svg>
+
+</a>
+
 <a href="https://wa.me/5511969444666" target="_blank">
 Dúvidas? Falar no WhatsApp
 </a>
+
 </div>
 
 <div class="contatoItem">
+
+<a href="https://instagram.com/te.aruanda" target="_blank">
+
+<svg fill="#E4405F" viewBox="0 0 24 24">
+<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7z"/>
+</svg>
+
+</a>
+
 <a href="https://instagram.com/te.aruanda" target="_blank">
 @te.aruanda
 </a>
+
 </div>
 
 </section>
@@ -348,7 +378,8 @@ Dúvidas? Falar no WhatsApp
 <footer>
 
 Templo Escola Aruanda de Mata Virgem<br><br>
-Ensino • Umbanda • Jurema Sagrada
+Ensino • Caridade • Espiritualidade
+
 </footer>
 
 <div class="lightbox" id="lightbox">
