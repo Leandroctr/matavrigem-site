@@ -532,6 +532,8 @@
 
       .galeria-grid { gap:5px; }
       .mapa-wrap iframe { height:250px; }
+      .agenda-banner-grid { grid-template-columns:1fr !important; }
+      .agenda-banner-sticky { position:static !important; }
 
       .contato-item { padding:1.2rem; }
 
@@ -601,15 +603,15 @@
         <a class="btn-cont" href="#contato">Falar Conosco</a>
       </div>
       <div class="proxima-hero">
-        <p class="proxima-hero-label">Próxima gira</p>
-        <p class="proxima-hero-nome">Exu e Pombogira</p>
-        <p class="proxima-hero-data">02 de abril · Quinta-feira · 20h30 · Véspera de feriado</p>
+        <p class="proxima-hero-label">⚠️ Aviso importante</p>
+        <p class="proxima-hero-nome">10/04 — Casa Fechada ao Público</p>
+        <p class="proxima-hero-data">Retornamos dia 17 de abril · Baianos e Boiadeiros</p>
       </div>
     </div>
 
 ```
 <div class="hero-dir">
-  <img src="https://matavirgem.org/capa.jpg" alt="Gira"/>
+  <img src="https://matavirgem.org/proxima.jpg" alt="Gira"/>
   <div class="hero-redes">
     <a href="https://instagram.com/te.aruanda" target="_blank" title="Instagram">
       <svg fill="#E4405F" viewBox="0 0 24 24"><path d="M7.5 2h9A5.5 5.5 0 0122 7.5v9A5.5 5.5 0 0116.5 22h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2zm0 1.5A4 4 0 003.5 7.5v9A4 4 0 007.5 20.5h9a4 4 0 004-4v-9a4 4 0 00-4-4h-9zm4.5 3.25a5.25 5.25 0 110 10.5 5.25 5.25 0 010-10.5zm0 1.5a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5zm5.5-.88a.87.87 0 11-1.74 0 .87.87 0 011.74 0z"/></svg>
@@ -629,19 +631,21 @@
 
   <!-- PRÓXIMA GIRA -->
 
+  <!-- PRÓXIMA GIRA -->
+
   <section id="proximaGira">
     <div class="container">
       <div class="prox-grid">
         <div class="prox-img">
-          <img src="https://matavirgem.org/proxima.jpg" alt="Exu e Pombogira"/>
+          <img src="https://matavirgem.org/proxima.jpg" alt="Casa Fechada 10 de Abril"/>
         </div>
         <div class="prox-info">
-          <p class="sec-label">Em destaque</p>
-          <h2 class="sec-title">Próxima <em>Gira</em></h2>
-          <p>A próxima gira do Templo é a <strong>Gira de Exu e Pombogira</strong>, no dia <strong>02 de abril, quinta-feira, às 20h30</strong> — véspera de feriado.</p>
-          <p>Será um trabalho de <strong>limpeza emocional</strong>. Os participantes devem trazer <strong>uma vela preta e uma vela branca</strong> para o trabalho.</p>
-          <a class="btn-sol" href="https://wa.me/5511969444666" target="_blank" style="margin-top:.5rem">
-            Tirar dúvidas no WhatsApp
+          <p class="sec-label">⚠️ Aviso</p>
+          <h2 class="sec-title">10 de Abril — <em>Casa Fechada</em></h2>
+          <p>Na próxima sexta-feira, dia <strong>10 de abril</strong>, <strong>não teremos gira</strong>. A casa estará <strong>fechada ao público</strong>.</p>
+          <p>Retornamos no dia <strong>17 de abril, sexta-feira</strong>, com a <strong>Gira de Baianos e Boiadeiros</strong>. Fique de olho no canal para não perder nenhum aviso!</p>
+          <a class="btn-sol" href="https://whatsapp.com/channel/0029VbBrPIcDp2Q3Wj8J9q22" target="_blank" style="margin-top:.5rem">
+            📣 Entrar no Canal de Avisos
           </a>
         </div>
       </div>
@@ -653,47 +657,85 @@
   <section id="agenda">
     <div class="container">
       <p class="sec-label">Calendário</p>
-      <h2 class="sec-title">Agenda de <em>Giras</em></h2>
-      <div class="agenda-lista">
+      <h2 class="sec-title">Agenda de <em>Abril</em></h2>
 
 ```
-    <div class="evento" style="background:rgba(200,168,75,.06); border-left: 3px solid var(--dourado);">
-      <div class="evento-data-box">
-        <div class="evento-dia">02</div>
-        <div class="evento-mes">Abr</div>
+  <!-- layout: lista + banner lado a lado -->
+  <div class="agenda-banner-grid" style="display:grid; grid-template-columns:1fr 340px; gap:2.5rem; align-items:start; margin-top:2.8rem;">
+
+    <!-- lista de eventos -->
+    <div>
+
+      <!-- aviso casa fechada -->
+      <div style="
+        display:flex; align-items:center; gap:1.2rem;
+        padding:1.2rem 1.6rem; margin-bottom:1px;
+        background:#1a1a18; border-left:3px solid #e05555;
+        border-radius:2px 2px 0 0;
+      ">
+        <div style="flex-shrink:0; text-align:center; width:56px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:#e05555; line-height:1;">10</div>
+          <div style="font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:#e05555; margin-top:.1rem;">Abr</div>
+        </div>
+        <div style="width:1px; height:40px; background:rgba(224,85,85,.3); flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:#e08080; margin-bottom:.3rem;">Sexta-feira</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:#fff; line-height:1.2;">🔒 Casa Fechada ao Público</div>
+          <div style="font-size:.68rem; color:rgba(255,255,255,.4); margin-top:.35rem; letter-spacing:.1em; text-transform:uppercase;">Sem gira neste dia</div>
+        </div>
       </div>
-      <div class="evento-sep"></div>
-      <div class="evento-info">
-        <div class="evento-semana">Quinta-feira · Véspera de feriado</div>
-        <div class="evento-nome">Exu e Pombogira</div>
-        <div class="evento-hora">◷ 20h30 &nbsp;·&nbsp; Trazer vela preta e vela branca</div>
+
+      <div class="agenda-lista" style="margin-top:0; border-radius:0 0 2px 2px;">
+
+        <div class="evento">
+          <div class="evento-data-box">
+            <div class="evento-dia">17</div>
+            <div class="evento-mes">Abr</div>
+          </div>
+          <div class="evento-sep"></div>
+          <div class="evento-info">
+            <div class="evento-semana">Sexta-feira</div>
+            <div class="evento-nome">Baianos e Boiadeiros</div>
+            <div class="evento-hora">◷ 20h30</div>
+          </div>
+        </div>
+
+        <div class="evento">
+          <div class="evento-data-box">
+            <div class="evento-dia">24</div>
+            <div class="evento-mes">Abr</div>
+          </div>
+          <div class="evento-sep"></div>
+          <div class="evento-info">
+            <div class="evento-semana">Sexta-feira</div>
+            <div class="evento-nome">Festa de Ogum — Atendimento com Caboclos</div>
+            <div class="evento-hora">◷ 20h30</div>
+          </div>
+        </div>
+
+        <div class="evento" style="background:rgba(200,168,75,.06);">
+          <div class="evento-data-box">
+            <div class="evento-dia">30</div>
+            <div class="evento-mes">Abr</div>
+          </div>
+          <div class="evento-sep"></div>
+          <div class="evento-info">
+            <div class="evento-semana">Quinta-feira · Véspera de feriado</div>
+            <div class="evento-nome">Gira de Malandros e Povo da Rua</div>
+            <div class="evento-hora">◷ 20h30</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="evento">
-      <div class="evento-data-box">
-        <div class="evento-dia">17</div>
-        <div class="evento-mes">Abr</div>
-      </div>
-      <div class="evento-sep"></div>
-      <div class="evento-info">
-        <div class="evento-semana">Sexta-feira</div>
-        <div class="evento-nome">Baianos e Boiadeiros</div>
-        <div class="evento-hora">◷ A confirmar</div>
-      </div>
-    </div>
-
-    <div class="evento">
-      <div class="evento-data-box">
-        <div class="evento-dia">24</div>
-        <div class="evento-mes">Abr</div>
-      </div>
-      <div class="evento-sep"></div>
-      <div class="evento-info">
-        <div class="evento-semana">Sexta-feira</div>
-        <div class="evento-nome">Festa de Ogum – Gira de Caboclos</div>
-        <div class="evento-hora">◷ A confirmar</div>
-      </div>
+    <!-- banner agenda abril -->
+    <div class="agenda-banner-sticky" style="position:sticky; top:80px;">
+      <img
+        src="https://matavirgem.org/agenda.jpg"
+        alt="Agenda Abril"
+        style="width:100%; border-radius:8px; box-shadow:0 20px 50px rgba(27,58,34,.2); display:block;"
+      />
     </div>
 
   </div>
