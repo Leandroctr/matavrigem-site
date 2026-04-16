@@ -899,6 +899,51 @@ function fazerLogin() {
     // Inicializar
     carregarDados();
   </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+  authDomain: "mata-virgem.firebaseapp.com",
+  projectId: "mata-virgem",
+  storageBucket: "mata-virgem.firebasestorage.app",
+  messagingSenderId: "351134240123",
+  appId: "1:351134240123:web:86a041fee58b856ea3c1de",
+  measurementId: "G-KM7DHTH737"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// se NÃO estiver logado → mostra login
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    document.body.innerHTML = `
+      <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0f172a;color:#fff;font-family:Arial">
+        <div style="background:#1e293b;padding:30px;border-radius:10px;text-align:center">
+          <h2>Painel Admin</h2>
+          <input id="email" placeholder="Email" style="display:block;margin:10px;padding:10px;width:220px">
+          <input id="senha" type="password" placeholder="Senha" style="display:block;margin:10px;padding:10px;width:220px">
+          <button onclick="login()" style="padding:10px;background:#22c55e;border:none;color:#fff;width:100%">Entrar</button>
+          <p id="erro" style="color:red"></p>
+        </div>
+      </div>
+    `;
+  }
+});
+
+// função login
+window.login = function() {
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+
+  signInWithEmailAndPassword(auth, email, senha)
+    .then(() => location.reload())
+    .catch(() => {
+      document.getElementById("erro").innerText = "Login inválido";
+    });
+};
+</script>
 </body>
 </html>
