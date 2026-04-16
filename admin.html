@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Administrativo - Aruanda de Mata Virgem</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --verde: #1b3a22;
+      --verde-med: #2c5c3a;
+      --verde-cl: #3d7a50;
+      --dourado: #c8a84b;
+      --dourado-cl: #e2c97e;
+      --marrom: #7a5230;
+      --marrom-cl: #a87840;
+      --creme: #f6f2ea;
+      --creme2: #ede8de;
+      --branco: #ffffff;
+      --preto: #0a0a08;
+      --preto-cl: #1a1a16;
+      --texto: #252520;
+      --texto-cl: #56564e;
+      --vermelho: #d64545;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--preto);
+      color: var(--texto);
+      overflow-x: hidden;
+    }
+
+    /* ══ HEADER ══ */
+    .adm-header {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      padding: 2rem;
+      color: var(--branco);
+      border-bottom: 1px solid rgba(200,168,75,.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .adm-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+    }
+
+    .adm-header-sub {
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--dourado-cl);
+      margin-top: .3rem;
+    }
+
+    .adm-logout {
+      background: rgba(200,168,75,.2);
+      border: 1px solid rgba(200,168,75,.4);
+      color: var(--dourado-cl);
+      padding: .7rem 1.5rem;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: all .3s;
+    }
+
+    .adm-logout:hover {
+      background: rgba(200,168,75,.3);
+      border-color: rgba(200,168,75,.6);
+    }
+
+    /* ══ CONTAINER ══ */
+    .adm-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* ══ TABS ══ */
+    .adm-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(200,168,75,.2);
+      flex-wrap: wrap;
+    }
+
+    .adm-tab {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--texto-cl);
+      cursor: pointer;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: all .3s;
+    }
+
+    .adm-tab:hover {
+      color: var(--dourado);
+    }
+
+    .adm-tab.active {
+      color: var(--dourado);
+      border-bottom-color: var(--dourado);
+    }
+
+    /* ══ CONTEÚDO ══ */
+    .adm-content {
+      display: none;
+      animation: fadeIn .3s;
+    }
+
+    .adm-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══ FORMULÁRIO ══ */
+    .adm-form {
+      background: var(--creme);
+      border: 1px solid rgba(200,168,75,.2);
+      border-radius: 2px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .adm-form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .adm-form-group label {
+      display: block;
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--verde);
+      margin-bottom: .5rem;
+      font-weight: 500;
+    }
+
+    .adm-form-group input,
+    .adm-form-group textarea {
+      width: 100%;
+      padding: .8rem;
+      border: 1px solid rgba(200,168,75,.3);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: .95rem;
+      color: var(--texto);
+      background: var(--branco);
+      transition: border-color .3s;
+    }
+
+    .adm-form-group input:focus,
+    .adm-form-group textarea:focus {
+      outline: none;
+      border-color: var(--dourado);
+      box-shadow: 0 0 0 3px rgba(200,168,75,.1);
+    }
+
+    .adm-form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* ══ BOTÕES ══ */
+    .adm-btn {
+      padding: .8rem 1.8rem;
+      border: none;
+      border-radius: 2px;
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .3s;
+      font-weight: 500;
+    }
+
+    .adm-btn-primary {
+      background: var(--verde);
+      color: var(--branco);
+    }
+
+    .adm-btn-primary:hover {
+      background: var(--verde-med);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(27,58,34,.3);
+    }
+
+    .adm-btn-secondary {
+      background: var(--dourado);
+      color: var(--verde);
+    }
+
+    .adm-btn-secondary:hover {
+      background: var(--dourado-cl);
+      transform: translateY(-2px);
+    }
+
+    .adm-btn-danger {
+      background: var(--vermelho);
+      color: var(--branco);
+    }
+
+    .adm-btn-danger:hover {
+      background: #c93636;
+      transform: translateY(-2px);
+    }
+
+    .adm-btn-small {
+      padding: .6rem 1.2rem;
+      font-size: .75rem;
+    }
+
+    /* ══ ITENS ══ */
+    .adm-item {
+      background: var(--creme);
+      border: 1px solid rgba(200,168,75,.2);
+      border-radius: 2px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .adm-item-info {
+      flex: 1;
+    }
+
+    .adm-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--verde);
+      margin-bottom: .3rem;
+    }
+
+    .adm-item-meta {
+      font-size: .8rem;
+      color: var(--texto-cl);
+    }
+
+    .adm-item-actions {
+      display: flex;
+      gap: .6rem;
+    }
+
+    /* ══ ALERT ══ */
+    .adm-alert {
+      padding: 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      font-size: .9rem;
+      animation: slideDown .3s;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .adm-alert-success {
+      background: rgba(37,211,102,.1);
+      border: 1px solid rgba(37,211,102,.3);
+      color: #1a7d4e;
+    }
+
+    .adm-alert-error {
+      background: rgba(214,69,69,.1);
+      border: 1px solid rgba(214,69,69,.3);
+      color: #9a2c2c;
+    }
+
+    .adm-alert-warning {
+      background: rgba(200,168,75,.1);
+      border: 1px solid rgba(200,168,75,.3);
+      color: #7a5230;
+    }
+
+    /* ══ GRID ══ */
+    .adm-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .adm-grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .adm-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .adm-logout {
+        align-self: flex-end;
+      }
+    }
+
+    /* ══ MODAL ══ */
+    .adm-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,8,.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .adm-modal.open {
+      display: flex;
+    }
+
+    .adm-modal-content {
+      background: var(--creme);
+      border-radius: 2px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalOpen .3s;
+    }
+
+    @keyframes modalOpen {
+      from { transform: scale(.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .adm-modal-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--verde);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(200,168,75,.2);
+    }
+
+    .adm-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--texto-cl);
+      cursor: pointer;
+      transition: color .2s;
+    }
+
+    .adm-modal-close:hover {
+      color: var(--dourado);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="adm-header">
+    <div>
+      <h1>Painel Administrativo</h1>
+      <div class="adm-header-sub">Templo Escola Aruanda de Mata Virgem</div>
+    </div>
+    <button class="adm-logout" onclick="window.location.href='index.html'">← Voltar ao Site</button>
+  </div>
+
+  <div class="adm-container">
+
+    <!-- TABS -->
+    <div class="adm-tabs">
+      <button class="adm-tab active" onclick="mudarTab('eventos')">📅 Eventos</button>
+      <button class="adm-tab" onclick="mudarTab('proxima')">🎭 Próxima Gira</button>
+      <button class="adm-tab" onclick="mudarTab('galeria')">🖼️ Galeria</button>
+      <button class="adm-tab" onclick="mudarTab('download')">📥 Baixar JSON</button>
+    </div>
+
+    <!-- EVENTOS -->
+    <div id="tab-eventos" class="adm-content active">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--verde); margin-bottom: 1.5rem;">Gerenciar Eventos</h2>
+
+      <div class="adm-alert adm-alert-warning" style="margin-bottom: 2rem;">
+        💡 Adicione, edite ou remova eventos da agenda. As mudanças são salvas automaticamente quando você clica em "Salvar".
+      </div>
+
+      <!-- Adicionar novo -->
+      <div class="adm-form">
+        <h3 style="color: var(--verde); margin-bottom: 1.5rem; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;">Adicionar Novo Evento</h3>
+        <div class="adm-grid-2">
+          <div class="adm-form-group">
+            <label>Dia (ex: 17)</label>
+            <input type="text" id="newEvtDia" placeholder="17" maxlength="2"/>
+          </div>
+          <div class="adm-form-group">
+            <label>Mês (ex: Abr)</label>
+            <input type="text" id="newEvtMes" placeholder="Abr" maxlength="3"/>
+          </div>
+          <div class="adm-form-group">
+            <label>Semana (ex: Sexta-feira)</label>
+            <input type="text" id="newEvtSemana" placeholder="Sexta-feira"/>
+          </div>
+          <div class="adm-form-group">
+            <label>Hora (ex: 20h30)</label>
+            <input type="text" id="newEvtHora" placeholder="20h30" maxlength="5"/>
+          </div>
+        </div>
+        <div class="adm-form-group">
+          <label>Nome do Evento</label>
+          <input type="text" id="newEvtNome" placeholder="Ex: Baianos e Boiadeiros"/>
+        </div>
+        <button class="adm-btn adm-btn-primary" onclick="adicionarEvento()">+ Adicionar Evento</button>
+      </div>
+
+      <!-- Lista de eventos -->
+      <div id="listaEventos"></div>
+    </div>
+
+    <!-- PRÓXIMA GIRA -->
+    <div id="tab-proxima" class="adm-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--verde); margin-bottom: 1.5rem;">Próxima Gira</h2>
+
+      <div class="adm-form">
+        <div class="adm-form-group">
+          <label>Data (ex: 17/04)</label>
+          <input type="text" id="proxData" placeholder="17/04"/>
+        </div>
+        <div class="adm-form-group">
+          <label>Dia da Semana</label>
+          <input type="text" id="proxDia" placeholder="Sexta-feira"/>
+        </div>
+        <div class="adm-form-group">
+          <label>Hora</label>
+          <input type="text" id="proxHora" placeholder="20h30"/>
+        </div>
+        <div class="adm-form-group">
+          <label>Nome da Gira</label>
+          <input type="text" id="proxNome" placeholder="Baianos e Boiadeiros"/>
+        </div>
+        <div class="adm-form-group">
+          <label>Descrição</label>
+          <textarea id="proxDesc" placeholder="Descreva a gira..."></textarea>
+        </div>
+        <div class="adm-form-group">
+          <label>URL da Imagem</label>
+          <input type="text" id="proxImg" placeholder="https://matavirgem.org/proxima.jpg"/>
+        </div>
+        <button class="adm-btn adm-btn-primary" onclick="salvarProxima()">💾 Salvar Próxima Gira</button>
+      </div>
+    </div>
+
+    <!-- GALERIA -->
+    <div id="tab-galeria" class="adm-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--verde); margin-bottom: 1.5rem;">Gerenciar Galeria</h2>
+
+      <div class="adm-form">
+        <h3 style="color: var(--verde); margin-bottom: 1.5rem; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;">Adicionar Foto</h3>
+        <div class="adm-form-group">
+          <label>Título da Foto</label>
+          <input type="text" id="newFotoTitulo" placeholder="Ex: Altar"/>
+        </div>
+        <div class="adm-form-group">
+          <label>URL da Imagem</label>
+          <input type="text" id="newFotoUrl" placeholder="https://matavirgem.org/foto.jpeg"/>
+        </div>
+        <button class="adm-btn adm-btn-primary" onclick="adicionarFoto()">+ Adicionar Foto</button>
+      </div>
+
+      <div id="listaFotos"></div>
+    </div>
+
+    <!-- DOWNLOAD JSON -->
+    <div id="tab-download" class="adm-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--verde); margin-bottom: 1.5rem;">Exportar Dados</h2>
+
+      <div class="adm-alert adm-alert-warning" style="margin-bottom: 2rem;">
+        📝 Aqui você pode baixar o arquivo <code style="background: rgba(0,0,0,.1); padding: .3rem .6rem; border-radius: 2px;">dados.json</code> com todas as informações. Substitua o arquivo no servidor.
+      </div>
+
+      <div class="adm-form">
+        <div style="background: rgba(200,168,75,.1); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; border: 1px solid rgba(200,168,75,.2);">
+          <p style="font-size: .9rem; color: var(--texto); margin-bottom: 1rem; line-height: 1.6;">
+            <strong>Como atualizar o servidor:</strong><br>
+            1. Clique em "Baixar JSON"<br>
+            2. Acesse seu servidor via FTP ou painel de hosting<br>
+            3. Substitua o arquivo <code style="background: rgba(0,0,0,.1); padding: .3rem .4rem; border-radius: 2px;">dados.json</code> pela versão nova<br>
+            4. Pronto! O site será atualizado automaticamente
+          </p>
+        </div>
+
+        <button class="adm-btn adm-btn-secondary" onclick="baixarJSON()" style="width: 100%; text-align: center; justify-content: center;">
+          📥 Baixar Arquivo dados.json
+        </button>
+      </div>
+
+      <div class="adm-form" style="margin-top: 2rem;">
+        <h3 style="color: var(--verde); margin-bottom: 1rem; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;">Preview JSON</h3>
+        <pre id="jsonPreview" style="background: rgba(0,0,0,.05); padding: 1rem; border-radius: 2px; overflow-x: auto; font-size: .85rem; max-height: 400px; overflow-y: auto; border: 1px solid rgba(200,168,75,.15);"></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL EDITAR EVENTO -->
+  <div id="modalEvento" class="adm-modal" onclick="if(event.target===this) fecharModal('modalEvento')">
+    <button class="adm-modal-close" onclick="fecharModal('modalEvento')">×</button>
+    <div class="adm-modal-content" onclick="event.stopPropagation()">
+      <div class="adm-modal-header">Editar Evento</div>
+      <div class="adm-form-group">
+        <label>Dia</label>
+        <input type="text" id="editEvtDia" maxlength="2"/>
+      </div>
+      <div class="adm-form-group">
+        <label>Mês</label>
+        <input type="text" id="editEvtMes" maxlength="3"/>
+      </div>
+      <div class="adm-form-group">
+        <label>Semana</label>
+        <input type="text" id="editEvtSemana"/>
+      </div>
+      <div class="adm-form-group">
+        <label>Hora</label>
+        <input type="text" id="editEvtHora" maxlength="5"/>
+      </div>
+      <div class="adm-form-group">
+        <label>Nome</label>
+        <input type="text" id="editEvtNome"/>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button class="adm-btn adm-btn-primary" style="flex: 1;" onclick="salvarEdicaoEvento()">Salvar</button>
+        <button class="adm-btn" style="flex: 1; background: var(--texto-cl); color: var(--branco);" onclick="fecharModal('modalEvento')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR FOTO -->
+  <div id="modalFoto" class="adm-modal" onclick="if(event.target===this) fecharModal('modalFoto')">
+    <button class="adm-modal-close" onclick="fecharModal('modalFoto')">×</button>
+    <div class="adm-modal-content" onclick="event.stopPropagation()">
+      <div class="adm-modal-header">Editar Foto</div>
+      <div class="adm-form-group">
+        <label>Título</label>
+        <input type="text" id="editFotoTitulo"/>
+      </div>
+      <div class="adm-form-group">
+        <label>URL</label>
+        <input type="text" id="editFotoUrl"/>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button class="adm-btn adm-btn-primary" style="flex: 1;" onclick="salvarEdicaoFoto()">Salvar</button>
+        <button class="adm-btn" style="flex: 1; background: var(--texto-cl); color: var(--branco);" onclick="fecharModal('modalFoto')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let dados = {};
+    let eventoEmEdicao = null;
+    let fotoEmEdicao = null;
+
+    // Carregar dados
+    async function carregarDados() {
+      try {
+        const resposta = await fetch('dados.json');
+        dados = await resposta.json();
+        renderizar();
+      } catch (erro) {
+        alert('Erro ao carregar dados.json: ' + erro);
+      }
+    }
+
+    function renderizar() {
+      renderizarEventos();
+      renderizarProxima();
+      renderizarFotos();
+      atualizarPreview();
+    }
+
+    // ══ EVENTOS ══
+    function renderizarEventos() {
+      const container = document.getElementById('listaEventos');
+      container.innerHTML = dados.eventos.map(evt => `
+        <div class="adm-item">
+          <div class="adm-item-info">
+            <div class="adm-item-title">${evt.nome}</div>
+            <div class="adm-item-meta">
+              ${evt.dia}/${evt.mes} • ${evt.semana} • ${evt.hora}
+            </div>
+          </div>
+          <div class="adm-item-actions">
+            <button class="adm-btn adm-btn-secondary adm-btn-small" onclick="editarEvento(${evt.id})">Editar</button>
+            <button class="adm-btn adm-btn-danger adm-btn-small" onclick="removerEvento(${evt.id})">Remover</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function adicionarEvento() {
+      const dia = document.getElementById('newEvtDia').value;
+      const mes = document.getElementById('newEvtMes').value;
+      const semana = document.getElementById('newEvtSemana').value;
+      const hora = document.getElementById('newEvtHora').value;
+      const nome = document.getElementById('newEvtNome').value;
+
+      if (!dia || !mes || !semana || !hora || !nome) {
+        alert('Preencha todos os campos!');
+        return;
+      }
+
+      const novoId = Math.max(...dados.eventos.map(e => e.id), 0) + 1;
+      dados.eventos.push({ id: novoId, dia, mes, semana, nome, hora });
+
+      document.getElementById('newEvtDia').value = '';
+      document.getElementById('newEvtMes').value = '';
+      document.getElementById('newEvtSemana').value = '';
+      document.getElementById('newEvtHora').value = '';
+      document.getElementById('newEvtNome').value = '';
+
+      renderizarEventos();
+      atualizarPreview();
+      mostrarAlerta('✅ Evento adicionado!', 'success');
+    }
+
+    function editarEvento(id) {
+      eventoEmEdicao = dados.eventos.find(e => e.id === id);
+      if (!eventoEmEdicao) return;
+
+      document.getElementById('editEvtDia').value = eventoEmEdicao.dia;
+      document.getElementById('editEvtMes').value = eventoEmEdicao.mes;
+      document.getElementById('editEvtSemana').value = eventoEmEdicao.semana;
+      document.getElementById('editEvtHora').value = eventoEmEdicao.hora;
+      document.getElementById('editEvtNome').value = eventoEmEdicao.nome;
+
+      abrirModal('modalEvento');
+    }
+
+    function salvarEdicaoEvento() {
+      eventoEmEdicao.dia = document.getElementById('editEvtDia').value;
+      eventoEmEdicao.mes = document.getElementById('editEvtMes').value;
+      eventoEmEdicao.semana = document.getElementById('editEvtSemana').value;
+      eventoEmEdicao.hora = document.getElementById('editEvtHora').value;
+      eventoEmEdicao.nome = document.getElementById('editEvtNome').value;
+
+      fecharModal('modalEvento');
+      renderizarEventos();
+      atualizarPreview();
+      mostrarAlerta('✅ Evento atualizado!', 'success');
+    }
+
+    function removerEvento(id) {
+      if (confirm('Tem certeza que quer remover este evento?')) {
+        dados.eventos = dados.eventos.filter(e => e.id !== id);
+        renderizarEventos();
+        atualizarPreview();
+        mostrarAlerta('✅ Evento removido!', 'success');
+      }
+    }
+
+    // ══ PRÓXIMA GIRA ══
+    function renderizarProxima() {
+      const prox = dados.proximaGira;
+      document.getElementById('proxData').value = prox.data;
+      document.getElementById('proxDia').value = prox.dia;
+      document.getElementById('proxHora').value = prox.hora;
+      document.getElementById('proxNome').value = prox.nome;
+      document.getElementById('proxDesc').value = prox.descricao;
+      document.getElementById('proxImg').value = prox.imagem;
+    }
+
+    function salvarProxima() {
+      dados.proximaGira.data = document.getElementById('proxData').value;
+      dados.proximaGira.dia = document.getElementById('proxDia').value;
+      dados.proximaGira.hora = document.getElementById('proxHora').value;
+      dados.proximaGira.nome = document.getElementById('proxNome').value;
+      dados.proximaGira.descricao = document.getElementById('proxDesc').value;
+      dados.proximaGira.imagem = document.getElementById('proxImg').value;
+
+      atualizarPreview();
+      mostrarAlerta('✅ Próxima gira atualizada!', 'success');
+    }
+
+    // ══ GALERIA ══
+    function renderizarFotos() {
+      const container = document.getElementById('listaFotos');
+      container.innerHTML = dados.galeria.map(foto => `
+        <div class="adm-item">
+          <div class="adm-item-info">
+            <div class="adm-item-title">${foto.titulo}</div>
+            <div class="adm-item-meta">${foto.url.substring(0, 50)}...</div>
+          </div>
+          <div class="adm-item-actions">
+            <button class="adm-btn adm-btn-secondary adm-btn-small" onclick="editarFoto(${foto.id})">Editar</button>
+            <button class="adm-btn adm-btn-danger adm-btn-small" onclick="removerFoto(${foto.id})">Remover</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function adicionarFoto() {
+      const titulo = document.getElementById('newFotoTitulo').value;
+      const url = document.getElementById('newFotoUrl').value;
+
+      if (!titulo || !url) {
+        alert('Preencha todos os campos!');
+        return;
+      }
+
+      const novoId = Math.max(...dados.galeria.map(f => f.id), 0) + 1;
+      dados.galeria.push({ id: novoId, titulo, url });
+
+      document.getElementById('newFotoTitulo').value = '';
+      document.getElementById('newFotoUrl').value = '';
+
+      renderizarFotos();
+      atualizarPreview();
+      mostrarAlerta('✅ Foto adicionada!', 'success');
+    }
+
+    function editarFoto(id) {
+      fotoEmEdicao = dados.galeria.find(f => f.id === id);
+      if (!fotoEmEdicao) return;
+
+      document.getElementById('editFotoTitulo').value = fotoEmEdicao.titulo;
+      document.getElementById('editFotoUrl').value = fotoEmEdicao.url;
+
+      abrirModal('modalFoto');
+    }
+
+    function salvarEdicaoFoto() {
+      fotoEmEdicao.titulo = document.getElementById('editFotoTitulo').value;
+      fotoEmEdicao.url = document.getElementById('editFotoUrl').value;
+
+      fecharModal('modalFoto');
+      renderizarFotos();
+      atualizarPreview();
+      mostrarAlerta('✅ Foto atualizada!', 'success');
+    }
+
+    function removerFoto(id) {
+      if (confirm('Tem certeza que quer remover esta foto?')) {
+        dados.galeria = dados.galeria.filter(f => f.id !== id);
+        renderizarFotos();
+        atualizarPreview();
+        mostrarAlerta('✅ Foto removida!', 'success');
+      }
+    }
+
+    // ══ EXPORT ══
+    function atualizarPreview() {
+      document.getElementById('jsonPreview').textContent = JSON.stringify(dados, null, 2);
+    }
+
+    function baixarJSON() {
+      const json = JSON.stringify(dados, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dados.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ══ UI ══
+    function mudarTab(tab) {
+      document.querySelectorAll('.adm-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.adm-tab').forEach(el => el.classList.remove('active'));
+
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function mostrarAlerta(msg, tipo) {
+      const container = document.querySelector('.adm-container');
+      const alerta = document.createElement('div');
+      alerta.className = `adm-alert adm-alert-${tipo}`;
+      alerta.textContent = msg;
+      container.insertBefore(alerta, container.firstChild);
+
+      setTimeout(() => alerta.remove(), 3000);
+    }
+
+    // Inicializar
+    carregarDados();
+  </script>
+
+</body>
+</html>

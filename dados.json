@@ -1,0 +1,121 @@
+{
+  "proximaGira": {
+    "data": "17/04",
+    "dia": "Sexta-feira",
+    "hora": "20h30",
+    "nome": "Gira de Baianos e Boiadeiros",
+    "descricao": "Nesta gira, trabalharemos com a força dos Baianos e Boiadeiros, trazendo limpeza espiritual, firmeza e direcionamento de caminhos.",
+    "imagem": "https://matavirgem.org/proxima.jpg"
+  },
+  "eventos": [
+    {
+      "id": 1,
+      "dia": "17",
+      "mes": "Abr",
+      "semana": "Sexta-feira",
+      "nome": "Baianos e Boiadeiros",
+      "hora": "20h30"
+    },
+    {
+      "id": 2,
+      "dia": "24",
+      "mes": "Abr",
+      "semana": "Sexta-feira",
+      "nome": "Festa de Ogum — Atendimento com Caboclos",
+      "hora": "20h30"
+    },
+    {
+      "id": 3,
+      "dia": "30",
+      "mes": "Abr",
+      "semana": "Quinta-feira · Véspera de feriado",
+      "nome": "Gira de Malandros e Povo da Rua",
+      "hora": "20h30"
+    }
+  ],
+  "agendaBanner": {
+    "imagem": "https://matavirgem.org/agenda.jpg",
+    "titulo": "Agenda de Abril",
+    "subtitulo": "Confira todos os eventos"
+  },
+  "galeria": [
+    {
+      "id": 1,
+      "titulo": "Altar",
+      "url": "https://matavirgem.org/altar.jpeg"
+    },
+    {
+      "id": 2,
+      "titulo": "Povo",
+      "url": "https://matavirgem.org/povo.jpeg"
+    },
+    {
+      "id": 3,
+      "titulo": "Caldeirão",
+      "url": "https://matavirgem.org/caldeirao.jpeg"
+    },
+    {
+      "id": 4,
+      "titulo": "Esquerda",
+      "url": "https://matavirgem.org/esq.jpeg"
+    }
+  ],
+  "cursos": [
+    {
+      "id": 1,
+      "titulo": "Identidade Mediunica",
+      "descricao": "Descubra sua mediunidade e aprenda a trabalhar com os guias espirituais. Um curso completo sobre desenvolvimento mediúnico.",
+      "modulo": 1,
+      "aulas": [
+        {
+          "id": 1,
+          "numero": 1,
+          "titulo": "Introdução à Mediunidade",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 2,
+          "numero": 2,
+          "titulo": "Tipos de Mediunidade",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 3,
+          "numero": 3,
+          "titulo": "Desenvolvimento Seguro",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 4,
+          "numero": 4,
+          "titulo": "Proteção Espiritual",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 5,
+          "numero": 5,
+          "titulo": "Comunicação com Guias",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 6,
+          "numero": 6,
+          "titulo": "Práticas Diárias",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 7,
+          "numero": 7,
+          "titulo": "Integrando sua Mediunidade",
+          "youtube": "dQw4w9WgXcQ"
+        },
+        {
+          "id": 8,
+          "numero": 8,
+          "titulo": "Próximos Passos",
+          "youtube": "dQw4w9WgXcQ"
+        }
+      ]
+    }
+  ]
+}
