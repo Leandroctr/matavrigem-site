@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Admin - Aruanda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --verde: #1b3a22;
+      --verde-med: #2c5c3a;
+      --dourado: #c8a84b;
+      --creme: #f6f2ea;
+      --branco: #ffffff;
+      --texto: #252520;
+      --texto-cl: #56564e;
+      --vermelho: #d64545;
+      --ok: #25d366;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: #0a0a08; color: var(--texto); }
+
+    /* ════ LOGIN ════ */
+    .login-screen {
+      position: fixed; inset: 0; z-index: 1000;
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+
+    .login-screen.hidden { display: none; }
+
+    .login-card {
+      background: var(--creme); border-radius: 12px; padding: 2rem;
+      max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .login-card h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: var(--verde); margin-bottom: .5rem;
+    }
+
+    .login-card .subtitle {
+      font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--dourado); margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block; font-size: .75rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--verde); margin-bottom: .4rem; font-weight: 500;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%; padding: .7rem; border: 1px solid rgba(200,168,75,.3);
+      border-radius: 6px; font-family: inherit; font-size: .95rem; color: var(--texto);
+      background: var(--branco); transition: border-color .3s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--dourado);
+      box-shadow: 0 0 0 3px rgba(200,168,75,.1);
+    }
+
+    .btn {
+      width: 100%; padding: .8rem; background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      color: var(--branco); border: none; border-radius: 6px; font-size: .8rem;
+      letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .3s;
+      font-weight: 500; margin-bottom: .8rem;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,58,34,.3);
+    }
+
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--vermelho); font-size: .75rem; padding: .6rem;
+      background: rgba(214,69,69,.1); border: 1px solid rgba(214,69,69,.3);
+      border-radius: 4px; display: none; margin-bottom: .8rem;
+    }
+
+    .error-msg.show { display: block; }
+
+    .info-box {
+      background: rgba(200,168,75,.1); border: 1px solid rgba(200,168,75,.3);
+      border-radius: 4px; padding: .8rem; margin-bottom: 1.5rem;
+      font-size: .8rem; line-height: 1.5; color: var(--texto);
+    }
+
+    .toggle-btn {
+      background: none; border: none; color: var(--dourado);
+      cursor: pointer; text-decoration: underline; font-weight: 500;
+    }
+
+    /* ════ HEADER ════ */
+    .header {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      padding: 1.2rem; color: var(--branco);
+      border-bottom: 1px solid rgba(200,168,75,.2);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem;
+    }
+
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300; margin: 0;
+    }
+
+    .header-sub {
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(226,201,126,.8); margin-top: .2rem;
+    }
+
+    .logout-btn {
+      background: rgba(200,168,75,.2); border: 1px solid rgba(200,168,75,.4);
+      color: var(--dourado); padding: .6rem 1rem; border-radius: 6px;
+      cursor: pointer; font-size: .7rem; letter-spacing: .1em;
+      text-transform: uppercase; font-weight: 500; transition: all .3s;
+    }
+
+    .logout-btn:hover { background: rgba(200,168,75,.3); }
+
+    /* ════ CONTAINER ════ */
+    .container { max-width: 1000px; margin: 0 auto; padding: 1rem; }
+
+    /* ════ TABS ════ */
+    .tabs {
+      display: flex; gap: .4rem; margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(200,168,75,.2);
+      flex-wrap: wrap; overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: .7rem .9rem; background: none; border: none;
+      border-bottom: 2px solid transparent; color: var(--texto-cl);
+      cursor: pointer; font-size: .7rem; letter-spacing: .1em;
+      text-transform: uppercase; transition: all .3s; white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tab-btn:hover { color: var(--dourado); }
+    .tab-btn.active { color: var(--dourado); border-bottom-color: var(--dourado); }
+
+    /* ════ CONTENT ════ */
+    .tab-content {
+      display: none; animation: fadeIn .3s;
+    }
+
+    .tab-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ════ FORM ════ */
+    .form {
+      background: var(--creme); border: 1px solid rgba(200,168,75,.2);
+      border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+
+    .form h3 {
+      color: var(--verde); margin-bottom: 1rem; font-size: 1rem; font-family: 'Cormorant Garamond', serif;
+    }
+
+    .form-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ════ ITEMS ════ */
+    .item {
+      background: var(--creme); border: 1px solid rgba(200,168,75,.2);
+      border-radius: 4px; padding: 1rem; margin-bottom: .8rem;
+      display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .item { grid-template-columns: 1fr; }
+    }
+
+    .item-info { min-width: 0; }
+    .item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--verde); margin-bottom: .2rem;
+      word-break: break-word;
+    }
+
+    .item-meta {
+      font-size: .7rem; color: var(--texto-cl);
+    }
+
+    .item-img {
+      width: 50px; height: 50px; border-radius: 4px;
+      object-fit: cover; border: 1px solid rgba(200,168,75,.2);
+    }
+
+    .item-actions {
+      display: flex; gap: .3rem; flex-wrap: wrap;
+    }
+
+    /* ════ BUTTONS ════ */
+    .btn-small {
+      padding: .5rem .7rem; font-size: .7rem;
+      background: var(--verde); color: var(--branco);
+      border: none; border-radius: 4px; cursor: pointer;
+      transition: all .3s;
+    }
+
+    .btn-small:hover { background: var(--verde-med); transform: translateY(-1px); }
+    .btn-small.danger { background: var(--vermelho); }
+    .btn-small.danger:hover { background: #c93636; }
+
+    .btn-block {
+      width: 100%; margin-bottom: .5rem;
+    }
+
+    /* ════ ALERT ════ */
+    .alert {
+      padding: .8rem; border-radius: 4px; margin-bottom: 1rem;
+      font-size: .8rem; animation: slideDown .3s;
+      display: flex; align-items: center; gap: .6rem;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .alert-success {
+      background: rgba(37,211,102,.1);
+      border: 1px solid rgba(37,211,102,.3);
+      color: #1a7d4e;
+    }
+
+    .alert-error {
+      background: rgba(214,69,69,.1);
+      border: 1px solid rgba(214,69,69,.3);
+      color: #9a2c2c;
+    }
+
+    .preview-img {
+      max-width: 200px; border-radius: 4px; margin-top: .5rem;
+      border: 1px solid rgba(200,168,75,.2);
+    }
+
+    /* ════ MODAL ════ */
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,10,8,.7); z-index: 200;
+      align-items: center; justify-content: center; padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.open { display: flex; }
+    .modal-content {
+      background: var(--creme); border-radius: 6px; padding: 1.5rem;
+      max-width: 500px; width: 100%; max-height: 90vh;
+      overflow-y: auto; position: relative;
+    }
+
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; font-size: 1.5rem;
+      color: var(--texto-cl); cursor: pointer;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;
+      padding-bottom: .8rem; border-bottom: 1px solid rgba(200,168,75,.2);
+    }
+
+    .modal-actions {
+      display: flex; gap: .5rem; margin-top: 1.5rem;
+    }
+
+    .modal-actions button { flex: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h1>Aruanda</h1>
+      <div class="subtitle">Painel Administrativo</div>
+
+      <div class="info-box">
+        ℹ️ Crie uma conta nova ou entre com email/senha que você já criou.
+      </div>
+
+      <div id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="seu@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="loginPassword"/>
+        </div>
+        <button class="btn" onclick="fazerLogin()" id="loginBtn">Entrar</button>
+        <div class="error-msg" id="loginError"></div>
+        <div style="text-align: center; font-size: .8rem; color: var(--texto-cl);">
+          Sem conta? <button class="toggle-btn" onclick="toggleForm()">Criar nova</button>
+        </div>
+      </div>
+
+      <div id="registroForm" style="display: none;">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="registroEmail" placeholder="seu@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Senha (mín. 6 caracteres)</label>
+          <input type="password" id="registroPassword"/>
+        </div>
+        <div class="form-group">
+          <label>Confirmar Senha</label>
+          <input type="password" id="registroPasswordConfirm"/>
+        </div>
+        <button class="btn" onclick="fazerRegistro()" id="registroBtn">Criar Conta</button>
+        <div class="error-msg" id="registroError"></div>
+        <div style="text-align: center; font-size: .8rem; color: var(--texto-cl);">
+          Já tem conta? <button class="toggle-btn" onclick="toggleForm()">Fazer login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header" id="header" style="display: none;">
+    <div>
+      <h1>Painel Admin</h1>
+      <div class="header-sub">Aruanda de Mata Virgem</div>
+    </div>
+    <button class="logout-btn" onclick="fazerLogout()">Sair</button>
+  </div>
+
+  <!-- CONTAINER -->
+  <div class="container" id="container" style="display: none;">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="mudarTab('eventos')">📅 Eventos</button>
+      <button class="tab-btn" onclick="mudarTab('proxima')">🎭 Próxima Gira</button>
+      <button class="tab-btn" onclick="mudarTab('galeria')">🖼️ Galeria</button>
+      <button class="tab-btn" onclick="mudarTab('cursos')">📚 Cursos</button>
+    </div>
+
+    <!-- EVENTOS -->
+    <div id="eventos" class="tab-content active">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Eventos</h2>
+
+      <div class="form">
+        <h3>+ Novo Evento</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Dia</label>
+            <input type="text" id="newEvtDia" placeholder="17" maxlength="2"/>
+          </div>
+          <div class="form-group">
+            <label>Mês</label>
+            <input type="text" id="newEvtMes" placeholder="Abr"/>
+          </div>
+          <div class="form-group">
+            <label>Semana</label>
+            <input type="text" id="newEvtSemana" placeholder="Sexta-feira"/>
+          </div>
+          <div class="form-group">
+            <label>Hora</label>
+            <input type="text" id="newEvtHora" placeholder="20h30"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nome do Evento</label>
+          <input type="text" id="newEvtNome" placeholder="Ex: Baianos e Boiadeiros"/>
+        </div>
+        <button class="btn btn-block" onclick="adicionarEvento()">+ Adicionar Evento</button>
+      </div>
+
+      <div id="listaEventos"></div>
+    </div>
+
+    <!-- PRÓXIMA GIRA -->
+    <div id="proxima" class="tab-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Próxima Gira</h2>
+
+      <div class="form">
+        <div class="form-group">
+          <label>Data (ex: 17/04)</label>
+          <input type="text" id="proxData" placeholder="17/04"/>
+        </div>
+        <div class="form-group">
+          <label>Dia da Semana</label>
+          <input type="text" id="proxDia" placeholder="Sexta-feira"/>
+        </div>
+        <div class="form-group">
+          <label>Hora</label>
+          <input type="text" id="proxHora" placeholder="20h30"/>
+        </div>
+        <div class="form-group">
+          <label>Nome da Gira</label>
+          <input type="text" id="proxNome" placeholder="Baianos e Boiadeiros"/>
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea id="proxDesc" placeholder="Descreva a gira..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Imagem (URL ou arquivo)</label>
+          <input type="text" id="proxImg" placeholder="https://..."/>
+          <input type="file" id="proxImgFile" accept="image/*" onchange="previewImg('proxImgFile', 'proxImg')"/>
+          <img id="proxImg-preview" style="display:none;" class="preview-img">
+        </div>
+        <button class="btn btn-block" onclick="salvarProxima()">💾 Salvar Próxima Gira</button>
+      </div>
+    </div>
+
+    <!-- GALERIA -->
+    <div id="galeria" class="tab-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Galeria</h2>
+
+      <div class="form">
+        <h3>+ Nova Foto</h3>
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" id="newFotoTitulo" placeholder="Ex: Altar"/>
+        </div>
+        <div class="form-group">
+          <label>Imagem (URL ou arquivo)</label>
+          <input type="text" id="newFotoUrl" placeholder="https://..."/>
+          <input type="file" id="newFotoFile" accept="image/*" onchange="previewImg('newFotoFile', 'newFotoUrl')"/>
+          <img id="newFotoUrl-preview" style="display:none;" class="preview-img">
+        </div>
+        <button class="btn btn-block" onclick="adicionarFoto()">+ Adicionar Foto</button>
+      </div>
+
+      <div id="listaFotos"></div>
+    </div>
+
+    <!-- CURSOS -->
+    <div id="cursos" class="tab-content">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Cursos</h2>
+
+      <div class="form">
+        <h3>+ Nova Aula</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Número</label>
+            <input type="number" id="newAulaNumero" placeholder="1" min="1"/>
+          </div>
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" id="newAulaTitulo" placeholder="Introdução"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>ID YouTube (após v=)</label>
+          <input type="text" id="newAulaYoutube" placeholder="dQw4w9WgXcQ"/>
+        </div>
+        <button class="btn btn-block" onclick="adicionarAula()">+ Adicionar Aula</button>
+      </div>
+
+      <div id="listaAulas"></div>
+    </div>
+
+  </div>
+
+  <!-- MODAL EDITAR -->
+  <div id="modalEvento" class="modal" onclick="if(event.target===this) fecharModal('modalEvento')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="fecharModal('modalEvento')">×</button>
+      <div class="modal-title">Editar Evento</div>
+      <div class="form-group">
+        <label>Dia</label>
+        <input type="text" id="editEvtDia"/>
+      </div>
+      <div class="form-group">
+        <label>Mês</label>
+        <input type="text" id="editEvtMes"/>
+      </div>
+      <div class="form-group">
+        <label>Semana</label>
+        <input type="text" id="editEvtSemana"/>
+      </div>
+      <div class="form-group">
+        <label>Hora</label>
+        <input type="text" id="editEvtHora"/>
+      </div>
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" id="editEvtNome"/>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="salvarEdicaoEvento()">Salvar</button>
+        <button class="btn" style="background: var(--texto-cl);" onclick="fecharModal('modalEvento')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalFoto" class="modal" onclick="if(event.target===this) fecharModal('modalFoto')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="fecharModal('modalFoto')">×</button>
+      <div class="modal-title">Editar Foto</div>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="editFotoTitulo"/>
+      </div>
+      <div class="form-group">
+        <label>URL</label>
+        <input type="text" id="editFotoUrl" onchange="previewEditImg()"/>
+        <img id="editFotoUrl-preview" style="display:none;" class="preview-img">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="salvarEdicaoFoto()">Salvar</button>
+        <button class="btn" style="background: var(--texto-cl);" onclick="fecharModal('modalFoto')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.firebasecdn.com/9.22.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.firebasecdn.com/9.22.2/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.firebasecdn.com/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+      authDomain: "mata-virgem.firebaseapp.com",
+      projectId: "mata-virgem",
+      storageBucket: "mata-virgem.firebasestorage.app",
+      messagingSenderId: "351134240123",
+      appId: "1:351134240123:web:86a041fee58b856ea3c1de",
+      measurementId: "G-KM7DHTH737"
+    };
+
+    console.log('🔥 Iniciando Firebase...');
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    console.log('✅ Firebase conectado!');
+
+    let usuario = null;
+    let dados = { eventos: [], proximaGira: {}, galeria: [], cursos: [] };
+    let eventoEmEdicao = null;
+    let fotoEmEdicao = null;
+
+    // ══ LOGIN ══
+    window.fazerLogin = async function() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      const error = document.getElementById('loginError');
+
+      if (!email || !password) {
+        error.innerHTML = '❌ Preencha email e senha';
+        error.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      try {
+        console.log('📧 Login:', email);
+        await signInWithEmailAndPassword(auth, email, password);
+        console.log('✅ Login ok!');
+      } catch (e) {
+        btn.disabled = false;
+        console.error('❌ Erro:', e.code);
+        error.innerHTML = '❌ Email ou senha inválidos';
+        error.classList.add('show');
+      }
+    };
+
+    window.fazerRegistro = async function() {
+      const email = document.getElementById('registroEmail').value.trim();
+      const password = document.getElementById('registroPassword').value;
+      const confirm = document.getElementById('registroPasswordConfirm').value;
+      const btn = document.getElementById('registroBtn');
+      const error = document.getElementById('registroError');
+
+      if (!email || !password || !confirm) {
+        error.innerHTML = '❌ Preencha todos os campos';
+        error.classList.add('show');
+        return;
+      }
+
+      if (password !== confirm) {
+        error.innerHTML = '❌ Senhas não coincidem';
+        error.classList.add('show');
+        return;
+      }
+
+      if (password.length < 6) {
+        error.innerHTML = '❌ Senha deve ter 6+ caracteres';
+        error.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      try {
+        console.log('📧 Criando:', email);
+        await createUserWithEmailAndPassword(auth, email, password);
+        console.log('✅ Conta criada!');
+      } catch (e) {
+        btn.disabled = false;
+        console.error('❌ Erro:', e.code);
+        error.innerHTML = '❌ Email já registrado';
+        error.classList.add('show');
+      }
+    };
+
+    window.fazerLogout = async function() {
+      if (confirm('Sair?')) {
+        await signOut(auth);
+        console.log('✅ Desconectado');
+      }
+    };
+
+    window.toggleForm = function() {
+      document.getElementById('loginForm').style.display = 
+        document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
+      document.getElementById('registroForm').style.display = 
+        document.getElementById('registroForm').style.display === 'none' ? 'block' : 'none';
+    };
+
+    // ══ CARREGAR ══
+    async function carregarDados() {
+      try {
+        console.log('📥 Carregando dados...');
+
+        onSnapshot(query(collection(db, 'eventos'), orderBy('dia', 'asc')), (snap) => {
+          dados.eventos = [];
+          snap.forEach((d) => dados.eventos.push({ id: d.id, ...d.data() }));
+          console.log('✅ Eventos:', dados.eventos.length);
+          renderEventos();
+        });
+
+        onSnapshot(query(collection(db, 'proximaGira')), (snap) => {
+          if (!snap.empty) {
+            dados.proximaGira = snap.docs[0].data();
+            console.log('✅ Próxima:', dados.proximaGira.nome);
+            renderProxima();
+          }
+        });
+
+        onSnapshot(query(collection(db, 'galeria')), (snap) => {
+          dados.galeria = [];
+          snap.forEach((d) => dados.galeria.push({ id: d.id, ...d.data() }));
+          console.log('✅ Fotos:', dados.galeria.length);
+          renderFotos();
+        });
+
+        onSnapshot(query(collection(db, 'cursos')), (snap) => {
+          if (!snap.empty) {
+            const c = snap.docs[0].data();
+            dados.cursos = c.aulas || [];
+            console.log('✅ Aulas:', dados.cursos.length);
+            renderAulas();
+          }
+        });
+      } catch (e) {
+        console.error('❌ Erro carregar:', e);
+      }
+    }
+
+    // ══ AUTH ══
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        usuario = user;
+        console.log('👤 User:', user.email);
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('header').style.display = 'flex';
+        document.getElementById('container').style.display = 'block';
+        carregarDados();
+      } else {
+        usuario = null;
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('header').style.display = 'none';
+        document.getElementById('container').style.display = 'none';
+      }
+    });
+
+    // ══ EVENTOS ══
+    window.renderEventos = function() {
+      document.getElementById('listaEventos').innerHTML = dados.eventos.map(e => `
+        <div class="item">
+          <div class="item-info">
+            <div class="item-title">${e.nome}</div>
+            <div class="item-meta">${e.dia}/${e.mes} • ${e.semana} • ${e.hora}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-small" onclick="editarEvento('${e.id}')">Editar</button>
+            <button class="btn-small danger" onclick="removerEvento('${e.id}')">X</button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.adicionarEvento = async function() {
+      const dia = document.getElementById('newEvtDia').value.trim();
+      const mes = document.getElementById('newEvtMes').value.trim();
+      const semana = document.getElementById('newEvtSemana').value.trim();
+      const hora = document.getElementById('newEvtHora').value.trim();
+      const nome = document.getElementById('newEvtNome').value.trim();
+
+      if (!dia || !mes || !semana || !hora || !nome) {
+        mostrarAlerta('Preencha todos!', 'error');
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, 'eventos', Date.now().toString()), { dia, mes, semana, nome, hora });
+        document.getElementById('newEvtDia').value = '';
+        document.getElementById('newEvtMes').value = '';
+        document.getElementById('newEvtSemana').value = '';
+        document.getElementById('newEvtHora').value = '';
+        document.getElementById('newEvtNome').value = '';
+        mostrarAlerta('✅ Evento adicionado!', 'success');
+      } catch (e) {
+        console.error('Erro:', e);
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    window.editarEvento = function(id) {
+      eventoEmEdicao = dados.eventos.find(e => e.id === id);
+      document.getElementById('editEvtDia').value = eventoEmEdicao.dia;
+      document.getElementById('editEvtMes').value = eventoEmEdicao.mes;
+      document.getElementById('editEvtSemana').value = eventoEmEdicao.semana;
+      document.getElementById('editEvtHora').value = eventoEmEdicao.hora;
+      document.getElementById('editEvtNome').value = eventoEmEdicao.nome;
+      abrirModal('modalEvento');
+    };
+
+    window.salvarEdicaoEvento = async function() {
+      try {
+        await setDoc(doc(db, 'eventos', eventoEmEdicao.id), {
+          dia: document.getElementById('editEvtDia').value,
+          mes: document.getElementById('editEvtMes').value,
+          semana: document.getElementById('editEvtSemana').value,
+          hora: document.getElementById('editEvtHora').value,
+          nome: document.getElementById('editEvtNome').value
+        });
+        fecharModal('modalEvento');
+        mostrarAlerta('✅ Atualizado!', 'success');
+      } catch (e) {
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    window.removerEvento = async function(id) {
+      if (confirm('Remover?')) {
+        try {
+          await deleteDoc(doc(db, 'eventos', id));
+          mostrarAlerta('✅ Removido!', 'success');
+        } catch (e) {
+          mostrarAlerta('❌ Erro', 'error');
+        }
+      }
+    };
+
+    // ══ PRÓXIMA GIRA ══
+    window.renderProxima = function() {
+      const p = dados.proximaGira;
+      if (p) {
+        document.getElementById('proxData').value = p.data || '';
+        document.getElementById('proxDia').value = p.dia || '';
+        document.getElementById('proxHora').value = p.hora || '';
+        document.getElementById('proxNome').value = p.nome || '';
+        document.getElementById('proxDesc').value = p.descricao || '';
+        document.getElementById('proxImg').value = p.imagem || '';
+        if (p.imagem) {
+          document.getElementById('proxImg-preview').src = p.imagem;
+          document.getElementById('proxImg-preview').style.display = 'block';
+        }
+      }
+    };
+
+    window.salvarProxima = async function() {
+      try {
+        await setDoc(doc(db, 'proximaGira', 'gira1'), {
+          data: document.getElementById('proxData').value,
+          dia: document.getElementById('proxDia').value,
+          hora: document.getElementById('proxHora').value,
+          nome: document.getElementById('proxNome').value,
+          descricao: document.getElementById('proxDesc').value,
+          imagem: document.getElementById('proxImg').value
+        });
+        mostrarAlerta('✅ Salvo!', 'success');
+      } catch (e) {
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    // ══ GALERIA ══
+    window.renderFotos = function() {
+      document.getElementById('listaFotos').innerHTML = dados.galeria.map(f => `
+        <div class="item">
+          <img src="${f.url}" alt="${f.titulo}" class="item-img">
+          <div class="item-info">
+            <div class="item-title">${f.titulo}</div>
+            <div class="item-meta">${f.url.substring(0, 40)}...</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-small" onclick="editarFoto('${f.id}')">Editar</button>
+            <button class="btn-small danger" onclick="removerFoto('${f.id}')">X</button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.adicionarFoto = async function() {
+      const titulo = document.getElementById('newFotoTitulo').value.trim();
+      const url = document.getElementById('newFotoUrl').value.trim();
+
+      if (!titulo || !url) {
+        mostrarAlerta('Preencha título e URL!', 'error');
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, 'galeria', Date.now().toString()), { titulo, url });
+        document.getElementById('newFotoTitulo').value = '';
+        document.getElementById('newFotoUrl').value = '';
+        document.getElementById('newFotoFile').value = '';
+        document.getElementById('newFotoUrl-preview').style.display = 'none';
+        mostrarAlerta('✅ Foto adicionada!', 'success');
+      } catch (e) {
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    window.editarFoto = function(id) {
+      fotoEmEdicao = dados.galeria.find(f => f.id === id);
+      document.getElementById('editFotoTitulo').value = fotoEmEdicao.titulo;
+      document.getElementById('editFotoUrl').value = fotoEmEdicao.url;
+      document.getElementById('editFotoUrl-preview').src = fotoEmEdicao.url;
+      document.getElementById('editFotoUrl-preview').style.display = 'block';
+      abrirModal('modalFoto');
+    };
+
+    window.salvarEdicaoFoto = async function() {
+      try {
+        await setDoc(doc(db, 'galeria', fotoEmEdicao.id), {
+          titulo: document.getElementById('editFotoTitulo').value,
+          url: document.getElementById('editFotoUrl').value
+        });
+        fecharModal('modalFoto');
+        mostrarAlerta('✅ Atualizado!', 'success');
+      } catch (e) {
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    window.removerFoto = async function(id) {
+      if (confirm('Remover?')) {
+        try {
+          await deleteDoc(doc(db, 'galeria', id));
+          mostrarAlerta('✅ Removido!', 'success');
+        } catch (e) {
+          mostrarAlerta('❌ Erro', 'error');
+        }
+      }
+    };
+
+    // ══ CURSOS ══
+    window.renderAulas = function() {
+      document.getElementById('listaAulas').innerHTML = dados.cursos.map((a, i) => `
+        <div class="item">
+          <div class="item-info">
+            <div class="item-title">Aula ${a.numero}: ${a.titulo}</div>
+            <div class="item-meta">YouTube: ${a.youtube}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-small danger" onclick="removerAula(${i})">X</button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.adicionarAula = async function() {
+      const numero = parseInt(document.getElementById('newAulaNumero').value);
+      const titulo = document.getElementById('newAulaTitulo').value.trim();
+      const youtube = document.getElementById('newAulaYoutube').value.trim();
+
+      if (!numero || !titulo || !youtube) {
+        mostrarAlerta('Preencha todos!', 'error');
+        return;
+      }
+
+      try {
+        const novas = [...dados.cursos, { numero, titulo, youtube }];
+        await setDoc(doc(db, 'cursos', 'curso1'), { aulas: novas });
+        document.getElementById('newAulaNumero').value = '';
+        document.getElementById('newAulaTitulo').value = '';
+        document.getElementById('newAulaYoutube').value = '';
+        mostrarAlerta('✅ Aula adicionada!', 'success');
+      } catch (e) {
+        mostrarAlerta('❌ Erro', 'error');
+      }
+    };
+
+    window.removerAula = async function(i) {
+      if (confirm('Remover?')) {
+        try {
+          const novas = dados.cursos.filter((_, idx) => idx !== i);
+          await setDoc(doc(db, 'cursos', 'curso1'), { aulas: novas });
+          mostrarAlerta('✅ Removido!', 'success');
+        } catch (e) {
+          mostrarAlerta('❌ Erro', 'error');
+        }
+      }
+    };
+
+    // ══ UI ══
+    window.mudarTab = function(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      event.target.classList.add('active');
+    };
+
+    window.abrirModal = function(id) {
+      document.getElementById(id).classList.add('open');
+    };
+
+    window.fecharModal = function(id) {
+      document.getElementById(id).classList.remove('open');
+    };
+
+    window.mostrarAlerta = function(msg, tipo) {
+      const cont = document.getElementById('container');
+      if (!cont) return;
+      const al = document.createElement('div');
+      al.className = `alert alert-${tipo}`;
+      al.innerHTML = `<span>${msg}</span>`;
+      cont.insertBefore(al, cont.firstChild);
+      setTimeout(() => al.remove(), 3000);
+    };
+
+    window.previewImg = function(inputId, urlInputId) {
+      const input = document.getElementById(inputId);
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById(urlInputId).value = e.target.result;
+          document.getElementById(urlInputId + '-preview').src = e.target.result;
+          document.getElementById(urlInputId + '-preview').style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    };
+
+    window.previewEditImg = function() {
+      const url = document.getElementById('editFotoUrl').value;
+      const preview = document.getElementById('editFotoUrl-preview');
+      if (url) {
+        preview.src = url;
+        preview.style.display = 'block';
+      }
+    };
+
+    console.log('🎉 Admin pronto!');
+  </script>
+
+</body>
+</html>
