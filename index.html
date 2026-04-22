@@ -372,46 +372,110 @@
     }
 
     /* ══ GALERIA ══ */
-    #fotos { background:var(--verde); }
+    #fotos { background:var(--verde); position:relative; overflow:hidden; }
+    #fotos::before {
+      content:''; position:absolute; top:-40%; right:-15%; width:600px; height:600px;
+      border-radius:50%; background:rgba(200,168,75,.03); pointer-events:none; z-index:0;
+    }
+    #fotos::after {
+      content:''; position:absolute; bottom:-30%; left:-10%; width:500px; height:500px;
+      border-radius:50%; background:rgba(200,168,75,.02); pointer-events:none; z-index:0;
+    }
+    #fotos .container { position:relative; z-index:1; }
     #fotos .sec-title { color:var(--branco); }
     #fotos .sec-label { color:var(--dourado-cl); }
     #fotos .sec-label::after { background:var(--dourado-cl); }
 
     .galeria-grid {
-      display:grid; grid-template-columns:repeat(4,1fr);
-      gap:8px; margin-top:2.5rem;
+      display:grid; 
+      grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+      gap:12px; 
+      margin-top:2.8rem;
     }
     .gal-item {
-      position:relative; overflow:hidden;
-      border-radius:2px; aspect-ratio:3/4; cursor:pointer;
+      position:relative; 
+      overflow:hidden;
+      border-radius:8px; 
+      aspect-ratio:1/1; 
+      cursor:pointer;
+      group: true;
     }
+    .gal-item::before {
+      content:''; position:absolute; inset:0; z-index:2;
+      background:linear-gradient(135deg, rgba(200,168,75,0) 0%, rgba(200,168,75,.15) 100%);
+      opacity:0; transition:opacity .4s cubic-bezier(.16,.1,.3,1);
+    }
+    .gal-item:hover::before { opacity:1; }
+    
     .gal-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform .5s, filter .4s;
-      filter: brightness(.82) saturate(.88);
+      transition: transform .6s cubic-bezier(.16,.1,.3,1), filter .5s ease;
+      filter: brightness(.85) saturate(.9) contrast(1.05);
     }
-    .gal-item:hover img { transform:scale(1.07); filter:brightness(.95) saturate(1.1); }
-    .gal-hover {
-      position:absolute; inset:0;
-      background:linear-gradient(to top,rgba(27,58,34,.65) 0%,transparent 50%);
-      opacity:0; transition:opacity .3s;
-      display:flex; align-items:flex-end; padding:1rem;
+    .gal-item:hover img { 
+      transform: scale(1.12) rotate(.5deg); 
+      filter: brightness(1) saturate(1.2) contrast(1.15);
     }
-    .gal-item:hover .gal-hover { opacity:1; }
-    .gal-hover-icon { font-size:1.3rem; color:var(--dourado-cl); }
+    
+    .gal-overlay {
+      position:absolute; inset:0; z-index:3;
+      background:linear-gradient(to bottom, 
+        rgba(27,58,34,0) 0%,
+        rgba(27,58,34,.3) 40%,
+        rgba(27,58,34,.7) 100%);
+      opacity:0; transition:opacity .4s cubic-bezier(.16,.1,.3,1);
+      display:flex; align-items:flex-end; justify-content:center;
+      padding:1.2rem;
+    }
+    .gal-item:hover .gal-overlay { opacity:1; }
+    
+    .gal-icon-wrap {
+      width:44px; height:44px; 
+      border-radius:50%;
+      background:rgba(200,168,75,.9);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--verde);
+      font-size:1.2rem;
+      transform:scale(0); 
+      transition:transform .5s cubic-bezier(.175,.885,.32,1.275);
+    }
+    .gal-item:hover .gal-icon-wrap { 
+      transform:scale(1);
+    }
 
-    .galeria-footer { display:flex; justify-content:center; margin-top:2rem; }
+    .galeria-footer { 
+      display:flex; justify-content:center; margin-top:3rem; 
+    }
     .btn-instagram {
       display:inline-flex; align-items:center; gap:.6rem;
-      padding:.8rem 1.8rem;
-      border:1px solid rgba(200,168,75,.45); color:var(--dourado-cl);
-      text-decoration:none; font-size:.74rem; letter-spacing:.18em;
-      text-transform:uppercase; border-radius:2px; transition:all .3s;
+      padding:.9rem 2rem;
+      border:1px solid rgba(200,168,75,.5); 
+      color:var(--dourado-cl);
+      text-decoration:none; 
+      font-size:.74rem; 
+      letter-spacing:.18em;
+      text-transform:uppercase; 
+      border-radius:4px; 
+      transition:all .4s cubic-bezier(.16,.1,.3,1);
+      position:relative;
+      overflow:hidden;
     }
-    .btn-instagram:hover { border-color:var(--dourado); background:rgba(200,168,75,.08); }
+    .btn-instagram::before {
+      content:''; position:absolute; inset:0;
+      background:rgba(200,168,75,.08);
+      transform:translateX(-100%);
+      transition:transform .4s cubic-bezier(.16,.1,.3,1);
+    }
+    .btn-instagram:hover {
+      border-color:var(--dourado-cl);
+      transform:translateY(-2px);
+      box-shadow:0 8px 24px rgba(200,168,75,.15);
+    }
+    .btn-instagram:hover::before { transform:translateX(0); }
+    .btn-instagram svg { position:relative; z-index:1; }
 
     /* ══ LOCALIZAÇÃO ══ */
     #local { background:var(--branco); }
@@ -475,21 +539,108 @@
     /* ══ LIGHTBOX ══ */
     .lightbox {
       position:fixed; inset:0; z-index:500;
-      background:rgba(8,18,10,.95);
+      background:rgba(8,18,10,.97);
       display:none; align-items:center; justify-content:center;
-      backdrop-filter:blur(6px);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      opacity:0;
+      transition:opacity .4s cubic-bezier(.16,.1,.3,1);
     }
-    .lightbox.open { display:flex; }
+    .lightbox.open { 
+      display:flex; 
+      opacity:1;
+    }
+    .lb-container {
+      position:relative;
+      width:90%;
+      max-width:900px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
     .lightbox img {
-      max-width:90vw; max-height:88vh;
-      border-radius:2px; box-shadow:0 0 60px rgba(0,0,0,.5);
+      max-width:90vw; 
+      max-height:85vh;
+      border-radius:12px; 
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      object-fit:contain;
+      animation:imgEntry .5s cubic-bezier(.175,.885,.32,1.275);
     }
+    @keyframes imgEntry {
+      from {
+        opacity:0;
+        transform:scale(.85) translateY(20px);
+      }
+      to {
+        opacity:1;
+        transform:scale(1) translateY(0);
+      }
+    }
+    
     .lb-close {
-      position:absolute; top:1.5rem; right:2rem;
-      font-size:2rem; color:rgba(246,242,234,.7); cursor:pointer;
-      background:none; border:none; line-height:1; transition:color .2s;
+      position:absolute; top:-50px; right:0;
+      width:44px; height:44px;
+      border-radius:50%;
+      background:rgba(200,168,75,.2);
+      border:1px solid rgba(200,168,75,.4);
+      color:rgba(246,242,234,.9); 
+      cursor:pointer;
+      font-size:1.8rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:all .3s cubic-bezier(.16,.1,.3,1);
+      backdrop-filter:blur(8px);
     }
-    .lb-close:hover { color:var(--dourado-cl); }
+    .lb-close:hover { 
+      background:rgba(200,168,75,.4);
+      border-color:rgba(200,168,75,.8);
+      color:var(--dourado-cl);
+      transform:rotate(90deg) scale(1.1);
+    }
+
+    .lb-nav {
+      position:absolute;
+      top:50%;
+      width:100%;
+      transform:translateY(-50%);
+      display:flex;
+      justify-content:space-between;
+      padding:0 1.2rem;
+      pointer-events:none;
+    }
+    .lb-btn {
+      width:44px; height:44px;
+      border-radius:50%;
+      background:rgba(200,168,75,.2);
+      border:1px solid rgba(200,168,75,.4);
+      color:rgba(246,242,234,.9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      font-size:1.2rem;
+      transition:all .3s cubic-bezier(.16,.1,.3,1);
+      pointer-events:auto;
+      backdrop-filter:blur(8px);
+    }
+    .lb-btn:hover {
+      background:rgba(200,168,75,.4);
+      border-color:rgba(200,168,75,.8);
+      color:var(--dourado-cl);
+      transform:scale(1.1);
+    }
+
+    .lb-counter {
+      position:absolute;
+      bottom:-40px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:.74rem;
+      color:rgba(246,242,234,.6);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
 
     /* ══ BOTÃO FLUTUANTE ══ */
     .btn-flutuante {
@@ -529,8 +680,7 @@
       .nav-canal  { display:none; }
       .hamburger  { display:flex; }
 
-      .galeria-grid { grid-template-columns:repeat(2,1fr); }
-      .gal-item { aspect-ratio:1/1; }
+      .galeria-grid { grid-template-columns:repeat(3,1fr); gap:10px; }
 
       .contato-grid { grid-template-columns:1fr; }
     }
@@ -561,8 +711,8 @@
       .evento-nome { font-size:1.05rem; }
       .evento-sep { height:34px; }
 
-      .galeria-grid { gap:5px; grid-template-columns: 1fr; }
-      .gal-item { aspect-ratio: 3/4; }
+      .galeria-grid { gap:6px; grid-template-columns:repeat(2, 1fr); }
+
       .mapa-wrap iframe { height:250px; }
 
       .contato-item { padding:1.2rem; }
@@ -571,6 +721,11 @@
 
       footer { padding:2.2rem 1.4rem; }
       .footer-logo { font-size:1.15rem; }
+
+      .lightbox img { max-height:70vh; }
+      .lb-close { top:-40px; width:40px; height:40px; font-size:1.5rem; }
+      .lb-btn { width:40px; height:40px; font-size:1rem; }
+      .lb-counter { bottom:-35px; font-size:.66rem; }
     }
   </style>
 
@@ -737,9 +892,18 @@
   </footer>
 
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" onclick="fecharLb()">
-    <button class="lb-close" onclick="fecharLb()">×</button>
-    <img id="lb-img" src="" alt=""/>
+  <div class="lightbox" id="lightbox" onclick="fecharLbClick(event)">
+    <div class="lb-container">
+      <button class="lb-close" onclick="fecharLb(event)" aria-label="Fechar">×</button>
+      <img id="lb-img" src="" alt=""/>
+      <div class="lb-nav">
+        <button class="lb-btn" onclick="anteriorFoto(event)" title="Anterior">‹</button>
+        <button class="lb-btn" onclick="proximaFoto(event)" title="Próxima">›</button>
+      </div>
+      <div class="lb-counter">
+        <span id="lb-atual">1</span> / <span id="lb-total">1</span>
+      </div>
+    </div>
   </div>
 
   <!-- BOTÃO FLUTUANTE -->
@@ -864,24 +1028,55 @@
 
     function renderizarGaleria() {
       const grid = document.getElementById('galeriaGrid');
-      grid.innerHTML = dados.galeria.map(foto => `
-        <div class="gal-item" onclick="abrirLb('${foto.url}')">
+      grid.innerHTML = dados.galeria.map((foto, idx) => `
+        <div class="gal-item" onclick="abrirLb(${idx})">
           <img src="${foto.url}" alt="${foto.titulo}"/>
-          <div class="gal-hover"><span class="gal-hover-icon">⊕</span></div>
+          <div class="gal-overlay">
+            <div class="gal-icon-wrap">⊕</div>
+          </div>
         </div>
       `).join('');
     }
 
     // UI Functions
-    window.abrirLb = function(src){
-      document.getElementById('lb-img').src = src;
+    let galeriaAtual = 0;
+    
+    window.abrirLb = function(idx){
+      galeriaAtual = idx;
+      const foto = dados.galeria[idx];
+      if (!foto) return;
+      
+      document.getElementById('lb-img').src = foto.url;
+      document.getElementById('lb-atual').textContent = idx + 1;
+      document.getElementById('lb-total').textContent = dados.galeria.length;
       document.getElementById('lightbox').classList.add('open');
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '0px';
     };
 
-    window.fecharLb = function(){
+    window.fecharLb = function(e){
+      if (e) e.stopPropagation();
       document.getElementById('lightbox').classList.remove('open');
       document.body.style.overflow = '';
+      galeriaAtual = 0;
+    };
+
+    window.fecharLbClick = function(e){
+      if (e.target.id === 'lightbox') {
+        fecharLb();
+      }
+    };
+
+    window.proximaFoto = function(e){
+      if (e) e.stopPropagation();
+      galeriaAtual = (galeriaAtual + 1) % dados.galeria.length;
+      abrirLb(galeriaAtual);
+    };
+
+    window.anteriorFoto = function(e){
+      if (e) e.stopPropagation();
+      galeriaAtual = (galeriaAtual - 1 + dados.galeria.length) % dados.galeria.length;
+      abrirLb(galeriaAtual);
     };
 
     window.fecharMenu = function(){
@@ -903,8 +1098,12 @@
       mNav.classList.toggle('open');
     });
 
-    // Lightbox ESC
-    document.addEventListener('keydown', e => { if(e.key==='Escape') fecharLb(); });
+    // Lightbox ESC e navegação teclado
+    document.addEventListener('keydown', e => { 
+      if(e.key==='Escape') fecharLb();
+      if(e.key==='ArrowRight') proximaFoto();
+      if(e.key==='ArrowLeft') anteriorFoto();
+    });
 
     // Iniciar
     carregarDados();
