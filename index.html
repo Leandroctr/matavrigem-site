@@ -552,6 +552,30 @@
       footer { padding:2.2rem 1.4rem; }
       .footer-logo { font-size:1.15rem; }
     }
+    @media (max-width: 768px) {
+
+  .prox-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
+  }
+
+  .hero-esq {
+    padding: 2rem 1.2rem !important;
+  }
+
+  .galeria-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .evento {
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  .evento-sep {
+    display: none;
+  }
+}
   </style>
 
 </head>
@@ -632,6 +656,32 @@
   <section id="proximaGira">
     <div class="container">
       <div class="prox-grid" id="proximaGiraGrid">
+<script>
+db.collection('proximaGira')
+  .onSnapshot(snapshot => {
+
+    if (snapshot.empty) return;
+
+    const d = snapshot.docs[0].data();
+
+    const grid = document.getElementById('proximaGiraGrid');
+
+    if (grid) {
+      grid.innerHTML = `
+        <div class="prox-img">
+          <img src="${d.imagem}">
+        </div>
+
+        <div class="prox-info">
+          <h2>${d.nome}</h2>
+          <p>${d.descricao}</p>
+          <p><strong>${d.data} • ${d.hora}</strong></p>
+        </div>
+      `;
+    }
+
+  });
+</script>
         <!-- Preenchido por JavaScript -->
       </div>
     </div>
@@ -889,6 +939,73 @@
     // Iniciar
     carregarDados();
   </script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
+<script>
+const config = {
+  apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+  authDomain: "mata-virgem.firebaseapp.com",
+  projectId: "mata-virgem",
+  storageBucket: "mata-virgem.firebasestorage.app",
+};
+
+firebase.initializeApp(config);
+const db = firebase.firestore();
+</script>
+
+  <script>
+db.collection('eventos')
+  .orderBy('dia', 'asc')
+  .onSnapshot(snapshot => {
+
+    const lista = document.getElementById('agendaLista');
+    if (!lista) return;
+
+    lista.innerHTML = '';
+
+    snapshot.forEach(doc => {
+      const e = doc.data();
+
+      lista.innerHTML += `
+        <div class="evento">
+          <div class="evento-data-box">
+            <div class="evento-dia">${e.dia}</div>
+            <div class="evento-mes">${e.mes}</div>
+          </div>
+
+          <div class="evento-sep"></div>
+
+          <div class="evento-info">
+            <div class="evento-semana">${e.semana}</div>
+            <div class="evento-nome">${e.nome}</div>
+            <div class="evento-hora">${e.hora}</div>
+          </div>
+        </div>
+      `;
+    });
+  });
+</script>
+  <script>
+db.collection('galeria')
+  .onSnapshot(snapshot => {
+
+    const grid = document.getElementById('galeriaGrid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    snapshot.forEach(doc => {
+      const f = doc.data();
+
+      grid.innerHTML += `
+        <div class="gal-item">
+          <img src="${f.url}" alt="${f.titulo}">
+        </div>
+      `;
+    });
+  });
+</script>
+  
 </body>
 </html>
