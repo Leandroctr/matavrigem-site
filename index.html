@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aruanda de Mata Virgem - Umbanda e Jurema Sagrada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --verde: #1b3a22;
+      --verde-med: #2c5c3a;
+      --dourado: #c8a84b;
+      --creme: #f6f2ea;
+      --branco: #ffffff;
+      --texto: #252520;
+      --texto-cl: #56564e;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--branco); color: var(--texto); }
+
+    .header {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      padding: 2rem; color: var(--branco); text-align: center; border-bottom: 3px solid var(--dourado);
+    }
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; margin-bottom: .5rem;
+    }
+    .header p {
+      font-size: .9rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(226,201,126,.8);
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* PRÓXIMA GIRA */
+    .proxima-gira {
+      background: var(--creme); border: 2px solid var(--dourado); border-radius: 8px;
+      padding: 2rem; margin-bottom: 3rem; text-align: center;
+    }
+    .proxima-gira h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--verde); margin-bottom: 1rem;
+    }
+    .proxima-info {
+      font-size: 1.1rem; color: var(--texto); margin: .5rem 0;
+    }
+    .proxima-info strong { color: var(--verde); }
+    .proxima-desc {
+      font-size: .95rem; color: var(--texto-cl); margin-top: 1rem; line-height: 1.6;
+    }
+
+    /* AGENDA */
+    .secao-titulo {
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--verde);
+      margin: 2rem 0 1.5rem 0; text-align: center; border-bottom: 2px solid var(--dourado);
+      padding-bottom: 1rem;
+    }
+
+    .agenda-container {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;
+    }
+
+    .evento-card {
+      background: var(--creme); border-left: 4px solid var(--dourado); padding: 1.5rem; border-radius: 6px;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .evento-card:hover {
+      transform: translateY(-4px); box-shadow: 0 8px 24px rgba(27,58,34,.15);
+    }
+
+    .evento-data {
+      display: flex; gap: 1rem; margin-bottom: 1rem;
+    }
+    .evento-dia {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--dourado); font-weight: 600; line-height: 1;
+    }
+    .evento-mes-semana {
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .evento-mes { font-size: .9rem; font-weight: 600; color: var(--verde); }
+    .evento-semana { font-size: .8rem; color: var(--texto-cl); }
+
+    .evento-nome {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: .5rem;
+    }
+    .evento-hora {
+      font-size: .9rem; color: var(--dourado); font-weight: 500;
+    }
+
+    /* GALERIA */
+    .galeria-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;
+    }
+
+    .galeria-item {
+      border-radius: 8px; overflow: hidden; aspect-ratio: 1;
+      border: 2px solid rgba(200,168,75,.2); transition: all .3s;
+      cursor: pointer; position: relative;
+    }
+    .galeria-item:hover {
+      border-color: var(--dourado); box-shadow: 0 8px 24px rgba(27,58,34,.15);
+      transform: scale(1.02);
+    }
+
+    .galeria-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .galeria-titulo {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(27,58,34,.8), transparent);
+      color: var(--branco); padding: 1rem; font-size: .9rem;
+      font-weight: 500; display: none;
+    }
+
+    .galeria-item:hover .galeria-titulo { display: block; }
+
+    /* RODAPÉ */
+    .footer {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      color: var(--branco); text-align: center; padding: 2rem; margin-top: 3rem;
+      border-top: 3px solid var(--dourado); font-size: .8rem;
+    }
+
+    .footer p { margin: .5rem 0; }
+
+    .version-info {
+      background: rgba(200,168,75,.1); border: 1px solid rgba(200,168,75,.3);
+      border-radius: 4px; padding: .6rem; margin-top: 1rem; font-size: .7rem;
+      color: rgba(226,201,126,.9); font-family: monospace;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 1.8rem; }
+      .secao-titulo { font-size: 1.5rem; }
+      .evento-card { padding: 1rem; }
+      .galeria-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    }
+
+    .loading { text-align: center; color: var(--texto-cl); padding: 2rem; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Aruanda de Mata Virgem</h1>
+    <p>Templo Escola • Umbanda e Jurema Sagrada</p>
+  </div>
+
+  <div class="container">
+
+    <!-- PRÓXIMA GIRA -->
+    <div id="proximaContainer" class="loading">Carregando próxima gira...</div>
+
+    <!-- AGENDA -->
+    <h2 class="secao-titulo">Agenda de Eventos</h2>
+    <div id="agendaContainer" class="agenda-container loading">
+      <p class="loading">Carregando eventos...</p>
+    </div>
+
+    <!-- GALERIA -->
+    <h2 class="secao-titulo">Galeria</h2>
+    <div id="galeriaContainer" class="galeria-grid loading">
+      <p class="loading">Carregando fotos...</p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>Templo Escola Aruanda de Mata Virgem</p>
+    <p>Umbanda e Jurema Sagrada</p>
+    <div class="version-info" id="versionInfo">
+      Carregando informações do sistema...
+    </div>
+  </div>
+
+  <!-- Firebase SDK COMPAT -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const config = {
+      apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+      authDomain: "mata-virgem.firebaseapp.com",
+      projectId: "mata-virgem",
+      storageBucket: "mata-virgem.firebasestorage.app",
+      messagingSenderId: "351134240123",
+      appId: "1:351134240123:web:86a041fee58b856ea3c1de"
+    };
+
+    console.log('🔥 Inicializando Firebase no site...');
+    firebase.initializeApp(config);
+    const db = firebase.firestore();
+
+    const agora = new Date();
+    const versionInfo = `v1.0 • ${agora.toLocaleDateString('pt-BR')} • ${agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+    document.getElementById('versionInfo').textContent = '⏰ ' + versionInfo;
+
+    // ══ PRÓXIMA GIRA ══
+    db.collection('proximaGira').onSnapshot(snap => {
+      const container = document.getElementById('proximaContainer');
+      
+      if (snap.empty) {
+        container.innerHTML = '<p class="loading">Nenhuma gira programada</p>';
+        return;
+      }
+
+      const gira = snap.docs[0].data();
+      container.innerHTML = `
+        <div class="proxima-gira">
+          <h2>🎭 Próxima Gira</h2>
+          <div class="proxima-info">
+            <strong>${gira.data}</strong> • ${gira.dia}
+          </div>
+          <div class="proxima-info">
+            <strong>Horário:</strong> ${gira.hora}
+          </div>
+          <div class="proxima-info">
+            <strong>${gira.nome}</strong>
+          </div>
+          <div class="proxima-desc">
+            ${gira.descricao}
+          </div>
+        </div>
+      `;
+    });
+
+    // ══ AGENDA ══
+    db.collection('eventos').orderBy('dia', 'asc').onSnapshot(snap => {
+      const container = document.getElementById('agendaContainer');
+      
+      if (snap.empty) {
+        container.innerHTML = '<p class="loading">Nenhum evento</p>';
+        return;
+      }
+
+      const eventos = snap.docs.map(doc => doc.data());
+      container.innerHTML = eventos.map(evt => `
+        <div class="evento-card">
+          <div class="evento-data">
+            <div class="evento-dia">${evt.dia}</div>
+            <div class="evento-mes-semana">
+              <div class="evento-mes">${evt.mes}</div>
+              <div class="evento-semana">${evt.semana}</div>
+            </div>
+          </div>
+          <div class="evento-nome">${evt.nome}</div>
+          <div class="evento-hora">⏰ ${evt.hora}</div>
+        </div>
+      `).join('');
+    });
+
+    // ══ GALERIA ══
+    db.collection('galeria').onSnapshot(snap => {
+      const container = document.getElementById('galeriaContainer');
+      
+      if (snap.empty) {
+        container.innerHTML = '<p class="loading">Nenhuma foto</p>';
+        return;
+      }
+
+      const fotos = snap.docs.map(doc => doc.data());
+      container.innerHTML = fotos.map((foto, i) => `
+        <div class="galeria-item">
+          <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23999%22%3EFoto não carregada%3C/text%3E%3C/svg%3E'">
+          <div class="galeria-titulo">${foto.titulo}</div>
+        </div>
+      `).join('');
+    });
+
+    console.log('✅ Site carregado com Firebase!');
+  </script>
+
+</body>
+</html>

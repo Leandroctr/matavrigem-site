@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Importador - Firebase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1b3a22 0%, #2c5c3a 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .card {
+      background: #f6f2ea; border-radius: 12px; padding: 2rem;
+      max-width: 600px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+      color: #1b3a22; margin-bottom: .5rem;
+    }
+    .subtitle {
+      font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+      color: #c8a84b; margin-bottom: 1.5rem;
+    }
+    textarea {
+      width: 100%; padding: 1rem; border: 1px solid rgba(200,168,75,.3);
+      border-radius: 6px; font-family: monospace; font-size: .85rem;
+      min-height: 300px; resize: vertical; color: #252520; margin-bottom: 1rem;
+    }
+    textarea:focus { outline: none; border-color: #c8a84b; box-shadow: 0 0 0 3px rgba(200,168,75,.1); }
+    .btn {
+      width: 100%; padding: 1rem;
+      background: linear-gradient(135deg, #1b3a22 0%, #2c5c3a 100%);
+      color: #fff; border: none; border-radius: 6px; font-size: .85rem;
+      letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+      transition: all .3s; font-weight: 500; margin-bottom: 1rem;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,58,34,.3); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .status {
+      padding: 1rem; border-radius: 6px; margin-bottom: 1rem;
+      font-size: .9rem; display: none; line-height: 1.6;
+    }
+    .status.show { display: block; }
+    .status-success {
+      background: rgba(37,211,102,.1); border: 1px solid rgba(37,211,102,.3); color: #1a7d4e;
+    }
+    .status-error {
+      background: rgba(214,69,69,.1); border: 1px solid rgba(214,69,69,.3); color: #9a2c2c;
+    }
+    .status-loading {
+      background: rgba(200,168,75,.1); border: 1px solid rgba(200,168,75,.3); color: #7a5230;
+    }
+    .info-box {
+      background: rgba(200,168,75,.1); border: 1px solid rgba(200,168,75,.3);
+      border-radius: 4px; padding: 1rem; margin-bottom: 1.5rem;
+      font-size: .8rem; line-height: 1.6; color: #252520;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Importador</h1>
+    <div class="subtitle">Firebase Firestore</div>
+
+    <div class="info-box">
+      ℹ️ Cole seu <strong>dados.json</strong> aqui para importar eventos, fotos, próxima gira e cursos.
+    </div>
+
+    <textarea id="jsonInput" placeholder="Cole aqui o JSON..."></textarea>
+
+    <button class="btn" id="btnImportar" onclick="importar()">📥 Importar Dados</button>
+    <div id="statusDiv" class="status"></div>
+
+    <div style="text-align: center; font-size: .7rem; color: #56564e; margin-top: 1.5rem;">
+      Após importar, acesse <strong>admin.html</strong>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    let db = null;
+    let pronto = false;
+
+    const config = {
+      apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+      authDomain: "mata-virgem.firebaseapp.com",
+      projectId: "mata-virgem",
+      storageBucket: "mata-virgem.firebasestorage.app",
+      messagingSenderId: "351134240123",
+      appId: "1:351134240123:web:86a041fee58b856ea3c1de"
+    };
+
+    console.log('🔥 Carregando Firebase...');
+    
+    setTimeout(() => {
+      try {
+        firebase.initializeApp(config);
+        db = firebase.firestore();
+        pronto = true;
+        console.log('✅ Firebase pronto!');
+        status('✅ Firebase pronto! Cole seu JSON...', 'success');
+      } catch (e) {
+        console.error('❌', e);
+        status('❌ Erro ao carregar Firebase', 'error');
+      }
+    }, 500);
+
+    function status(msg, tipo) {
+      const div = document.getElementById('statusDiv');
+      div.textContent = msg;
+      div.className = 'status show status-' + tipo;
+    }
+
+    async function importar() {
+      if (!pronto) {
+        status('⏳ Aguarde Firebase carregar...', 'loading');
+        return;
+      }
+
+      const json = document.getElementById('jsonInput').value.trim();
+      if (!json) {
+        status('❌ Cole o JSON!', 'error');
+        return;
+      }
+
+      document.getElementById('btnImportar').disabled = true;
+      status('⏳ Validando...', 'loading');
+
+      try {
+        const dados = JSON.parse(json);
+        console.log('✅ JSON válido');
+
+        // Limpar
+        status('🗑️ Limpando dados antigos...', 'loading');
+        let snap = await db.collection('eventos').get();
+        for (let doc of snap.docs) await doc.ref.delete();
+        snap = await db.collection('galeria').get();
+        for (let doc of snap.docs) await doc.ref.delete();
+
+        // Eventos
+        if (dados.eventos && Array.isArray(dados.eventos)) {
+          status(`📝 Importando ${dados.eventos.length} eventos...`, 'loading');
+          for (let evt of dados.eventos) {
+            await db.collection('eventos').doc(String(evt.id || Date.now())).set({
+              dia: String(evt.dia || ''),
+              mes: String(evt.mes || ''),
+              semana: String(evt.semana || ''),
+              nome: String(evt.nome || ''),
+              hora: String(evt.hora || '')
+            });
+          }
+        }
+
+        // Próxima Gira
+        if (dados.proximaGira) {
+          status('🎭 Importando próxima gira...', 'loading');
+          await db.collection('proximaGira').doc('gira1').set({
+            data: String(dados.proximaGira.data || ''),
+            dia: String(dados.proximaGira.dia || ''),
+            hora: String(dados.proximaGira.hora || ''),
+            nome: String(dados.proximaGira.nome || ''),
+            descricao: String(dados.proximaGira.descricao || ''),
+            imagem: String(dados.proximaGira.imagem || '')
+          });
+        }
+
+        // Galeria
+        if (dados.galeria && Array.isArray(dados.galeria)) {
+          status(`📸 Importando ${dados.galeria.length} fotos...`, 'loading');
+          for (let foto of dados.galeria) {
+            await db.collection('galeria').doc(String(foto.id || Date.now())).set({
+              titulo: String(foto.titulo || ''),
+              url: String(foto.url || '')
+            });
+          }
+        }
+
+        // Cursos
+        if (dados.cursos && Array.isArray(dados.cursos)) {
+          status('📚 Importando cursos...', 'loading');
+          const aulas = (dados.cursos[0] && dados.cursos[0].aulas) ? dados.cursos[0].aulas : [];
+          await db.collection('cursos').doc('curso1').set({
+            aulas: aulas
+          });
+        }
+
+        document.getElementById('btnImportar').disabled = false;
+        status('✅ IMPORTAÇÃO CONCLUÍDA! Acesse admin.html', 'success');
+        console.log('🎉 Pronto!');
+        
+        setTimeout(() => {
+          document.getElementById('jsonInput').value = '';
+        }, 2000);
+
+      } catch (e) {
+        document.getElementById('btnImportar').disabled = false;
+        console.error('❌', e);
+        status('❌ Erro: ' + e.message, 'error');
+      }
+    }
+
+    console.log('✅ Importador carregado');
+  </script>
+
+</body>
+</html>
