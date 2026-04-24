@@ -4,69 +4,44 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Painel Admin - Aruanda</title>
-      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&display=swap" rel="stylesheet">
       <style>
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 :root {
-                              --verde: #1b3a22; --verde-med: #2c5c3a; --verde-cl: #3d7a50;
-                              --dourado: #c8a84b; --dourado-cl: #e2c97e; --marrom: #7a5230;
-                              --marrom-cl: #a87840; --creme: #f6f2ea; --creme2: #ede8de;
-                              --branco: #ffffff; --preto: #0a0a08;
+                              --verde: #1b3a22; --dourado: #c8a84b; --creme: #f6f2ea; --preto: #0a0a08;
                 }
-                body {
-                              font-family: 'Cormorant Garamond', serif;
-                              background: linear-gradient(135deg, var(--preto) 0%, #1a1a18 100%);
-                              color: var(--preto); min-height: 100vh; padding: 2rem;
-                }
+                body { font-family: 'Cormorant Garamond', serif; background: linear-gradient(135deg, var(--preto) 0%, #1a1a18 100%); color: var(--preto); min-height: 100vh; padding: 2rem; }
                 .container { max-width: 1000px; margin: 0 auto; }
                 header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 2px solid var(--dourado); }
-                h1 { font-size: 2.5rem; color: var(--creme); margin-bottom: 0.5rem; font-weight: 400; }
+                h1 { font-size: 2.5rem; color: var(--creme); margin-bottom: 0.5rem; }
                 .subtitle { color: var(--dourado); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
-                .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center; border-bottom: 1px solid var(--dourado); padding-bottom: 1rem; }
-                .tab-btn { padding: 0.8rem 1.5rem; background: transparent; border: 2px solid var(--dourado); color: var(--dourado); cursor: pointer; font-size: 0.95rem; font-family: 'Cormorant Garamond', serif; transition: all 0.3s ease; letter-spacing: 1px; }
-                .tab-btn:hover, .tab-btn.active { background: var(--dourado); color: var(--preto); font-weight: 600; }
-                .tab-content { display: none; animation: fadeIn 0.3s ease; }
+                .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center; border-bottom: 1px solid var(--dourado); padding-bottom: 1rem; flex-wrap: wrap; }
+                .tab-btn { padding: 0.8rem 1.5rem; background: transparent; border: 2px solid var(--dourado); color: var(--dourado); cursor: pointer; font-family: 'Cormorant Garamond', serif; transition: all 0.3s; }
+                .tab-btn.active { background: var(--dourado); color: var(--preto); font-weight: 600; }
+                .tab-content { display: none; animation: fadeIn 0.3s; }
                 .tab-content.active { display: block; }
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-                .form { background: var(--creme); padding: 2rem; border-radius: 8px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                .form { background: var(--creme); padding: 2rem; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
                 .form-group { margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
                 .form-group.full { grid-template-columns: 1fr; }
-                label { display: block; font-size: 0.85rem; color: var(--preto); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-                input, textarea, select { width: 100%; padding: 0.8rem; border: 1px solid var(--dourado); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--preto); background: var(--branco); transition: border-color 0.3s ease; }
-                input:focus, textarea:focus, select:focus { outline: none; border-color: var(--dourado-cl); box-shadow: 0 0 5px rgba(200, 168, 75, 0.3); }
-                textarea { resize: vertical; min-height: 100px; }
-                button { padding: 1rem 2rem; background: var(--verde); color: var(--creme); border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s ease; width: 100%; }
-                button:hover { background: var(--verde-med); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(27, 58, 34, 0.3); }
-                .upload-area { border: 2px dashed var(--dourado); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; background: rgba(200, 168, 75, 0.05); margin: 1rem 0; }
-                .upload-area:hover { border-color: var(--dourado-cl); background: rgba(200, 168, 75, 0.1); }
-                .upload-area.dragover { border-color: var(--verde); background: rgba(27, 58, 34, 0.1); }
-                .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-                .preview-img { max-width: 300px; max-height: 300px; margin: 1rem auto; border-radius: 8px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
-                .item-card { background: var(--creme); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--dourado); transition: all 0.3s ease; }
-                .item-card:hover { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transform: translateX(5px); }
+                label { display: block; font-size: 0.85rem; color: var(--preto); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase; }
+                input, textarea { width: 100%; padding: 0.8rem; border: 1px solid var(--dourado); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; }
+                textarea { min-height: 100px; resize: vertical; }
+                button { padding: 1rem 2rem; background: var(--verde); color: var(--creme); border: none; border-radius: 4px; cursor: pointer; font-family: 'Cormorant Garamond', serif; font-weight: 600; text-transform: uppercase; transition: all 0.3s; width: 100%; margin-top: 1rem; }
+                button:hover { background: #2c5c3a; }
+                .upload-area { border: 2px dashed var(--dourado); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; background: rgba(200,168,75,0.05); margin: 1rem 0; }
+                .upload-area:hover { background: rgba(200,168,75,0.1); border-color: #e2c97e; }
+                .preview-img { max-width: 300px; max-height: 300px; margin: 1rem auto; border-radius: 8px; }
+                .item-card { background: var(--creme); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--dourado); }
                 .item-info { flex: 1; }
-                .item-title { font-size: 1.1rem; color: var(--preto); font-weight: 600; margin-bottom: 0.3rem; }
-                .item-date { font-size: 0.85rem; color: var(--marrom); }
+                .item-title { font-size: 1.1rem; font-weight: 600; }
+                .item-date { font-size: 0.85rem; color: #7a5230; }
                 .delete-btn { background: #e74c3c; padding: 0.5rem 1rem; font-size: 0.8rem; width: auto; }
-                .delete-btn:hover { background: #c0392b; }
                 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-                .gallery-item { background: var(--creme); border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
-                .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
+                .gallery-item { background: var(--creme); border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
                 .gallery-item img { width: 100%; height: 250px; object-fit: cover; }
-                .gallery-item-info { padding: 1rem; }
-                .gallery-item-delete { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.3s ease; }
-                .gallery-item:hover .gallery-item-delete { opacity: 1; }
-                .gallery-item-delete:hover { background: #c0392b; }
-                .success-msg, .error-msg { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; text-align: center; font-weight: 600; }
-                .success-msg { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-                .error-msg { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-                @media (max-width: 768px) {
-                              body { padding: 1rem; } h1 { font-size: 1.8rem; }
-                              .form-group { grid-template-columns: 1fr; } .tabs { flex-direction: column; }
-                              .gallery-grid { grid-template-columns: 1fr; }
-                              .item-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
-                              .delete-btn { width: 100%; }
-                }
+                .success { background: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
+                .error { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
             </style>
   </head>
   <body>
@@ -78,7 +53,7 @@
         
                 <div class="tabs">
                             <button class="tab-btn active" onclick="switchTab('eventos')">📅 EVENTOS</button>button>
-                            <button class="tab-btn" onclick="switchTab('gira')">🎪 GIRA GIRA</button>button>
+                            <button class="tab-btn" onclick="switchTab('gira')">🎪 PRÓXIMA GIRA</button>button>
                             <button class="tab-btn" onclick="switchTab('galeria')">🖼️ GALERIA</button>button>
                 </div>div>
         
@@ -87,337 +62,289 @@
                                             <h2 style="margin-bottom: 1.5rem; color: var(--verde);">➕ Novo Evento</h2>
                                             <div class="form-group full">
                                                                 <label>Foto da Agenda</label>
-                                                                <div class="upload-area" id="uploadAgenda" ondrop="handleDrop(event, 'agenda')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('agendaInput').click()">
-                                                                                        <div class="upload-icon">📸</div>div>
+                                                                <div class="upload-area" onclick="document.getElementById('agendaInput').click()">
+                                                                                        <div style="font-size: 2rem;">📸</div>div>
                                                                                         <p>Clique ou arraste a foto aqui</p>
-                                                                                        <small>PNG, JPG ou GIF (máx. 5MB)</small>
                                                                 </div>div>
-                                                                <input type="file" id="agendaInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 'agenda')">
+                                                                <input type="file" id="agendaInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'agendaPreview')">
                                                                 <img id="agendaPreview" class="preview-img" style="display: none;">
                                             </div>div>
                                             <div class="form-group">
-                                                                <div><label for="eventoDia">DIA</label><input type="number" id="eventoDia" min="1" max="31" placeholder="17"></div>
-                                                                <div><label for="eventoMes">MÊS</label>label><input type="text" id="eventoMes" placeholder="Abr"></div>
+                                                                <div><label>DIA</label><input type="number" id="eventoDia" min="1" max="31"></div>
+                                                                <div><label>MÊS</label><input type="text" id="eventoMes"></div>
                                             </div>
                                             <div class="form-group">
-                                                                  <div><label for="eventoSemana">SEMANA</label>label><input type="text" id="eventoSemana" placeholder="Sexta-feira"></div>
-                                                                  <div><label for="eventoHora">HORA</label>label><input type="time" id="eventoHora"></div>
+                                                                <div><label>SEMANA</label><input type="text" id="eventoSemana"></div>
+                                                                <div><label>HORA</label><input type="time" id="eventoHora"></div>
                                             </div>
-                                              <div class="form-group full">
-                                                                    <label for="eventoNome">NOME DO EVENTO</label>label>
-                                                                    <input type="text" id="eventoNome" placeholder="Ex: Baianos e Boiadeiros">
-                                              </div>
-                                              <div class="form-group full">
-                                                                    <label for="eventoDescricao">DESCRIÇÃO</label>label>
-                                                                    <textarea id="eventoDescricao" placeholder="Descreva o evento..."></textarea>
-                                              </div>
-                                              <button onclick="adicionarEvento()" style="margin-top: 1rem;">➕ ADICIONAR EVENTO</button>button>
-                                              <div id="mensagemEvento"></div>
+                                            <div class="form-group full">
+                                                                <label>NOME DO EVENTO</label>
+                                                                <input type="text" id="eventoNome">
+                                            </div>
+                                            <div class="form-group full">
+                                                                <label>DESCRIÇÃO</label>
+                                                                <textarea id="eventoDescricao"></textarea>
+                                            </div>
+                                            <button onclick="adicionarEvento()">➕ ADICIONAR EVENTO</button>button>
+                                            <div id="msgEvento"></div>
                             </div>
-                              <div style="margin-top: 2rem;">
-                                                <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📋 Eventos Cadastrados</h2>h2>
-                                                <div id="listaEventos"></div>
-                              </div>
+                            <div style="margin-top: 2rem;">
+                                            <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📋 Eventos Cadastrados</h2>h2>
+                                            <div id="listaEventos"></div>
+                            </div>
                 </div>
-
-                  <div id="gira" class="tab-content">
-                                <div class="form">
-                                                  <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🎪 Próxima Gira</h2>h2>
-                                                  <div class="form-group full">
-                                                                        <label>Banner da Próxima Gira</label>
-                                                                      <div class="upload-area" id="uploadGira" ondrop="handleDrop(event, 'gira')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('giraInput').click()">
-                                                                                              <div class="upload-icon">🎪</div>
-                                                                                              <p>Clique ou arraste a foto aqui</p>
-                                                                                              <small>PNG, JPG ou GIF (máx. 5MB)</small>
-                                                                      </div>
-                                                                      <input type="file" id="giraInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 'gira')">
-                                                                      <img id="giraPreview" class="preview-img" style="display: none;">
-                                                  </div>
-                                                <div class="form-group">
-                                                                    <div><label for="giraDia">DIA</label><input type="number" id="giraDia" min="1" max="31"></div>
-                                                                    <div><label for="giraMes">MÊS</label><input type="text" id="giraMes"></div>
-                                                </div>
-                                                <div class="form-group">
-                                                                    <div><label for="giraSemana">DIA DA SEMANA</label><input type="text" id="giraSemana"></div>
-                                                                    <div><label for="giraHora">HORA</label><input type="time" id="giraHora"></div>
-                                                </div>
-                                                <div class="form-group full">
-                                                                    <label for="giraNome">NOME DA DATA</label>
-                                                                    <input type="text" id="giraNome" placeholder="Ex: Festa de Ogum">
-                                                </div>
-                                                <div class="form-group full">
-                                                                    <label for="giraDescricao">DESCRIÇÃO</label>
-                                                                    <textarea id="giraDescricao" placeholder="Descreva a gira..."></textarea>
-                                                </div>
-                                                <div class="form-group full">
-                                                                    <label for="giraImagem">URL DA IMAGEM (backup)</label>
-                                                                    <input type="url" id="giraImagem">
-                                                </div>
-                                                <button onclick="salvarGira()" style="margin-top: 1rem;">💾 SALVAR PRÓXIMA GIRA</button>button>
-                                                <div id="mensagemGira"></div>
-                                </div>
-                              <div style="margin-top: 2rem;">
-                                              <h2 style="color: var(--creme); margin-bottom: 1.5rem;">👀 Preview da Próxima Gira</h2>h2>
-                                              <div class="item-card">
-                                                                  <div class="item-info">
-                                                                                          <div class="item-title" id="giraPreviewNome">Nenhuma gira cadastrada</div>
-                                                                                          <div class="item-date" id="giraPreviewData">-</div>
-                                                                  </div>
-                                              </div>
-                              </div>
-                  </div>
+        
+                <div id="gira" class="tab-content">
+                            <div class="form">
+                                            <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🎪 Próxima Gira</h2>h2>
+                                            <div class="form-group full">
+                                                                <label>Banner da Próxima Gira</label>
+                                                                <div class="upload-area" onclick="document.getElementById('giraInput').click()">
+                                                                                        <div style="font-size: 2rem;">🎪</div>
+                                                                                        <p>Clique ou arraste a foto aqui</p>
+                                                                </div>
+                                                                <input type="file" id="giraInput" accept="image/*" style="display: none;" onchange="previewImage(this, 'giraPreview')">
+                                                                <img id="giraPreview" class="preview-img" style="display: none;">
+                                            </div>
+                                            <div class="form-group">
+                                                                <div><label>DIA</label><input type="number" id="giraDia"></div>
+                                                                <div><label>MÊS</label><input type="text" id="giraMes"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                                <div><label>SEMANA</label><input type="text" id="giraSemana"></div>
+                                                                <div><label>HORA</label><input type="time" id="giraHora"></div>
+                                            </div>
+                                            <div class="form-group full">
+                                                                <label>NOME DA DATA</label>
+                                                                <input type="text" id="giraNome">
+                                            </div>
+                                            <div class="form-group full">
+                                                                <label>DESCRIÇÃO</label>
+                                                                <textarea id="giraDescricao"></textarea>
+                                            </div>
+                                            <button onclick="salvarGira()">💾 SALVAR</button>button>
+                                            <div id="msgGira"></div>
+                            </div>
+                </div>
         
                 <div id="galeria" class="tab-content">
                             <div class="form">
-                                            <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🖼️ Galeria de Fotos</h2>h2>
+                                            <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🖼️ Galeria</h2>h2>
                                             <div class="form-group full">
-                                                                <label>Adicionar Fotos à Galeria</label>
-                                                                <div class="upload-area" id="uploadGaleria" ondrop="handleDrop(event, 'galeria')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('galeriaInput').click()">
-                                                                                        <div class="upload-icon">📸</div>
-                                                                                        <p>Clique ou arraste as fotos aqui</p>
-                                                                                        <small>PNG, JPG ou GIF (máx. 5MB cada)</small>
+                                                                <label>Fotos para Galeria</label>
+                                                                <div class="upload-area" onclick="document.getElementById('galeriaInput').click()">
+                                                                                        <div style="font-size: 2rem;">📸</div>
+                                                                                        <p>Clique ou arraste fotos aqui</p>
                                                                 </div>
-                                                                <input type="file" id="galeriaInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event, 'galeria')">
+                                                                <input type="file" id="galeriaInput" accept="image/*" multiple style="display: none;">
                                             </div>
-                                            <div class="form-group full">
-                                                                <label for="galeriaDescricao">DESCRIÇÃO (opcional)</label>
-                                                                <input type="text" id="galeriaDescricao" placeholder="Digite uma descrição para a foto">
-                                            </div>
-                                            <button onclick="enviarGaleria()" style="margin-top: 1rem;">⬆️ ENVIAR FOTOS</button>button>
-                                            <div id="mensagemGaleria"></div>
+                                            <button onclick="enviarGaleria()">⬆️ ENVIAR FOTOS</button>button>
+                                            <div id="msgGaleria"></div>
                             </div>
                             <div style="margin-top: 2rem;">
-                                            <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📸 Fotos da Galeria</h2>h2>
-                                            <div class="gallery-grid" id="galeriaGrid">
-                                                                <p style="color: var(--creme);">Carregando fotos...</p>
-                                            </div>
+                                            <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📸 Fotos</h2>h2>
+                                            <div class="gallery-grid" id="galeriaGrid"></div>
                             </div>
                 </div>
         </div>
   
       <script type="module">
               import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-              import { getStorage, ref, uploadBytes, getDownloadURL, listAll, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
-              import { getDatabase, ref as dbRef, set, get, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+              import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
       
               const firebaseConfig = {
                             apiKey: "AIzaSyB8TvBdzL9g-Tq4X2FDHj-4vvPqx0l4jEE",
                             authDomain: "aruanda-88a0d.firebaseapp.com",
                             projectId: "aruanda-88a0d",
                             storageBucket: "aruanda-88a0d.appspot.com",
-                            databaseURL: "https://aruanda-88a0d-default-rtdb.firebaseio.com",
                             messagingSenderId: "595948020595",
                             appId: "1:595948020595:web:3f892e2e15d2e3854e0c39"
               };
       
               const app = initializeApp(firebaseConfig);
               const storage = getStorage(app);
-              const database = getDatabase(app);
       
-              let arquivoAgenda = null, arquivoGira = null, arquivosGaleria = [];
-      
-              window.switchTab = function(tabName) {
+              window.switchTab = function(tab) {
                             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                            document.getElementById(tabName).classList.add('active');
+                            document.getElementById(tab).classList.add('active');
                             event.target.classList.add('active');
-                            if (tabName === 'gira') carregarGira();
-                            else if (tabName === 'galeria') carregarGaleria();
-                            else if (tabName === 'eventos') carregarEventos();
+                            if (tab === 'galeria') carregarGaleria();
               };
       
-              window.handleDragOver = function(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); };
-              window.handleDragLeave = function(e) { e.currentTarget.classList.remove('dragover'); };
-              window.handleDrop = function(e, type) {
-                            e.preventDefault(); e.currentTarget.classList.remove('dragover');
-                            const files = e.dataTransfer.files;
-                            if (files.length > 0) {
-                                              if (type === 'galeria') document.getElementById('galeriaInput').files = files;
-                                                                else { const input = document.getElementById(type + 'Input'); const dt = new DataTransfer(); dt.items.add(files[0]); input.files = dt.files; handleFileSelect({target: input}, type); }
+              window.previewImage = function(input, previewId) {
+                            if (input.files[0]) {
+                                              const reader = new FileReader();
+                                              reader.onload = (e) => {
+                                                                    document.getElementById(previewId).src = e.target.result;
+                                                                    document.getElementById(previewId).style.display = 'block';
+                                              };
+                                              reader.readAsDataURL(input.files[0]);
                             }
               };
       
-              window.handleFileSelect = function(event, type) {
-                            const files = event.target.files;
-                            if (type === 'agenda') { if (files.length) { arquivoAgenda = files[0]; mostrarPreview(files[0], 'agendaPreview'); } }
-                            else if (type === 'gira') { if (files.length) { arquivoGira = files[0]; mostrarPreview(files[0], 'giraPreview'); } }
-                            else if (type === 'galeria') arquivosGaleria = Array.from(files);
-              };
-      
-              function mostrarPreview(file, elementId) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                              const preview = document.getElementById(elementId);
-                                              preview.src = e.target.result; preview.style.display = 'block';
-                            };
-                            reader.readAsDataURL(file);
-              }
-      
               window.adicionarEvento = async function() {
-                            const dia = document.getElementById('eventoDia').value;
-                            const mes = document.getElementById('eventoMes').value;
-                            const semana = document.getElementById('eventoSemana').value;
-                            const hora = document.getElementById('eventoHora').value;
-                            const nome = document.getElementById('eventoNome').value;
-                            const descricao = document.getElementById('eventoDescricao').value;
-                            if (!dia || !mes || !semana || !hora || !nome) { mostrarMensagem('Preencha todos os campos obrigatórios', 'error', 'mensagemEvento'); return; }
-                            try {
-                                              const eventoData = { dia, mes, semana, hora, nome, descricao, imagemAgenda: '', dataCriacao: new Date().toISOString() };
-                                              if (arquivoAgenda) {
-                                                                    const fileName = 'eventos/agenda_' + Date.now() + '_' + arquivoAgenda.name;
-                                                                    const storageRef = ref(storage, fileName);
-                                                                    await uploadBytes(storageRef, arquivoAgenda);
-                                                                    eventoData.imagemAgenda = fileName;
-                                                                    arquivoAgenda = null;
-                                              }
-                                                                await set(dbRef(database, 'eventos/' + Date.now()), eventoData);
-                                              mostrarMensagem('✅ Evento adicionado com sucesso!', 'success', 'mensagemEvento');
-                                              document.getElementById('eventoDia').value = '';
-                                              document.getElementById('eventoMes').value = '';
-                                              document.getElementById('eventoSemana').value = '';
-                                              document.getElementById('eventoHora').value = '';
-                                              document.getElementById('eventoNome').value = '';
-                                              document.getElementById('eventoDescricao').value = '';
-                                              document.getElementById('agendaPreview').style.display = 'none';
-                                              carregarEventos();
-                            } catch (error) { mostrarMensagem('❌ Erro ao adicionar evento: ' + error.message, 'error', 'mensagemEvento'); }
-              };
-      
-              window.carregarEventos = async function() {
-                            try {
-                                              const snapshot = await get(dbRef(database, 'eventos'));
-                                              const listaEventos = document.getElementById('listaEventos');
-                                              listaEventos.innerHTML = '';
-                                              if (snapshot.exists()) {
-                                                                    const eventos = snapshot.val();
-                                                                    Object.keys(eventos).forEach(key => {
-                                                                                              const evento = eventos[key];
-                                                                                              const card = document.createElement('div');
-                                                                                              card.className = 'item-card';
-                                                                                              card.innerHTML = `<div class="item-info"><div class="item-title">${evento.nome}</div><div class="item-date">${evento.dia}/${evento.mes} • ${evento.semana} • ${evento.hora}</div></div><button class="delete-btn" onclick="deletarEvento('${key}')">🗑️ Excluir</button>`;
-                                                                                              listaEventos.appendChild(card);
-                                                                    });
-                                              } else listaEventos.innerHTML = '<p style="color: var(--creme);">Nenhum evento cadastrado</p>';
-                            } catch (error) { console.error('Erro ao carregar eventos:', error); }
-              };
-      
-              window.deletarEvento = async function(eventoId) {
-                            if (confirm('Tem certeza que deseja excluir este evento?')) {
+                            const evento = {
+                                              dia: document.getElementById('eventoDia').value,
+                                              mes: document.getElementById('eventoMes').value,
+                                              semana: document.getElementById('eventoSemana').value,
+                                              hora: document.getElementById('eventoHora').value,
+                                              nome: document.getElementById('eventoNome').value,
+                                              descricao: document.getElementById('eventoDescricao').value,
+                                              id: Date.now()
+                            };
+                
+                            if (!evento.dia || !evento.mes || !evento.semana || !evento.hora || !evento.nome) {
+                                              mostraMsg('Preencha todos os campos', 'error', 'msgEvento');
+                                              return;
+                            }
+                
+                            const input = document.getElementById('agendaInput');
+                            if (input.files[0]) {
                                               try {
-                                                                    await remove(dbRef(database, 'eventos/' + eventoId));
-                                                                    mostrarMensagem('✅ Evento excluído com sucesso!', 'success', 'mensagemEvento');
-                                                                    carregarEventos();
-                                              } catch (error) { mostrarMensagem('❌ Erro ao excluir evento: ' + error.message, 'error', 'mensagemEvento'); }
+                                                                    const file = input.files[0];
+                                                                    const fileName = 'eventos/' + Date.now() + '_' + file.name;
+                                                                    const storageRef = ref(storage, fileName);
+                                                                    await uploadBytes(storageRef, file);
+                                                                    evento.foto = fileName;
+                                              } catch (e) {
+                                                                    mostraMsg('Erro ao enviar foto: ' + e.message, 'error', 'msgEvento');
+                                                                    return;
+                                              }
+                            }
+                
+                            let eventos = JSON.parse(localStorage.getItem('eventos') || '[]');
+                            eventos.push(evento);
+                            localStorage.setItem('eventos', JSON.stringify(eventos));
+                
+                            mostraMsg('✅ Evento adicionado!', 'success', 'msgEvento');
+                            document.getElementById('eventoDia').value = '';
+                            document.getElementById('eventoMes').value = '';
+                            document.getElementById('eventoSemana').value = '';
+                            document.getElementById('eventoHora').value = '';
+                            document.getElementById('eventoNome').value = '';
+                            document.getElementById('eventoDescricao').value = '';
+                            document.getElementById('agendaInput').value = '';
+                            document.getElementById('agendaPreview').style.display = 'none';
+                            carregarEventos();
+              };
+      
+              window.carregarEventos = function() {
+                            const eventos = JSON.parse(localStorage.getItem('eventos') || '[]');
+                            const lista = document.getElementById('listaEventos');
+                            lista.innerHTML = eventos.length ? eventos.map(e => `
+                                            <div class="item-card">
+                                                                <div class="item-info">
+                                                                                        <div class="item-title">${e.nome}</div>
+                                                                                                                <div class="item-date">${e.dia}/${e.mes} • ${e.semana} • ${e.hora}</div>
+                                                                                                                                    </div>
+                                                                                                                                                        <button class="delete-btn" onclick="deletarEvento(${e.id})">🗑️</button>
+                                                                                                                                                                        </div>
+                                                                                                                                                                                    `).join('') : '<p style="color: var(--creme);">Nenhum evento</p>';
+              };
+      
+              window.deletarEvento = function(id) {
+                            if (confirm('Deletar evento?')) {
+                                              let eventos = JSON.parse(localStorage.getItem('eventos') || '[]');
+                                              eventos = eventos.filter(e => e.id !== id);
+                                              localStorage.setItem('eventos', JSON.stringify(eventos));
+                                              carregarEventos();
                             }
               };
       
               window.salvarGira = async function() {
-                            const dia = document.getElementById('giraDia').value;
-                            const mes = document.getElementById('giraMes').value;
-                            const semana = document.getElementById('giraSemana').value;
-                            const hora = document.getElementById('giraHora').value;
-                            const nome = document.getElementById('giraNome').value;
-                            const descricao = document.getElementById('giraDescricao').value;
-                            const imagem = document.getElementById('giraImagem').value;
-                            if (!dia || !mes || !semana || !hora || !nome) { mostrarMensagem('Preencha todos os campos obrigatórios', 'error', 'mensagemGira'); return; }
-                            try {
-                                              const giraData = { dia, mes, semana, hora, nome, descricao, imagem, imagemBanner: '', dataAtualizacao: new Date().toISOString() };
-                                              if (arquivoGira) {
-                                                                    const fileName = 'gira/banner_' + Date.now() + '_' + arquivoGira.name;
+                            const gira = {
+                                              dia: document.getElementById('giraDia').value,
+                                              mes: document.getElementById('giraMes').value,
+                                              semana: document.getElementById('giraSemana').value,
+                                              hora: document.getElementById('giraHora').value,
+                                              nome: document.getElementById('giraNome').value,
+                                              descricao: document.getElementById('giraDescricao').value
+                            };
+                
+                            if (!gira.dia || !gira.mes || !gira.semana || !gira.hora || !gira.nome) {
+                                              mostraMsg('Preencha todos os campos', 'error', 'msgGira');
+                                              return;
+                            }
+                
+                            const input = document.getElementById('giraInput');
+                            if (input.files[0]) {
+                                              try {
+                                                                    const file = input.files[0];
+                                                                    const fileName = 'gira/banner_' + Date.now() + '_' + file.name;
                                                                     const storageRef = ref(storage, fileName);
-                                                                    await uploadBytes(storageRef, arquivoGira);
-                                                                    giraData.imagemBanner = fileName;
-                                                                    arquivoGira = null;
+                                                                    await uploadBytes(storageRef, file);
+                                                                    gira.foto = fileName;
+                                              } catch (e) {
+                                                                    mostraMsg('Erro: ' + e.message, 'error', 'msgGira');
+                                                                    return;
                                               }
-                                                                await set(dbRef(database, 'proximaGira'), giraData);
-                                              mostrarMensagem('✅ Próxima gira salva com sucesso!', 'success', 'mensagemGira');
-                                              carregarGira();
-                            } catch (error) { mostrarMensagem('❌ Erro ao salvar: ' + error.message, 'error', 'mensagemGira'); }
-              };
-      
-              window.carregarGira = async function() {
-                            try {
-                                              const snapshot = await get(dbRef(database, 'proximaGira'));
-                                              if (snapshot.exists()) {
-                                                                    const gira = snapshot.val();
-                                                                    document.getElementById('giraDia').value = gira.dia || '';
-                                                                    document.getElementById('giraMes').value = gira.mes || '';
-                                                                    document.getElementById('giraSemana').value = gira.semana || '';
-                                                                    document.getElementById('giraHora').value = gira.hora || '';
-                                                                    document.getElementById('giraNome').value = gira.nome || '';
-                                                                    document.getElementById('giraDescricao').value = gira.descricao || '';
-                                                                    document.getElementById('giraImagem').value = gira.imagem || '';
-                                                                    document.getElementById('giraPreviewNome').textContent = gira.nome || 'Sem nome';
-                                                                    document.getElementById('giraPreviewData').textContent = (gira.dia ? gira.dia + '/' + gira.mes : '') + (gira.semana ? ' • ' + gira.semana : '') + (gira.hora ? ' • ' + gira.hora : '');
-                                              }
-                            } catch (error) { console.error('Erro ao carregar gira:', error); }
+                            }
+                
+                            localStorage.setItem('gira', JSON.stringify(gira));
+                            mostraMsg('✅ Salvo!', 'success', 'msgGira');
               };
       
               window.enviarGaleria = async function() {
-                            if (arquivosGaleria.length === 0) { mostrarMensagem('Selecione pelo menos uma foto', 'error', 'mensagemGaleria'); return; }
-                            try {
-                                              const descricao = document.getElementById('galeriaDescricao').value;
-                                              for (let arquivo of arquivosGaleria) {
-                                                                    const fileName = 'galeria/' + Date.now() + '_' + arquivo.name;
-                                                                    const storageRef = ref(storage, fileName);
-                                                                    await uploadBytes(storageRef, arquivo);
-                                                                    const id = Date.now() + Math.random();
-                                                                    await set(dbRef(database, 'galeria/' + id), { arquivo: fileName, descricao: descricao || 'Sem descrição', dataCriacao: new Date().toISOString() });
-                                              }
-                                              mostrarMensagem('✅ Fotos enviadas com sucesso!', 'success', 'mensagemGaleria');
-                                              arquivosGaleria = [];
-                                              document.getElementById('galeriaDescricao').value = '';
-                                              document.getElementById('galeriaInput').value = '';
-                                              carregarGaleria();
-                            } catch (error) { mostrarMensagem('❌ Erro ao enviar fotos: ' + error.message, 'error', 'mensagemGaleria'); }
-              };
-      
-              window.carregarGaleria = async function() {
-                            try {
-                                              const snapshot = await get(dbRef(database, 'galeria'));
-                                              const grid = document.getElementById('galeriaGrid');
-                                              grid.innerHTML = '';
-                                              if (snapshot.exists()) {
-                                                                    const fotos = snapshot.val();
-                                                                    for (let id in fotos) {
-                                                                                              const foto = fotos[id];
-                                                                                              const item = document.createElement('div');
-                                                                                              item.className = 'gallery-item';
-                                                                                              const fileRef = ref(storage, foto.arquivo);
-                                                                                              try {
-                                                                                                                            const url = await getDownloadURL(fileRef);
-                                                                                                                            item.innerHTML = `<img src="${url}" alt="Foto galeria"><div class="gallery-item-info"><p>${foto.descricao}</p></div><button class="gallery-item-delete" onclick="deletarFoto('${id}', '${foto.arquivo}')">🗑️</button>`;
-                                                                                                } catch (e) { item.innerHTML = '<p>Erro ao carregar imagem</p>'; }
-                                                                                                                        grid.appendChild(item);
-                                                                    }
-                                              } else grid.innerHTML = '<p style="color: var(--creme);">Nenhuma foto na galeria</p>';
-                            } catch (error) { console.error('Erro ao carregar galeria:', error); }
-              };
-      
-              window.deletarFoto = async function(id, arquivo) {
-                            if (confirm('Tem certeza que deseja excluir esta foto?')) {
+                            const input = document.getElementById('galeriaInput');
+                            if (!input.files.length) {
+                                              mostraMsg('Selecione fotos', 'error', 'msgGaleria');
+                                              return;
+                            }
+                
+                            let galeria = JSON.parse(localStorage.getItem('galeria') || '[]');
+                
+                            for (let file of input.files) {
                                               try {
-                                                                    const fileRef = ref(storage, arquivo);
-                                                                    await deleteObject(fileRef);
-                                                                    await remove(dbRef(database, 'galeria/' + id));
-                                                                    mostrarMensagem('✅ Foto excluída com sucesso!', 'success', 'mensagemGaleria');
-                                                                    carregarGaleria();
-                                              } catch (error) { mostrarMensagem('❌ Erro ao excluir foto: ' + error.message, 'error', 'mensagemGaleria'); }
+                                                                    const fileName = 'galeria/' + Date.now() + '_' + Math.random().toString(36).substr(2, 9) + '_' + file.name;
+                                                                    const storageRef = ref(storage, fileName);
+                                                                    await uploadBytes(storageRef, file);
+                                                                    const url = await getDownloadURL(storageRef);
+                                                                    galeria.push({ id: Date.now() + Math.random(), foto: fileName, url: url });
+                                              } catch (e) {
+                                                                    mostraMsg('Erro: ' + e.message, 'error', 'msgGaleria');
+                                                                    return;
+                                              }
+                            }
+                
+                            localStorage.setItem('galeria', JSON.stringify(galeria));
+                            mostraMsg('✅ Fotos enviadas!', 'success', 'msgGaleria');
+                            input.value = '';
+                            carregarGaleria();
+              };
+      
+              window.carregarGaleria = function() {
+                            const galeria = JSON.parse(localStorage.getItem('galeria') || '[]');
+                            const grid = document.getElementById('galeriaGrid');
+                            grid.innerHTML = galeria.length ? galeria.map(foto => `
+                                            <div class="gallery-item" style="position: relative;">
+                                                                <img src="${foto.url}" alt="Foto" style="width: 100%; height: 250px; object-fit: cover;">
+                                                                                    <button onclick="deletarFoto(${foto.id})" style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">🗑️</button>
+                                                                                                    </div>
+                                                                                                                `).join('') : '<p style="color: var(--creme);">Nenhuma foto</p>';
+              };
+      
+              window.deletarFoto = function(id) {
+                            if (confirm('Deletar foto?')) {
+                                              let galeria = JSON.parse(localStorage.getItem('galeria') || '[]');
+                                              galeria = galeria.filter(f => f.id !== id);
+                                              localStorage.setItem('galeria', JSON.stringify(galeria));
+                                              carregarGaleria();
                             }
               };
       
-              function mostrarMensagem(msg, tipo, elementId) {
-                            const elemento = document.getElementById(elementId);
-                            elemento.className = tipo === 'error' ? 'error-msg' : 'success-msg';
-                            elemento.textContent = msg;
-                            setTimeout(() => { elemento.textContent = ''; elemento.className = ''; }, 5000);
+              function mostraMsg(msg, tipo, elId) {
+                            const el = document.getElementById(elId);
+                            el.className = tipo;
+                            el.textContent = msg;
+                            setTimeout(() => { el.textContent = ''; el.className = ''; }, 5000);
               }
       
               carregarEventos();
+              carregarGaleria();
       </script>
   </body>
-</html>html></small></small></p></label>
-                                            </div></div></small></p></label></h1>
+</html>html></p></p></label></label></div></div></p></label></h1>
                   </header>
   </body>
       </style></title>
