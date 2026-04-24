@@ -1,1008 +1,424 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel Admin - Aruanda</title>h
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --verde: #1b3a22;
-      --verde-med: #2c5c3a;
-      --dourado: #c8a84b;
-      --creme: #f6f2ea;
-      --branco: #ffffff;
-      --texto: #252520;
-      --texto-cl: #56564e;
-      --vermelho: #d64545;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', sans-serif; background: #0a0a08; color: var(--texto); }
-
-    .login-screen {
-      position: fixed; inset: 0; z-index: 1000;
-      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
-      display: flex; align-items: center; justify-content: center; padding: 1rem;
-    }
-    .login-screen.hidden { display: none; }
-    .login-card {
-      background: var(--creme); border-radius: 12px; padding: 2rem;
-      max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.3);
-    }
-    .login-card h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem; color: var(--verde); margin-bottom: .5rem;
-    }
-    .login-card .subtitle {
-      font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--dourado); margin-bottom: 1.5rem;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    .form-group label {
-      display: block; font-size: .75rem; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--verde); margin-bottom: .4rem; font-weight: 500;
-    }
-    .form-group input {
-      width: 100%; padding: .7rem; border: 1px solid rgba(200,168,75,.3);
-      border-radius: 6px; font-family: inherit; font-size: .95rem; color: var(--texto);
-      background: var(--branco); transition: border-color .3s;
-    }
-    .form-group input:focus {
-      outline: none; border-color: var(--dourado);
-      box-shadow: 0 0 0 3px rgba(200,168,75,.1);
-    }
-    .btn {
-      width: 100%; padding: .8rem; background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
-      color: var(--branco); border: none; border-radius: 6px; font-size: .8rem;
-      letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .3s;
-      font-weight: 500; margin-bottom: .8rem;
-    }
-    .btn:hover:not(:disabled) {
-      transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,58,34,.3);
-    }
-    .btn:disabled { opacity: .6; cursor: not-allowed; }
-    .error-msg {
-      color: var(--vermelho); font-size: .75rem; padding: .6rem;
-      background: rgba(214,69,69,.1); border: 1px solid rgba(214,69,69,.3);
-      border-radius: 4px; display: none; margin-bottom: .8rem;
-    }
-    .error-msg.show { display: block; }
-    .info-box {
-      background: rgba(200,168,75,.1); border: 1px solid rgba(200,168,75,.3);
-      border-radius: 4px; padding: .8rem; margin-bottom: 1.5rem;
-      font-size: .75rem; line-height: 1.5; color: var(--texto);
-    }
-    .toggle-btn {
-      background: none; border: none; color: var(--dourado);
-      cursor: pointer; text-decoration: underline; font-weight: 500;
-    }
-
-    .header {
-      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
-      padding: 1.2rem; color: var(--branco);
-      border-bottom: 1px solid rgba(200,168,75,.2);
-      display: flex; justify-content: space-between; align-items: center;
-      position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem;
-    }
-    .header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem; font-weight: 300; margin: 0;
-    }
-    .logout-btn {
-      background: rgba(200,168,75,.2); border: 1px solid rgba(200,168,75,.4);
-      color: var(--dourado); padding: .6rem 1rem; border-radius: 6px;
-      cursor: pointer; font-size: .7rem; letter-spacing: .1em;
-      text-transform: uppercase; font-weight: 500; transition: all .3s;
-    }
-    .logout-btn:hover { background: rgba(200,168,75,.3); }
-
-    .container { max-width: 1000px; margin: 0 auto; padding: 1rem; }
-    .tabs {
-      display: flex; gap: .4rem; margin-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(200,168,75,.2);
-      flex-wrap: wrap; overflow-x: auto;
-    }
-    .tab-btn {
-      padding: .7rem .9rem; background: none; border: none;
-      border-bottom: 2px solid transparent; color: var(--texto-cl);
-      cursor: pointer; font-size: .7rem; letter-spacing: .1em;
-      text-transform: uppercase; transition: all .3s; white-space: nowrap;
-    }
-    .tab-btn:hover { color: var(--dourado); }
-    .tab-btn.active { color: var(--dourado); border-bottom-color: var(--dourado); }
-
-    .tab-content {
-      display: none; animation: fadeIn .3s;
-    }
-    .tab-content.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .form {
-      background: var(--creme); border: 1px solid rgba(200,168,75,.2);
-      border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem;
-    }
-    .form h3 {
-      color: var(--verde); margin-bottom: 1rem; font-size: 1rem; font-family: 'Cormorant Garamond', serif;
-    }
-    .form-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-    }
-    @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
-    }
-
-    .item {
-      background: var(--creme); border: 1px solid rgba(200,168,75,.2);
-      border-radius: 4px; padding: 1rem; margin-bottom: .8rem;
-      display: grid; grid-template-columns: 1fr auto; gap: 1rem;
-      align-items: start;
-    }
-    .item-info { min-width: 0; }
-    .item-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem; color: var(--verde); margin-bottom: .2rem;
-      word-break: break-word;
-    }
-    .item-meta {
-      font-size: .7rem; color: var(--texto-cl);
-    }
-    .item-img {
-      width: 50px; height: 50px; border-radius: 4px;
-      object-fit: cover; border: 1px solid rgba(200,168,75,.2);
-    }
-    .item-actions {
-      display: flex; gap: .3rem; flex-wrap: wrap;
-    }
-    .btn-small {
-      padding: .5rem .7rem; font-size: .7rem;
-      background: var(--verde); color: var(--branco);
-      border: none; border-radius: 4px; cursor: pointer;
-      transition: all .3s;
-    }
-    .btn-small:hover { background: var(--verde-med); transform: translateY(-1px); }
-    .btn-small.danger { background: var(--vermelho); }
-    .btn-small.danger:hover { background: #c93636; }
-    .btn-block { width: 100%; margin-bottom: .5rem; }
-
-    .alert {
-      padding: .8rem; border-radius: 4px; margin-bottom: 1rem;
-      font-size: .8rem; animation: slideDown .3s;
-      display: flex; align-items: center; gap: .6rem;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .alert-success {
-      background: rgba(37,211,102,.1);
-      border: 1px solid rgba(37,211,102,.3);
-      color: #1a7d4e;
-    }
-    .alert-error {
-      background: rgba(214,69,69,.1);
-      border: 1px solid rgba(214,69,69,.3);
-      color: #9a2c2c;
-    }
-
-    textarea {
-      width: 100%; padding: .7rem; border: 1px solid rgba(200,168,75,.3);
-      border-radius: 6px; font-family: inherit; min-height: 80px;
-      color: var(--texto); background: var(--branco);
-    }
-
-    .file-input {
-      display: none;
-    }
-
-    .file-label {
-      display: inline-block; padding: .7rem 1rem; background: rgba(200,168,75,.2);
-      border: 1px dashed rgba(200,168,75,.5); border-radius: 6px; cursor: pointer;
-      font-size: .8rem; transition: all .3s; margin-bottom: .5rem;
-    }
-
-    .file-label:hover {
-      background: rgba(200,168,75,.3); border-color: var(--dourado);
-    }
-
-    .upload-progress {
-      display: none; margin: .5rem 0; font-size: .8rem; color: var(--dourado);
-    }
-
-    .version-footer {
-      background: rgba(200,168,75,.1); border-top: 1px solid rgba(200,168,75,.2);
-      padding: .8rem; text-align: center; font-size: .65rem; color: var(--texto-cl);
-      margin-top: 2rem; border-radius: 4px; font-family: monospace;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- LOGIN -->
-  <div class="login-screen" id="loginScreen">
-    <div class="login-card">
-      <h1>Aruanda</h1>
-      <div class="subtitle">Painel Administrativo</div>
-
-      <div class="info-box">
-        ℹ️ Crie uma conta com email/senha ou entre com a que você já criou.
-      </div>
-
-      <div id="loginForm">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" placeholder="seu@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Senha</label>
-          <input type="password" id="loginPassword"/>
-        </div>
-        <button class="btn" onclick="fazerLogin()" id="loginBtn">Entrar</button>
-        <div class="error-msg" id="loginError"></div>
-        <div style="text-align: center; font-size: .8rem; color: var(--texto-cl);">
-          Sem conta? <button class="toggle-btn" onclick="toggleForm()">Criar nova</button>
-        </div>
-      </div>
-
-      <div id="registroForm" style="display: none;">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="registroEmail" placeholder="seu@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Senha (mín. 6 caracteres)</label>
-          <input type="password" id="registroPassword"/>
-        </div>
-        <div class="form-group">
-          <label>Confirmar Senha</label>
-          <input type="password" id="registroPasswordConfirm"/>
-        </div>
-        <button class="btn" onclick="fazerRegistro()" id="registroBtn">Criar Conta</button>
-        <div class="error-msg" id="registroError"></div>
-        <div style="text-align: center; font-size: .8rem; color: var(--texto-cl);">
-          Já tem conta? <button class="toggle-btn" onclick="toggleForm()">Fazer login</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- HEADER -->
-  <div class="header" id="header" style="display: none;">
-    <div>
-      <h1>Painel Admin</h1>
-      <div style="font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(226,201,126,.8); margin-top: .2rem;">Aruanda de Mata Virgem</div>
-    </div>
-    <button class="logout-btn" onclick="fazerLogout()">Sair</button>
-  </div>
-
-  <!-- CONTAINER -->
-  <div class="container" id="container" style="display: none;">
-
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="mudarTab('eventos')">📅 Eventos</button>
-      <button class="tab-btn" onclick="mudarTab('proxima')">🎭 GIRA
+  <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Painel Admin - Aruanda</title>
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+      <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                :root {
+                              --verde: #1b3a22; --verde-med: #2c5c3a; --verde-cl: #3d7a50;
+                              --dourado: #c8a84b; --dourado-cl: #e2c97e; --marrom: #7a5230;
+                              --marrom-cl: #a87840; --creme: #f6f2ea; --creme2: #ede8de;
+                              --branco: #ffffff; --preto: #0a0a08;
+                }
+                body {
+                              font-family: 'Cormorant Garamond', serif;
+                              background: linear-gradient(135deg, var(--preto) 0%, #1a1a18 100%);
+                              color: var(--preto); min-height: 100vh; padding: 2rem;
+                }
+                .container { max-width: 1000px; margin: 0 auto; }
+                header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 2px solid var(--dourado); }
+                h1 { font-size: 2.5rem; color: var(--creme); margin-bottom: 0.5rem; font-weight: 400; }
+                .subtitle { color: var(--dourado); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
+                .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center; border-bottom: 1px solid var(--dourado); padding-bottom: 1rem; }
+                .tab-btn { padding: 0.8rem 1.5rem; background: transparent; border: 2px solid var(--dourado); color: var(--dourado); cursor: pointer; font-size: 0.95rem; font-family: 'Cormorant Garamond', serif; transition: all 0.3s ease; letter-spacing: 1px; }
+                .tab-btn:hover, .tab-btn.active { background: var(--dourado); color: var(--preto); font-weight: 600; }
+                .tab-content { display: none; animation: fadeIn 0.3s ease; }
+                .tab-content.active { display: block; }
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                .form { background: var(--creme); padding: 2rem; border-radius: 8px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+                .form-group { margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+                .form-group.full { grid-template-columns: 1fr; }
+                label { display: block; font-size: 0.85rem; color: var(--preto); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+                input, textarea, select { width: 100%; padding: 0.8rem; border: 1px solid var(--dourado); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--preto); background: var(--branco); transition: border-color 0.3s ease; }
+                input:focus, textarea:focus, select:focus { outline: none; border-color: var(--dourado-cl); box-shadow: 0 0 5px rgba(200, 168, 75, 0.3); }
+                textarea { resize: vertical; min-height: 100px; }
+                button { padding: 1rem 2rem; background: var(--verde); color: var(--creme); border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s ease; width: 100%; }
+                button:hover { background: var(--verde-med); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(27, 58, 34, 0.3); }
+                .upload-area { border: 2px dashed var(--dourado); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; background: rgba(200, 168, 75, 0.05); margin: 1rem 0; }
+                .upload-area:hover { border-color: var(--dourado-cl); background: rgba(200, 168, 75, 0.1); }
+                .upload-area.dragover { border-color: var(--verde); background: rgba(27, 58, 34, 0.1); }
+                .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+                .preview-img { max-width: 300px; max-height: 300px; margin: 1rem auto; border-radius: 8px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+                .item-card { background: var(--creme); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--dourado); transition: all 0.3s ease; }
+                .item-card:hover { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transform: translateX(5px); }
+                .item-info { flex: 1; }
+                .item-title { font-size: 1.1rem; color: var(--preto); font-weight: 600; margin-bottom: 0.3rem; }
+                .item-date { font-size: 0.85rem; color: var(--marrom); }
+                .delete-btn { background: #e74c3c; padding: 0.5rem 1rem; font-size: 0.8rem; width: auto; }
+                .delete-btn:hover { background: #c0392b; }
+                .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+                .gallery-item { background: var(--creme); border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
+                .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
+                .gallery-item img { width: 100%; height: 250px; object-fit: cover; }
+                .gallery-item-info { padding: 1rem; }
+                .gallery-item-delete { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.3s ease; }
+                .gallery-item:hover .gallery-item-delete { opacity: 1; }
+                .gallery-item-delete:hover { background: #c0392b; }
+                .success-msg, .error-msg { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; text-align: center; font-weight: 600; }
+                .success-msg { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+                .error-msg { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+                @media (max-width: 768px) {
+                              body { padding: 1rem; } h1 { font-size: 1.8rem; }
+                              .form-group { grid-template-columns: 1fr; } .tabs { flex-direction: column; }
+                              .gallery-grid { grid-template-columns: 1fr; }
+                              .item-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+                              .delete-btn { width: 100%; }
+                }
+            </style>
+  </head>
+  <body>
+        <div class="container">
+                  <header>
+                                <h1>Painel Admin</h1>
+                              <p class="subtitle">Aruanda de Mata Virgem</p>p>
+                  </header>
         
+                <div class="tabs">
+                            <button class="tab-btn active" onclick="switchTab('eventos')">📅 EVENTOS</button>button>
+                            <button class="tab-btn" onclick="switchTab('gira')">🎪 GIRA GIRA</button>button>
+                            <button class="tab-btn" onclick="switchTab('galeria')">🖼️ GALERIA</button>button>
+                </div>div>
         
-        Gira</button>
-      <button class="tab-btn" onclick="mudarTab('galeria')">🖼️ Galeria</button>
-      <button class="tab-btn" onclick="mudarTab('cursos')">📚 Cursos</button>
-    </div>
+                <div id="eventos" class="tab-content active">
+                            <div class="form">
+                                            <h2 style="margin-bottom: 1.5rem; color: var(--verde);">➕ Novo Evento</h2>
+                                            <div class="form-group full">
+                                                                <label>Foto da Agenda</label>
+                                                                <div class="upload-area" id="uploadAgenda" ondrop="handleDrop(event, 'agenda')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('agendaInput').click()">
+                                                                                        <div class="upload-icon">📸</div>div>
+                                                                                        <p>Clique ou arraste a foto aqui</p>
+                                                                                        <small>PNG, JPG ou GIF (máx. 5MB)</small>
+                                                                </div>div>
+                                                                <input type="file" id="agendaInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 'agenda')">
+                                                                <img id="agendaPreview" class="preview-img" style="display: none;">
+                                            </div>div>
+                                            <div class="form-group">
+                                                                <div><label for="eventoDia">DIA</label><input type="number" id="eventoDia" min="1" max="31" placeholder="17"></div>
+                                                                <div><label for="eventoMes">MÊS</label>label><input type="text" id="eventoMes" placeholder="Abr"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                                  <div><label for="eventoSemana">SEMANA</label>label><input type="text" id="eventoSemana" placeholder="Sexta-feira"></div>
+                                                                  <div><label for="eventoHora">HORA</label>label><input type="time" id="eventoHora"></div>
+                                            </div>
+                                              <div class="form-group full">
+                                                                    <label for="eventoNome">NOME DO EVENTO</label>label>
+                                                                    <input type="text" id="eventoNome" placeholder="Ex: Baianos e Boiadeiros">
+                                              </div>
+                                              <div class="form-group full">
+                                                                    <label for="eventoDescricao">DESCRIÇÃO</label>label>
+                                                                    <textarea id="eventoDescricao" placeholder="Descreva o evento..."></textarea>
+                                              </div>
+                                              <button onclick="adicionarEvento()" style="margin-top: 1rem;">➕ ADICIONAR EVENTO</button>button>
+                                              <div id="mensagemEvento"></div>
+                            </div>
+                              <div style="margin-top: 2rem;">
+                                                <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📋 Eventos Cadastrados</h2>h2>
+                                                <div id="listaEventos"></div>
+                              </div>
+                </div>
 
-    <!-- EVENTOS -->
-    <div id="eventos" class="tab-content active">
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Eventos</h2>
-
-      <div class="form">
-        <h3>+ Novo Evento</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Dia</label>
-            <input type="text" id="newEvtDia" placeholder="17" maxlength="2"/>
-          </div>
-          <div class="form-group">
-            <label>Mês</label>
-            <input type="text" id="newEvtMes" placeholder="Abr"/>
-          </div>
-          <div class="form-group">
-            <label>Semana</label>
-            <input type="text" id="newEvtSemana" placeholder="Sexta-feira"/>
-          </div>
-          <div class="form-group">
-            <label>Hora</label>
-            <input type="text" id="newEvtHora" placeholder="20h30"/>
-          </div>
+                  <div id="gira" class="tab-content">
+                                <div class="form">
+                                                  <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🎪 Próxima Gira</h2>h2>
+                                                  <div class="form-group full">
+                                                                        <label>Banner da Próxima Gira</label>
+                                                                      <div class="upload-area" id="uploadGira" ondrop="handleDrop(event, 'gira')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('giraInput').click()">
+                                                                                              <div class="upload-icon">🎪</div>
+                                                                                              <p>Clique ou arraste a foto aqui</p>
+                                                                                              <small>PNG, JPG ou GIF (máx. 5MB)</small>
+                                                                      </div>
+                                                                      <input type="file" id="giraInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 'gira')">
+                                                                      <img id="giraPreview" class="preview-img" style="display: none;">
+                                                  </div>
+                                                <div class="form-group">
+                                                                    <div><label for="giraDia">DIA</label><input type="number" id="giraDia" min="1" max="31"></div>
+                                                                    <div><label for="giraMes">MÊS</label><input type="text" id="giraMes"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                                    <div><label for="giraSemana">DIA DA SEMANA</label><input type="text" id="giraSemana"></div>
+                                                                    <div><label for="giraHora">HORA</label><input type="time" id="giraHora"></div>
+                                                </div>
+                                                <div class="form-group full">
+                                                                    <label for="giraNome">NOME DA DATA</label>
+                                                                    <input type="text" id="giraNome" placeholder="Ex: Festa de Ogum">
+                                                </div>
+                                                <div class="form-group full">
+                                                                    <label for="giraDescricao">DESCRIÇÃO</label>
+                                                                    <textarea id="giraDescricao" placeholder="Descreva a gira..."></textarea>
+                                                </div>
+                                                <div class="form-group full">
+                                                                    <label for="giraImagem">URL DA IMAGEM (backup)</label>
+                                                                    <input type="url" id="giraImagem">
+                                                </div>
+                                                <button onclick="salvarGira()" style="margin-top: 1rem;">💾 SALVAR PRÓXIMA GIRA</button>button>
+                                                <div id="mensagemGira"></div>
+                                </div>
+                              <div style="margin-top: 2rem;">
+                                              <h2 style="color: var(--creme); margin-bottom: 1.5rem;">👀 Preview da Próxima Gira</h2>h2>
+                                              <div class="item-card">
+                                                                  <div class="item-info">
+                                                                                          <div class="item-title" id="giraPreviewNome">Nenhuma gira cadastrada</div>
+                                                                                          <div class="item-date" id="giraPreviewData">-</div>
+                                                                  </div>
+                                              </div>
+                              </div>
+                  </div>
+        
+                <div id="galeria" class="tab-content">
+                            <div class="form">
+                                            <h2 style="margin-bottom: 1.5rem; color: var(--verde);">🖼️ Galeria de Fotos</h2>h2>
+                                            <div class="form-group full">
+                                                                <label>Adicionar Fotos à Galeria</label>
+                                                                <div class="upload-area" id="uploadGaleria" ondrop="handleDrop(event, 'galeria')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('galeriaInput').click()">
+                                                                                        <div class="upload-icon">📸</div>
+                                                                                        <p>Clique ou arraste as fotos aqui</p>
+                                                                                        <small>PNG, JPG ou GIF (máx. 5MB cada)</small>
+                                                                </div>
+                                                                <input type="file" id="galeriaInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event, 'galeria')">
+                                            </div>
+                                            <div class="form-group full">
+                                                                <label for="galeriaDescricao">DESCRIÇÃO (opcional)</label>
+                                                                <input type="text" id="galeriaDescricao" placeholder="Digite uma descrição para a foto">
+                                            </div>
+                                            <button onclick="enviarGaleria()" style="margin-top: 1rem;">⬆️ ENVIAR FOTOS</button>button>
+                                            <div id="mensagemGaleria"></div>
+                            </div>
+                            <div style="margin-top: 2rem;">
+                                            <h2 style="color: var(--creme); margin-bottom: 1.5rem;">📸 Fotos da Galeria</h2>h2>
+                                            <div class="gallery-grid" id="galeriaGrid">
+                                                                <p style="color: var(--creme);">Carregando fotos...</p>
+                                            </div>
+                            </div>
+                </div>
         </div>
-        <div class="form-group">
-          <label>Nome do Evento</label>
-          <input type="text" id="newEvtNome" placeholder="Ex: Baianos e Boiadeiros"/>
-        </div>
-        <button class="btn btn-block" onclick="adicionarEvento()">+ Adicionar Evento</button>
-      </div>
-
-      <div id="listaEventos"></div>
-    </div>
-
-    <!-- PRÓXIMA GIRA -->
-    <div id="proxima" class="tab-content">
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Próxima Gira</h2>
-
-      <div class="form">
-        <div class="form-group">
-          <label>Data (ex: 17/04)</label>
-          <input type="text" id="proxData" placeholder="17/04"/>
-        </div>
-        <div class="form-group">
-          <label>Dia da Semana</label>
-          <input type="text" id="proxDia" placeholder="Sexta-feira"/>
-        </div>
-        <div class="form-group">
-          <label>Hora</label>
-          <input type="text" id="proxHora" placeholder="20h30"/>
-        </div>
-        <div class="form-group">
-          <label>Nome da Gira</label>
-          <input type="text" id="proxNome" placeholder="Baianos e Boiadeiros"/>
-        </div>
-        <div class="form-group">
-          <label>Descrição</label>
-          <textarea id="proxDesc" placeholder="Descreva a gira..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Imagem (URL)</label>
-          <input type="text" id="proxImg" placeholder="https://..."/>
-        </div>
-        <button class="btn btn-block" onclick="salvarProxima()">💾 Salvar Próxima Gira</button>
-      </div>
-    </div>
-
-    <!-- GALERIA -->
-    <div id="galeria" class="tab-content">
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Galeria</h2>
-
-      <div class="form">
-        <h3>+ Nova Foto</h3>
-        <div class="form-group">
-          <label>Título</label>
-          <input type="text" id="newFotoTitulo" placeholder="Ex: Altar"/>
-        </div>
-        <div class="form-group">
-          <label>Imagem</label>
-          <input type="file" id="newFotoFile" class="file-input" accept="image/*" onchange="prepararFoto()"/>
-          <label for="newFotoFile" class="file-label">📸 Selecione uma foto</label>
-          <div class="upload-progress" id="uploadProgress"></div>
-        </div>
-        <button class="btn btn-block" onclick="adicionarFoto()">+ Adicionar Foto</button>
-      </div>
-
-      <div id="listaFotos"></div>
-    </div>
-
-    <!-- PROXIMA GIRA -->
-    <div id="proxima" class="tab-content">
-            <!-- Formulário antigo -->
-            <div class="form"><h3>📅 Próxima Gira</h3>
-
-            </div>
-            <!-- NOVA SEÇÃO: Upload do Banner - Interface amigável para Mobile e PC -->
-        <!-- Upload do Banner -->
-      <div style="background:#f9f5f0;padding:2rem;border-radius:12px;margin:2rem 0;border:2px solid #b5865a;">          <h4 style="margin-bottom:1rem;color:#5a3e2b;">🖼️ Banner da Próxima Gira</h4>
-
-          <!-- Input oculto - aceita imagem direto da galeria/câmera -->
-          <input
-            type="file"
-            id="proximaGiraFile"
-            accept="image/*"
-            capture="environment"
-            style="display:none;"
-            onchange="previewProximaGira(this)"
-          >
-
-          <!-- Área de preview + botão de selecionar -->
-          <div id="proximaGiraDropArea" style="
-            border: 2px dashed #b5865a;
-            border-radius: 12px;
-            padding: 2rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            background: #fff;
-            margin-bottom: 1rem;
-            position: relative;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-          " onclick="document.getElementById('proximaGiraFile').click()">
-            <div id="proximaGiraPlaceholder">
-              <div style="font-size:3rem;margin-bottom:0.5rem;">📸</div>
-              <p style="font-size:1.1rem;font-weight:600;color:#5a3e2b;margin:0 0 0.3rem;">Toque para selecionar imagem</p>
-              <p style="font-size:0.85rem;color:#888;margin:0;">Escolha da galeria ou tire uma foto</p>
-            </div>
-            <div id="proximaGiraPreview" style="display:none;width:100%;"></div>
-          </div>
-
-          <!-- Nome do arquivo selecionado -->
-          <div id="proximaGiraFileName" style="
-            font-size:0.85rem;
-            color:#666;
-            text-align:center;
-            margin-bottom:1rem;
-            display:none;
-          "></div>
-
-          <!-- Barra de progresso -->
-          <div class="upload-progress" id="uploadProgressProxima" style="margin-bottom:1rem;"></div>
-
-          <!-- Botão de enviar -->
-          <button
-            id="btnEnviarProxima"
-            class="btn btn-block"
-            onclick="uploadProximaGira()"
-            style="display:none;background:#5a3e2b;color:#fff;font-size:1.1rem;padding:1rem;border-radius:10px;"
-          >
-            📤 Enviar Banner
-          </button>
-
-          <!-- Botão para trocar imagem (visível após selecionar) -->
-          <button
-            id="btnTrocarProxima"
-            class="btn btn-block"
-            onclick="document.getElementById('proximaGiraFile').click()"
-            style="display:none;background:#e0c9a6;color:#5a3e2b;margin-top:0.5rem;padding:0.8rem;border-radius:10px;"
-          >
-            🔄 Trocar Imagem
-          </button>
-        </div>
-
-      </div>
-    </div>
-</div> <!-- Fim da nova seção de upload -->
-<!-- CURSOS -->
-    <div id="cursos" class="tab-content">
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); margin-bottom: 1rem;">Cursos</h2>
-
-      <div class="form">
-        <h3>+ Nova Aula</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Número</label>
-            <input type="number" id="newAulaNumero" placeholder="1" min="1"/>
-          </div>
-          <div class="form-group">
-            <label>Título</label>
-            <input type="text" id="newAulaTitulo" placeholder="Introdução"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>ID YouTube (após v=)</label>
-          <input type="text" id="newAulaYoutube" placeholder="dQw4w9WgXcQ"/>
-        </div>
-        <button class="btn btn-block" onclick="adicionarAula()">+ Adicionar Aula</button>
-      </div>
-
-      <div id="listaAulas"></div>
-    </div>
-
-                <!-- VÍDEOS -->
-                            <div id="videos" class="tab-content">
-                                            <div class="form">
-                                                                <h3>🎥 Vídeos YouTube</h3>
-                                                                                    <div class="form-group">
-                                                                                                            <label>ID YouTube (após v=)</label>
-                                                                                                                                    <input type="text" id="newAulaYoutube" placeholder="dQw4w9WgXcQ">
-                                                                                                                                                        </div>
-                                                                                                                                                                            <button class="btn btn-block" onclick="adicionarAula()">+ Adicionar Vídeo</button>
-                                                                                                                                                                                                <div id="listaAulas"></div>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                            </div>
-
-    <!-- VERSION FOOTER -->
-    <div class="version-footer" id="versionFooter">
-      Carregando versão...
-    </div>
-
-  </div>
-
-  <!-- Firebase SDK COMPAT -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-
-  <script>
-    const config = {
-      apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
-      authDomain: "mata-virgem.firebaseapp.com",
-      projectId: "mata-virgem",
-      storageBucket: "mata-virgem.firebasestorage.app",
-      messagingSenderId: "351134240123",
-      appId: "1:351134240123:web:86a041fee58b856ea3c1de"
-    };
-
-    console.log('🔥 Inicializando Firebase Admin...');
-    firebase.initializeApp(config);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    // ══ VERSION ══
-    const agora = new Date();
-    const versionStr = `Admin v1.0 • ${agora.toLocaleDateString('pt-BR')} • ${agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
-    document.getElementById('versionFooter').textContent = '⏰ ' + versionStr;
-
-    let usuario = null;
-    let dados = { eventos: [], proximaGira: {}, galeria: [], cursos: [] };
-    let fotoParaUpload = null;
-
-    // ══ LOGIN ══
-    function fazerLogin() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-      const error = document.getElementById('loginError');
-
-      if (!email || !password) {
-        error.innerHTML = '❌ Preencha email e senha';
-        error.classList.add('show');
-        return;
-      }
-
-      btn.disabled = true;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(res => {
-          console.log('✅ Login:', res.user.email);
-        })
-        .catch(e => {
-          btn.disabled = false;
-          error.innerHTML = '❌ Email ou senha inválidos';
-          error.classList.add('show');
-        });
-    }
-
-    function fazerRegistro() {
-      const email = document.getElementById('registroEmail').value.trim();
-      const password = document.getElementById('registroPassword').value;
-      const confirm = document.getElementById('registroPasswordConfirm').value;
-      const btn = document.getElementById('registroBtn');
-      const error = document.getElementById('registroError');
-
-      if (!email || !password || !confirm) {
-        error.innerHTML = '❌ Preencha todos';
-        error.classList.add('show');
-        return;
-      }
-
-      if (password !== confirm) {
-        error.innerHTML = '❌ Senhas não coincidem';
-        error.classList.add('show');
-        return;
-      }
-
-      if (password.length < 6) {
-        error.innerHTML = '❌ Mínimo 6 caracteres';
-        error.classList.add('show');
-        return;
-      }
-
-      btn.disabled = true;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(res => {
-          console.log('✅ Conta criada');
-        })
-        .catch(e => {
-          btn.disabled = false;
-          error.innerHTML = '❌ Email já registrado';
-          error.classList.add('show');
-        });
-    }
-
-    function fazerLogout() {
-      if (confirm('Sair?')) {
-        auth.signOut();
-      }
-    }
-
-    function toggleForm() {
-      document.getElementById('loginForm').style.display = 
-        document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
-      document.getElementById('registroForm').style.display = 
-        document.getElementById('registroForm').style.display === 'none' ? 'block' : 'none';
-    }
-
-    // ══ CARREGAR DADOS ══
-    function carregarDados() {
-      db.collection('eventos').orderBy('dia', 'asc').onSnapshot(snap => {
-        dados.eventos = [];
-        snap.forEach(d => dados.eventos.push({ id: d.id, ...d.data() }));
-        renderizarEventos();
-      });
-
-      db.collection('proximaGira').onSnapshot(snap => {
-        if (!snap.empty) {
-          dados.proximaGira = snap.docs[0].data();
-          renderizarProxima();
-        }
-      });
-
-      db.collection('galeria').onSnapshot(snap => {
-        dados.galeria = [];
-        snap.forEach(d => dados.galeria.push({ id: d.id, ...d.data() }));
-        renderizarFotos();
-      });
-
-      db.collection('cursos').onSnapshot(snap => {
-        if (!snap.empty) {
-          const c = snap.docs[0].data();
-          dados.cursos = c.aulas || [];
-          renderizarAulas();
-        }
-      });
-    }
-
-    // ══ AUTH ══
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        usuario = user;
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('header').style.display = 'flex';
-        document.getElementById('container').style.display = 'block';
-        carregarDados();
-      } else {
-        usuario = null;
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('header').style.display = 'none';
-        document.getElementById('container').style.display = 'none';
-      }
-    });
-
-    // ══ EVENTOS ══
-    function renderizarEventos() {
-      document.getElementById('listaEventos').innerHTML = dados.eventos.map(e => `
-        <div class="item">
-          <div class="item-info">
-            <div class="item-title">${e.nome}</div>
-            <div class="item-meta">${e.dia}/${e.mes} • ${e.semana} • ${e.hora}</div>
-          </div>
-          <div class="item-actions">
-            <button class="btn-small danger" onclick="removerEvento('${e.id}')">X</button>
-          </div>
-        </div>
-      `).join('') || '<p style="color: var(--texto-cl); padding: 1rem;">Nenhum evento</p>';
-    }
-
-    async function adicionarEvento() {
-      const dia = document.getElementById('newEvtDia').value.trim();
-      const mes = document.getElementById('newEvtMes').value.trim();
-      const semana = document.getElementById('newEvtSemana').value.trim();
-      const hora = document.getElementById('newEvtHora').value.trim();
-      const nome = document.getElementById('newEvtNome').value.trim();
-
-      if (!dia || !mes || !semana || !hora || !nome) {
-        alerta('❌ Preencha todos!', 'error');
-        return;
-      }
-
-      try {
-        await db.collection('eventos').doc(String(Date.now())).set({ dia, mes, semana, nome, hora });
-        document.getElementById('newEvtDia').value = '';
-        document.getElementById('newEvtMes').value = '';
-        document.getElementById('newEvtSemana').value = '';
-        document.getElementById('newEvtHora').value = '';
-        document.getElementById('newEvtNome').value = '';
-        alerta('✅ Adicionado!', 'success');
-      } catch (e) {
-        alerta('❌ Erro', 'error');
-      }
-    }
-
-    async function removerEvento(id) {
-      if (confirm('Remover?')) {
-        try {
-          await db.collection('eventos').doc(id).delete();
-          alerta('✅ Removido!', 'success');
-        } catch (e) {
-          alerta('❌ Erro', 'error');
-        }
-      }
-    }
-
-    // ══ PRÓXIMA GIRA ══
-    function renderizarProxima() {
-      const p = dados.proximaGira;
-      if (p) {
-        document.getElementById('proxData').value = p.data || '';
-        document.getElementById('proxDia').value = p.dia || '';
-        document.getElementById('proxHora').value = p.hora || '';
-        document.getElementById('proxNome').value = p.nome || '';
-        document.getElementById('proxDesc').value = p.descricao || '';
-        document.getElementById('proxImg').value = p.imagem || '';
-      }
-    }
-
-    async function salvarProxima() {
-      try {
-        await db.collection('proximaGira').doc('gira1').set({
-          data: document.getElementById('proxData').value,
-          dia: document.getElementById('proxDia').value,
-          hora: document.getElementById('proxHora').value,
-          nome: document.getElementById('proxNome').value,
-          descricao: document.getElementById('proxDesc').value,
-          imagem: document.getElementById('proxImg').value
-        });
-        alerta('✅ Salvo!', 'success');
-      } catch (e) {
-        alerta('❌ Erro', 'error');
-      }
-    }
-
-    // ══ GALERIA COM UPLOAD ══
-    function prepararFoto() {
-      const file = document.getElementById('newFotoFile').files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        fotoParaUpload = {
-          file: file,
-          base64: e.target.result,
-          nome: file.name
-        };
-        document.querySelector('.file-label').textContent = '✅ ' + file.name;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function renderizarFotos() {
-      document.getElementById('listaFotos').innerHTML = dados.galeria.map(f => `
-        <div class="item">
-          <img src="${f.url}" alt="${f.titulo}" class="item-img" onerror="this.style.display='none'">
-          <div class="item-info">
-            <div class="item-title">${f.titulo}</div>
-            <div class="item-meta">${f.url.substring(0, 40)}...</div>
-          </div>
-          <div class="item-actions">
-            <button class="btn-small danger" onclick="removerFoto('${f.id}')">X</button>
-          </div>
-        </div>
-      `).join('') || '<p style="color: var(--texto-cl); padding: 1rem;">Nenhuma foto</p>';
-    }
-
-    async function adicionarFoto() {
-      const titulo = document.getElementById('newFotoTitulo').value.trim();
-
-      if (!titulo) {
-        alerta('❌ Preencha o título!', 'error');
-        return;
-      }
-
-      if (!fotoParaUpload) {
-        alerta('❌ Selecione uma imagem!', 'error');
-        return;
-      }
-
-      try {
-        const progress = document.getElementById('uploadProgress');
-        progress.style.display = 'block';
-        progress.textContent = '⏳ Enviando...';
-
-        // Upload para Firebase Storage
-        const ref = storage.ref('fotos/' + Date.now() + '_' + fotoParaUpload.nome);
-        const snapshot = await ref.putString(fotoParaUpload.base64, 'data_url');
-        const url = await snapshot.ref.getDownloadURL();
-
-        // Salvar no Firestore
-        await db.collection('galeria').doc(String(Date.now())).set({
-          titulo: titulo,
-          url: url
-        });
-
-        document.getElementById('newFotoTitulo').value = '';
-        document.getElementById('newFotoFile').value = '';
-        document.querySelector('.file-label').textContent = '📸 Selecione uma foto';
-        fotoParaUpload = null;
-        progress.style.display = 'none';
-
-        alerta('✅ Foto enviada!', 'success');
-      } catch (e) {
-        console.error(e);
-        alerta('❌ Erro ao enviar: ' + e.message, 'error');
-      }
-    }
-
-    async function removerFoto(id) {
-      if (confirm('Remover?')) {
-        try {
-          await db.collection('galeria').doc(id).delete();
-          alerta('✅ Removido!', 'success');
-        } catch (e) {
-          alerta('❌ Erro', 'error');
-        }
-      }
-    }
-
-    // ══ CURSOS ══
-    function renderizarAulas() {
-      document.getElementById('listaAulas').innerHTML = dados.cursos.map((a, i) => `
-        <div class="item">
-          <div class="item-info">
-            <div class="item-title">Aula ${a.numero}: ${a.titulo}</div>
-            <div class="item-meta">YouTube: ${a.youtube}</div>
-          </div>
-          <div class="item-actions">
-            <button class="btn-small danger" onclick="removerAula(${i})">X</button>
-          </div>
-        </div>
-      `).join('') || '<p style="color: var(--texto-cl); padding: 1rem;">Nenhuma aula</p>';
-    }
-
-    async function adicionarAula() {
-      const numero = parseInt(document.getElementById('newAulaNumero').value);
-      const titulo = document.getElementById('newAulaTitulo').value.trim();
-      const youtube = document.getElementById('newAulaYoutube').value.trim();
-
-      if (!numero || !titulo || !youtube) {
-        alerta('❌ Preencha todos!', 'error');
-        return;
-      }
-
-      try {
-        const novas = [...dados.cursos, { numero, titulo, youtube }];
-        await db.collection('cursos').doc('curso1').set({ aulas: novas });
-        document.getElementById('newAulaNumero').value = '';
-        document.getElementById('newAulaTitulo').value = '';
-        document.getElementById('newAulaYoutube').value = '';
-        alerta('✅ Adicionado!', 'success');
-      } catch (e) {
-        alerta('❌ Erro', 'error');
-      }
-    }
-
-    async function removerAula(i) {
-      if (confirm('Remover?')) {
-        try {
-          const novas = dados.cursos.filter((_, idx) => idx !== i);
-          await db.collection('cursos').doc('curso1').set({ aulas: novas });
-          alerta('✅ Removido!', 'success');
-        } catch (e) {
-          alerta('❌ Erro', 'error');
-        }
-      }
-    }
-
-    // ══ UI ══
-    function mudarTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      event.target.classList.add('active');
-    }
-
-    function alerta(msg, tipo) {
-      const cont = document.getElementById('container');
-      if (!cont) return;
-      const al = document.createElement('div');
-      al.className = `alert alert-${tipo}`;
-      al.innerHTML = `<span>${msg}</span>`;
-      cont.insertBefore(al, cont.firstChild);
-      setTimeout(() => al.remove(), 3000);
-    }
-
-    console.log('✅ Admin pronto!');
   
-    // Preview Próxima Gira - Exibe thumbnail antes do upload
-    function previewProximaGira(input) {
-        const file = input.files[0];
-        if (!file) return;
-
-        const preview = document.getElementById('proximaGiraPreview');
-        const placeholder = document.getElementById('proximaGiraPlaceholder');
-        const fileNameEl = document.getElementById('proximaGiraFileName');
-        const btnEnviar = document.getElementById('btnEnviarProxima');
-        const btnTrocar = document.getElementById('btnTrocarProxima');
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = '<img src="' + e.target.result + '" style="width:100%;border-radius:8px;max-height:300px;object-fit:contain;" alt="Preview">';
-            preview.style.display = 'block';
-            placeholder.style.display = 'none';
-            fileNameEl.textContent = '📄 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
-            fileNameEl.style.display = 'block';
-            btnEnviar.style.display = 'block';
-            btnTrocar.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-
-    // Upload Próxima Gira - Simples e descomplicado
-    async function uploadProximaGira() {
-        const fileInput = document.getElementById('proximaGiraFile');
-            const file = fileInput.files[0];
-                
-                    if (!file) {
-                            alert('❌ Selecione uma imagem!', 'error');
-                                    return;
-                                        }
-                                            
-                                                try {
-                                                        const progress = document.getElementById('uploadProgressProxima');
-                                                                progress.style.display = 'block';
-                                                                        progress.textContent = '📤 Enviando...';
-
-                                                  
-                                                                                        // Fazer upload para Firebase Storage com nome fixo
-                                                                                                const storageRef = firebase.storage().ref();
-                                                                                                        const fileRef = storageRef.child('proximaGira/banner.jpg');
-                                                                                                                
-                                                                                                                        const uploadTask = fileRef.put(file);
-                                                                                                                                
-                                                                                                                                        uploadTask.on('state_changed', (snapshot) => {
-                                                                                                                                                    // Aqui você pode mostrar progresso se quiser
-                                                                                                                                                            });
-                                                                                                                                                                    
-                                                                                                                                                                            await uploadTask;
-                                                                                                                                                                                    
-                                                                                                                                                                                            // Obter URL da imagem
-                                                                                                                                                                                                    const url = await fileRef.getDownloadURL();
-                                                                                                                                                                                                            
-                                                                                                                                                                                                                    // Salvar referência no Firestore
-                                                                                                                                                                                                                            await firebase.firestore().collection('configuracoes').doc('proximaGira').set({
-                                                                                                                                                                                                                                        imageUrl: url,
-                                                                                                                                                                                                                                                    timestamp: new Date()
-                                                                                                                                                                                                                                                            });
-                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                            progress.textContent = '✅ Banner enviado com sucesso!';
-                                                                                                                                                                                                                                                                                    progress.style.color = 'var(--verde)';
-                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                    // Limpar input
-                                                                                                                                                                                                                                                                                                            fileInput.value = '';
-                                                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                            // Mostrar preview
-                                                                                                                                                                                                                                                                                                                                    document.getElementById('proximaGiraPreview').innerHTML = 
-                                                                                                                                                                                                                                                                                                                                                `<img src="${url}" alt="Próxima Gira" style="max-width: 100%; border-radius: 8px; margin-top: 1rem;">`;
-                                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                                            } catch (erro) {
-                                                                                                                                                                                                                                                                                                                                                                    console.error(erro);
-                                                                                                                                                                                                                                                                                                                                                                            alert('❌ Erro ao enviar imagem: ' + erro.message, 'error');
-                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                }
-
-  
-
-                                                                                                                                                                                                                                                                                                                                                                                // Função para alternar status de cursos
-                                                                                                                                                                                                                                                                                                                                                                                async function alternarCursos() {
-                                                                                                                                                                                                                                                                                                                                                                                    const checkbox = document.getElementById('cursosAtivo');
-                                                                                                                                                                                                                                                                                                                                                                                        const ativo = checkbox.checked;
-                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                try {
-                                                                                                                                                                                                                                                                                                                                                                                                        await firebase.firestore().collection('configuracoes').doc('cursos').set({
-                                                                                                                                                                                                                                                                                                                                                                                                                    ativo: ativo,
-                                                                                                                                                                                                                                                                                                                                                                                                                                ultimaAtualizacao: new Date()
-                                                                                                                                                                                                                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        alert(`✅ Cursos ${ativo ? 'ativado' : 'desativado'} com sucesso!`, 'success');
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            } catch (erro) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    console.error('Erro ao salvar config de cursos:', erro);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            alert('❌ Erro ao salvar configuração', 'error');
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    checkbox.checked = !ativo;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        // Carregar status de cursos ao iniciar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        firebase.firestore().collection('configuracoes').doc('cursos').get().then(doc => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if (doc.exists) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    document.getElementById('cursosAtivo').checked = doc.data().ativo;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }).catch(erro => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            console.log('Config de cursos não encontrada, padrão: desativado');
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            });
-  </script>
-
-</body>
-</html>
+      <script type="module">
+              import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+              import { getStorage, ref, uploadBytes, getDownloadURL, listAll, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+              import { getDatabase, ref as dbRef, set, get, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+      
+              const firebaseConfig = {
+                            apiKey: "AIzaSyB8TvBdzL9g-Tq4X2FDHj-4vvPqx0l4jEE",
+                            authDomain: "aruanda-88a0d.firebaseapp.com",
+                            projectId: "aruanda-88a0d",
+                            storageBucket: "aruanda-88a0d.appspot.com",
+                            databaseURL: "https://aruanda-88a0d-default-rtdb.firebaseio.com",
+                            messagingSenderId: "595948020595",
+                            appId: "1:595948020595:web:3f892e2e15d2e3854e0c39"
+              };
+      
+              const app = initializeApp(firebaseConfig);
+              const storage = getStorage(app);
+              const database = getDatabase(app);
+      
+              let arquivoAgenda = null, arquivoGira = null, arquivosGaleria = [];
+      
+              window.switchTab = function(tabName) {
+                            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                            document.getElementById(tabName).classList.add('active');
+                            event.target.classList.add('active');
+                            if (tabName === 'gira') carregarGira();
+                            else if (tabName === 'galeria') carregarGaleria();
+                            else if (tabName === 'eventos') carregarEventos();
+              };
+      
+              window.handleDragOver = function(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); };
+              window.handleDragLeave = function(e) { e.currentTarget.classList.remove('dragover'); };
+              window.handleDrop = function(e, type) {
+                            e.preventDefault(); e.currentTarget.classList.remove('dragover');
+                            const files = e.dataTransfer.files;
+                            if (files.length > 0) {
+                                              if (type === 'galeria') document.getElementById('galeriaInput').files = files;
+                                                                else { const input = document.getElementById(type + 'Input'); const dt = new DataTransfer(); dt.items.add(files[0]); input.files = dt.files; handleFileSelect({target: input}, type); }
+                            }
+              };
+      
+              window.handleFileSelect = function(event, type) {
+                            const files = event.target.files;
+                            if (type === 'agenda') { if (files.length) { arquivoAgenda = files[0]; mostrarPreview(files[0], 'agendaPreview'); } }
+                            else if (type === 'gira') { if (files.length) { arquivoGira = files[0]; mostrarPreview(files[0], 'giraPreview'); } }
+                            else if (type === 'galeria') arquivosGaleria = Array.from(files);
+              };
+      
+              function mostrarPreview(file, elementId) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                              const preview = document.getElementById(elementId);
+                                              preview.src = e.target.result; preview.style.display = 'block';
+                            };
+                            reader.readAsDataURL(file);
+              }
+      
+              window.adicionarEvento = async function() {
+                            const dia = document.getElementById('eventoDia').value;
+                            const mes = document.getElementById('eventoMes').value;
+                            const semana = document.getElementById('eventoSemana').value;
+                            const hora = document.getElementById('eventoHora').value;
+                            const nome = document.getElementById('eventoNome').value;
+                            const descricao = document.getElementById('eventoDescricao').value;
+                            if (!dia || !mes || !semana || !hora || !nome) { mostrarMensagem('Preencha todos os campos obrigatórios', 'error', 'mensagemEvento'); return; }
+                            try {
+                                              const eventoData = { dia, mes, semana, hora, nome, descricao, imagemAgenda: '', dataCriacao: new Date().toISOString() };
+                                              if (arquivoAgenda) {
+                                                                    const fileName = 'eventos/agenda_' + Date.now() + '_' + arquivoAgenda.name;
+                                                                    const storageRef = ref(storage, fileName);
+                                                                    await uploadBytes(storageRef, arquivoAgenda);
+                                                                    eventoData.imagemAgenda = fileName;
+                                                                    arquivoAgenda = null;
+                                              }
+                                                                await set(dbRef(database, 'eventos/' + Date.now()), eventoData);
+                                              mostrarMensagem('✅ Evento adicionado com sucesso!', 'success', 'mensagemEvento');
+                                              document.getElementById('eventoDia').value = '';
+                                              document.getElementById('eventoMes').value = '';
+                                              document.getElementById('eventoSemana').value = '';
+                                              document.getElementById('eventoHora').value = '';
+                                              document.getElementById('eventoNome').value = '';
+                                              document.getElementById('eventoDescricao').value = '';
+                                              document.getElementById('agendaPreview').style.display = 'none';
+                                              carregarEventos();
+                            } catch (error) { mostrarMensagem('❌ Erro ao adicionar evento: ' + error.message, 'error', 'mensagemEvento'); }
+              };
+      
+              window.carregarEventos = async function() {
+                            try {
+                                              const snapshot = await get(dbRef(database, 'eventos'));
+                                              const listaEventos = document.getElementById('listaEventos');
+                                              listaEventos.innerHTML = '';
+                                              if (snapshot.exists()) {
+                                                                    const eventos = snapshot.val();
+                                                                    Object.keys(eventos).forEach(key => {
+                                                                                              const evento = eventos[key];
+                                                                                              const card = document.createElement('div');
+                                                                                              card.className = 'item-card';
+                                                                                              card.innerHTML = `<div class="item-info"><div class="item-title">${evento.nome}</div><div class="item-date">${evento.dia}/${evento.mes} • ${evento.semana} • ${evento.hora}</div></div><button class="delete-btn" onclick="deletarEvento('${key}')">🗑️ Excluir</button>`;
+                                                                                              listaEventos.appendChild(card);
+                                                                    });
+                                              } else listaEventos.innerHTML = '<p style="color: var(--creme);">Nenhum evento cadastrado</p>';
+                            } catch (error) { console.error('Erro ao carregar eventos:', error); }
+              };
+      
+              window.deletarEvento = async function(eventoId) {
+                            if (confirm('Tem certeza que deseja excluir este evento?')) {
+                                              try {
+                                                                    await remove(dbRef(database, 'eventos/' + eventoId));
+                                                                    mostrarMensagem('✅ Evento excluído com sucesso!', 'success', 'mensagemEvento');
+                                                                    carregarEventos();
+                                              } catch (error) { mostrarMensagem('❌ Erro ao excluir evento: ' + error.message, 'error', 'mensagemEvento'); }
+                            }
+              };
+      
+              window.salvarGira = async function() {
+                            const dia = document.getElementById('giraDia').value;
+                            const mes = document.getElementById('giraMes').value;
+                            const semana = document.getElementById('giraSemana').value;
+                            const hora = document.getElementById('giraHora').value;
+                            const nome = document.getElementById('giraNome').value;
+                            const descricao = document.getElementById('giraDescricao').value;
+                            const imagem = document.getElementById('giraImagem').value;
+                            if (!dia || !mes || !semana || !hora || !nome) { mostrarMensagem('Preencha todos os campos obrigatórios', 'error', 'mensagemGira'); return; }
+                            try {
+                                              const giraData = { dia, mes, semana, hora, nome, descricao, imagem, imagemBanner: '', dataAtualizacao: new Date().toISOString() };
+                                              if (arquivoGira) {
+                                                                    const fileName = 'gira/banner_' + Date.now() + '_' + arquivoGira.name;
+                                                                    const storageRef = ref(storage, fileName);
+                                                                    await uploadBytes(storageRef, arquivoGira);
+                                                                    giraData.imagemBanner = fileName;
+                                                                    arquivoGira = null;
+                                              }
+                                                                await set(dbRef(database, 'proximaGira'), giraData);
+                                              mostrarMensagem('✅ Próxima gira salva com sucesso!', 'success', 'mensagemGira');
+                                              carregarGira();
+                            } catch (error) { mostrarMensagem('❌ Erro ao salvar: ' + error.message, 'error', 'mensagemGira'); }
+              };
+      
+              window.carregarGira = async function() {
+                            try {
+                                              const snapshot = await get(dbRef(database, 'proximaGira'));
+                                              if (snapshot.exists()) {
+                                                                    const gira = snapshot.val();
+                                                                    document.getElementById('giraDia').value = gira.dia || '';
+                                                                    document.getElementById('giraMes').value = gira.mes || '';
+                                                                    document.getElementById('giraSemana').value = gira.semana || '';
+                                                                    document.getElementById('giraHora').value = gira.hora || '';
+                                                                    document.getElementById('giraNome').value = gira.nome || '';
+                                                                    document.getElementById('giraDescricao').value = gira.descricao || '';
+                                                                    document.getElementById('giraImagem').value = gira.imagem || '';
+                                                                    document.getElementById('giraPreviewNome').textContent = gira.nome || 'Sem nome';
+                                                                    document.getElementById('giraPreviewData').textContent = (gira.dia ? gira.dia + '/' + gira.mes : '') + (gira.semana ? ' • ' + gira.semana : '') + (gira.hora ? ' • ' + gira.hora : '');
+                                              }
+                            } catch (error) { console.error('Erro ao carregar gira:', error); }
+              };
+      
+              window.enviarGaleria = async function() {
+                            if (arquivosGaleria.length === 0) { mostrarMensagem('Selecione pelo menos uma foto', 'error', 'mensagemGaleria'); return; }
+                            try {
+                                              const descricao = document.getElementById('galeriaDescricao').value;
+                                              for (let arquivo of arquivosGaleria) {
+                                                                    const fileName = 'galeria/' + Date.now() + '_' + arquivo.name;
+                                                                    const storageRef = ref(storage, fileName);
+                                                                    await uploadBytes(storageRef, arquivo);
+                                                                    const id = Date.now() + Math.random();
+                                                                    await set(dbRef(database, 'galeria/' + id), { arquivo: fileName, descricao: descricao || 'Sem descrição', dataCriacao: new Date().toISOString() });
+                                              }
+                                              mostrarMensagem('✅ Fotos enviadas com sucesso!', 'success', 'mensagemGaleria');
+                                              arquivosGaleria = [];
+                                              document.getElementById('galeriaDescricao').value = '';
+                                              document.getElementById('galeriaInput').value = '';
+                                              carregarGaleria();
+                            } catch (error) { mostrarMensagem('❌ Erro ao enviar fotos: ' + error.message, 'error', 'mensagemGaleria'); }
+              };
+      
+              window.carregarGaleria = async function() {
+                            try {
+                                              const snapshot = await get(dbRef(database, 'galeria'));
+                                              const grid = document.getElementById('galeriaGrid');
+                                              grid.innerHTML = '';
+                                              if (snapshot.exists()) {
+                                                                    const fotos = snapshot.val();
+                                                                    for (let id in fotos) {
+                                                                                              const foto = fotos[id];
+                                                                                              const item = document.createElement('div');
+                                                                                              item.className = 'gallery-item';
+                                                                                              const fileRef = ref(storage, foto.arquivo);
+                                                                                              try {
+                                                                                                                            const url = await getDownloadURL(fileRef);
+                                                                                                                            item.innerHTML = `<img src="${url}" alt="Foto galeria"><div class="gallery-item-info"><p>${foto.descricao}</p></div><button class="gallery-item-delete" onclick="deletarFoto('${id}', '${foto.arquivo}')">🗑️</button>`;
+                                                                                                } catch (e) { item.innerHTML = '<p>Erro ao carregar imagem</p>'; }
+                                                                                                                        grid.appendChild(item);
+                                                                    }
+                                              } else grid.innerHTML = '<p style="color: var(--creme);">Nenhuma foto na galeria</p>';
+                            } catch (error) { console.error('Erro ao carregar galeria:', error); }
+              };
+      
+              window.deletarFoto = async function(id, arquivo) {
+                            if (confirm('Tem certeza que deseja excluir esta foto?')) {
+                                              try {
+                                                                    const fileRef = ref(storage, arquivo);
+                                                                    await deleteObject(fileRef);
+                                                                    await remove(dbRef(database, 'galeria/' + id));
+                                                                    mostrarMensagem('✅ Foto excluída com sucesso!', 'success', 'mensagemGaleria');
+                                                                    carregarGaleria();
+                                              } catch (error) { mostrarMensagem('❌ Erro ao excluir foto: ' + error.message, 'error', 'mensagemGaleria'); }
+                            }
+              };
+      
+              function mostrarMensagem(msg, tipo, elementId) {
+                            const elemento = document.getElementById(elementId);
+                            elemento.className = tipo === 'error' ? 'error-msg' : 'success-msg';
+                            elemento.textContent = msg;
+                            setTimeout(() => { elemento.textContent = ''; elemento.className = ''; }, 5000);
+              }
+      
+              carregarEventos();
+      </script>
+  </body>
+</html>html></small></small></p></label>
+                                            </div></div></small></p></label></h1>
+                  </header>
+  </body>
+      </style></title>
+  </head>
