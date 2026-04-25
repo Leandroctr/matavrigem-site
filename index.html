@@ -804,47 +804,17 @@
   </section>
 
   <!-- PRÓXIMA GIRA -->
-<section id="proximaGira">
-  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 2.5vw, 2.6rem); color: var(--verde); margin-bottom: .8rem;">
-    Próxima Gira
-  </h2>
+  <section id="proximaGira">
+    <div class="container">
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 2.5vw, 2.6rem); color: var(--verde); margin-bottom: .8rem;">
+        Próxima Gira
+      </h2>
 
-  <div class="container">
-    <div class="prox-grid" id="proximaGiraGrid">
-      <!-- Preenchido por JavaScript -->
+      <div class="prox-grid" id="proximaGiraGrid">
+        <!-- Preenchido por JavaScript -->
+      </div>
     </div>
-  </div>
-</section>
-
-  <!-- CURSOS -->
-          <section id="cursos" class="cursos-section" style="display: none;">
-                      <div class="container">
-                                      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">🎓 Nossos Cursos</h2>
-                                                      <div class="cursos-grid" id="cursosGrid">
-                                                                          <div class="curso-card" style="background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%); padding: 2rem; border-radius: 12px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(27, 58, 34, 0.3);">
-                                                                                                  <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">⏰ EM BREVE</h3>
-                                                                                                                          <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Estamos preparando cursos incríveis para você aprofundar seus conhecimentos espirituais.</p>
-                                                                                                                                                  <button class="btn btn-sol" disabled style="opacity: 0.6; cursor: not-allowed;">Indisponível Agora</button>
-                                                                                                                                                                      </div>
-                                                                                                                                                                                      </div>
-                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                          </section>
-                                                                                                                                                                                                        
-                                                                                                                                                                                                                <!-- VÍDEOS YOUTUBE -->
-                                                                                                                                                                                                                        <section id="videos" style="padding: 3rem 1rem; background: linear-gradient(180deg, rgba(243, 242, 226, 0.5) 0%, transparent 100%);">
-                                                                                                                                                                                                                                    <div class="container">
-                                                                                                                                                                                                                                                    <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">📺 Nossos Vídeos</h2>
-                                                                                                                                                                                                                                                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;" id="videosGrid">
-                                                                                                                                                                                                                                                                                        <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                                                                                                                                                                                                                                                                                                <iframe width="100%" height="200" src="https://www.youtube.com/embed/" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none;"></iframe>
-                                                                                                                                                                                                                                                                                                                                        <div style="padding: 1.5rem; text-align: center;">
-                                                                                                                                                                                                                                                                                                                                                                    <p style="color: var(--texto-cl); font-weight: bold;">Vídeos em breve!</p>
-                                                                                                                                                                                                                                                                                                                                                                                                <p style="color: var(--texto); font-size: 0.9rem;">Acompanhe nosso YouTube para conteúdos inspiradores</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </section>-->
+  </section>
 
   <!-- AGENDA -->
   <section id="agenda">
@@ -887,26 +857,6 @@
   </section>
 
   <!-- CONTATO -->
-
-   <!-- CAPTURA DE DADOS - LISTA DE TRANSMISSÃO -->
-          <section id="capturaLista" style="padding: 4rem 1rem; background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%); color: white;">
-                      <div class="container">
-                                      <div style="max-width: 600px; margin: 0 auto; text-align: center;">
-                                                          <h2 style="font-size: 2rem; margin-bottom: 1rem; font-family: 'Cormoran Garamond', serif;">✨ Receba Atualizações Exclusivas</✨></h2>
-                                                                              <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95;">Fique por dentro de novos conteúdos, eventos e atualizações do nosso terreiro</p>
-                                                                                                  
-                                                                                                                      <form id="formCapturaLista" style="display: flex; flex-direction: column; gap: 1rem;">
-                                                                                                                                              <input type="email" id="emailCaptura" placeholder="📧 Seu email" required style="padding: 12px; border: none; border-radius: 6px; font-size: 1rem;">
-                                                                                                                                                                      <input type="tel" id="whatsappCaptura" placeholder="📱 WhatsApp (opcional)" style="padding: 12px; border: none; border-radius: 6px; font-size: 1rem;">
-                                                                                                                                                                                              <button type="button" onclick="adicionarListaTransmissao()" class="btn" style="background: white; color: var(--verde); font-weight: bold; padding: 12px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;">
-                                                                                                                                                                                                                          ✓ Adicionar à Lista
-                                                                                                                                                                                                                                                  </button>
-                                                                                                                                                                                                                                                                      </form>
-                                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                                                              <p id="msgCaptura" style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;"></p>
-                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                          </div>
-                                                                                                                                                                                                                                                                                                                                                  </section>-->
   <section id="contato">
     <div class="container">
       <p class="sec-label">Fale conosco</p>
@@ -941,7 +891,7 @@
     <div class="footer-line"></div>
     <div class="footer-copy">© 2025 Aruanda de Mata Virgem · Todos os direitos reservados</div>
     <div class="footer-admin">
-      <a href="admin-firebase.html" target="_blank">🔒 Painel Administrativo</a>
+      <a href="admin.html" target="_blank">🔒 Painel Administrativo</a>
     </div>
   </footer>
 
@@ -968,295 +918,200 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
-      authDomain: "mata-virgem.firebaseapp.com",
-      projectId: "mata-virgem",
-      storageBucket: "mata-virgem.firebasestorage.app",
-      messagingSenderId: "351134240123",
-      appId: "1:351134240123:web:86a041fee58b856ea3c1de",
-      measurementId: "G-KM7DHTH737"
-    };
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
+    authDomain: "mata-virgem.firebaseapp.com",
+    projectId: "mata-virgem",
+    storageBucket: "mata-virgem.firebasestorage.app",
+    messagingSenderId: "351134240123",
+    appId: "1:351134240123:web:86a041fee58b856ea3c1de",
+    measurementId: "G-KM7DHTH737"
+  };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    let dados = { eventos: [], proximaGira: {}, galeria: [] };
+  let dados = { eventos: [], proximaGira: {}, galeria: [] };
 
-    // Carregar dados do Firestore em tempo real
-    async function carregarDados() {
-      try {
-        // Eventos
-        const eventosRef = collection(db, 'eventos');
-        const qEventos = query(eventosRef, orderBy('dia', 'asc'));
-        onSnapshot(qEventos, (snapshot) => {
-          dados.eventos = [];
-          snapshot.forEach((doc) => {
-            dados.eventos.push({ id: doc.id, ...doc.data() });
-          });
-          renderizarAgenda();
+  // Carregar dados do Firestore em tempo real
+  async function carregarDados() {
+    try {
+      // Eventos
+      const eventosRef = collection(db, 'eventos');
+      const qEventos = query(eventosRef, orderBy('dia', 'asc'));
+      onSnapshot(qEventos, (snapshot) => {
+        dados.eventos = [];
+        snapshot.forEach((doc) => {
+          dados.eventos.push({ id: doc.id, ...doc.data() });
         });
+        renderizarAgenda();
+      });
 
-        // Próxima Gira
-        const qProxima = query(collection(db, 'proximaGira'));
-        onSnapshot(qProxima, (snapshot) => {
-          if (!snapshot.empty) {
-            dados.proximaGira = snapshot.docs[0].data();
-            renderizarProximaGira();
-            renderizarProximaHero();
-          }
+      // Próxima Gira
+      const qProxima = query(collection(db, 'proximaGira'));
+      onSnapshot(qProxima, (snapshot) => {
+        if (!snapshot.empty) {
+          dados.proximaGira = snapshot.docs[0].data();
+          renderizarProximaGira();
+          renderizarProximaHero();
+        }
+      });
+
+      // Galeria
+      const qGaleria = query(collection(db, 'galeria'));
+      onSnapshot(qGaleria, (snapshot) => {
+        dados.galeria = [];
+        snapshot.forEach((doc) => {
+          dados.galeria.push({ id: doc.id, ...doc.data() });
         });
+        renderizarGaleria();
+      });
 
-        // Galeria
-        const qGaleria = query(collection(db, 'galeria'));
-        onSnapshot(qGaleria, (snapshot) => {
-          dados.galeria = [];
-          snapshot.forEach((doc) => {
-            dados.galeria.push({ id: doc.id, ...doc.data() });
-          });
-          renderizarGaleria();
-        });
-
-      } catch (erro) {
-        console.error('Erro ao carregar dados:', erro);
-      }
+    } catch (erro) {
+      console.error('Erro ao carregar dados:', erro);
     }
+  }
 
-    function renderizarProximaHero() {
-      const card = document.getElementById('proximaHeroCard');
-      const prox = dados.proximaGira;
-      if (prox && prox.data) {
-        card.innerHTML = `
-          <p class="proxima-hero-label">Próxima gira</p>
-          <p class="proxima-hero-nome">${prox.data} — ${prox.nome}</p>
-          <p class="proxima-hero-data">${prox.dia} · ${prox.hora}</p>
-        `;
-      }
-    }
-
-    function renderizarProximaGira() {
-      const grid = document.getElementById('proximaGiraGrid');
-      const prox = dados.proximaGira;
-      if (!prox.data) return;
-
-      grid.innerHTML = `
-        <div class="prox-img">
-          <img src="${prox.imagem}" alt="${prox.nome}"/>
-        </div>
-        <div class="prox-info">
-          <p class="sec-label">Próxima gira</p>
-          <h2>${prox.data} — <em>${prox.nome}</em></h2>
-          <p>${prox.descricao}</p>
-          <p>
-            📅 <strong>${prox.dia}, ${prox.data}</strong><br>
-            🕗 <strong>${prox.hora}</strong>
-          </p>
-          <a class="btn-sol" href="#contato" style="margin-top:.5rem">
-            Falar com a casa
-          </a>
-        </div>
+  function renderizarProximaHero() {
+    const card = document.getElementById('proximaHeroCard');
+    const prox = dados.proximaGira;
+    if (prox && prox.data) {
+      card.innerHTML = `
+        <p class="proxima-hero-label">Próxima gira</p>
+        <p class="proxima-hero-nome">${prox.data} — ${prox.nome}</p>
+        <p class="proxima-hero-data">${prox.dia} · ${prox.hora}</p>
       `;
     }
+  }
 
-    function renderizarAgenda() {
-      const lista = document.getElementById('agendaLista');
-      lista.innerHTML = dados.eventos.map(evt => `
-        <div class="evento">
-          <div class="evento-data-box">
-            <div class="evento-dia">${evt.dia}</div>
-            <div class="evento-mes">${evt.mes}</div>
-          </div>
-          <div class="evento-sep"></div>
-          <div class="evento-info">
-            <div class="evento-semana">${evt.semana}</div>
-            <div class="evento-nome">${evt.nome}</div>
-            <div class="evento-hora">◷ ${evt.hora}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderizarGaleria() {
-      const grid = document.getElementById('galeriaGrid');
-      grid.innerHTML = dados.galeria.map((foto, idx) => `
-        <div class="gal-item" onclick="abrirLb(${idx})">
-          <img src="${foto.url}" alt="${foto.titulo}"/>
-          <div class="gal-overlay">
-            <div class="gal-icon-wrap">⊕</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // UI Functions
-    let galeriaAtual = 0;
-    
-    window.abrirLb = function(idx){
-      galeriaAtual = idx;
-      const foto = dados.galeria[idx];
-      if (!foto) return;
-      
-      document.getElementById('lb-img').src = foto.url;
-      document.getElementById('lb-atual').textContent = idx + 1;
-      document.getElementById('lb-total').textContent = dados.galeria.length;
-      document.getElementById('lightbox').classList.add('open');
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '0px';
-    };
-
-    window.fecharLb = function(e){
-      if (e) e.stopPropagation();
-      document.getElementById('lightbox').classList.remove('open');
-      document.body.style.overflow = '';
-      galeriaAtual = 0;
-    };
-
-    window.fecharLbClick = function(e){
-      if (e.target.id === 'lightbox') {
-        fecharLb();
-      }
-    };
-
-    window.proximaFoto = function(e){
-      if (e) e.stopPropagation();
-      galeriaAtual = (galeriaAtual + 1) % dados.galeria.length;
-      abrirLb(galeriaAtual);
-    };
-
-    window.anteriorFoto = function(e){
-      if (e) e.stopPropagation();
-      galeriaAtual = (galeriaAtual - 1 + dados.galeria.length) % dados.galeria.length;
-      abrirLb(galeriaAtual);
-    };
-
-    window.fecharMenu = function(){
-      document.getElementById('hamburger').classList.remove('open');
-      document.getElementById('mobileNav').classList.remove('open');
-    };
-
-    // Scroll
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
-      document.getElementById('btnCanal').classList.toggle('show', window.scrollY > 300);
-    });
-
-    // Hamburger
-    const ham = document.getElementById('hamburger');
-    const mNav = document.getElementById('mobileNav');
-    ham.addEventListener('click', () => {
-      ham.classList.toggle('open');
-      mNav.classList.toggle('open');
-    });
-
-    // Lightbox ESC e navegação teclado
-    document.addEventListener('keydown', e => { 
-      if(e.key==='Escape') fecharLb();
-      if(e.key==='ArrowRight') proximaFoto();
-      if(e.key==='ArrowLeft') anteriorFoto();
-    });
-
-    // Iniciar
-    carregarDados();
-  </script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-<script>
-const config = {
-  apiKey: "AIzaSyCDt7n4hoxQlF0BRLWB_bBouO4A35YsZVY",
-  authDomain: "mata-virgem.firebaseapp.com",
-  projectId: "mata-virgem",
-  storageBucket: "mata-virgem.firebasestorage.app",
-};
-
-firebase.initializeApp(config);
-const db = firebase.firestore();
-</script>
-
-  <script>
-db.collection('eventos')
-  .orderBy('dia', 'asc')
-  .onSnapshot(snapshot => {
-
-    const lista = document.getElementById('agendaLista');
-    if (!lista) return;
-
-    lista.innerHTML = '';
-
-    snapshot.forEach(doc => {
-      const e = doc.data();
-
-      lista.innerHTML += `
-        <div class="evento">
-          <div class="evento-data-box">
-            <div class="evento-dia">${e.dia}</div>
-            <div class="evento-mes">${e.mes}</div>
-          </div>
-
-          <div class="evento-sep"></div>
-
-          <div class="evento-info">
-            <div class="evento-semana">${e.semana}</div>
-            <div class="evento-nome">${e.nome}</div>
-            <div class="evento-hora">${e.hora}</div>
-          </div>
-        </div>
-      `;
-    });
-  });
-</script>
-  <script>
-db.collection('galeria')
-  .onSnapshot(snapshot => {
-
-    const grid = document.getElementById('galeriaGrid');
-    if (!grid) return;
-
-    grid.innerHTML = '';
-
-    snapshot.forEach(doc => {
-      const f = doc.data();
-
-      grid.innerHTML += `
-        <div class="gal-item">
-          <img src="${f.url}" alt="${f.titulo}">
-        </div>
-      `;
-    });
-  });
-</script>
-
-  <script>
-db.collection('proximaGira')
-  .onSnapshot(snapshot => {
-
-    if (snapshot.empty) return;
-
-    const d = snapshot.docs[0].data();
-
+  function renderizarProximaGira() {
     const grid = document.getElementById('proximaGiraGrid');
+    const prox = dados.proximaGira;
+    if (!prox.data) return;
 
-    if (grid) {
-      grid.innerHTML = `
-        <div class="prox-img">
-          <img src="${d.imagem}">
+    grid.innerHTML = `
+      <div class="prox-img">
+        <img src="${prox.imagem}" alt="${prox.nome}"/>
+      </div>
+      <div class="prox-info">
+        <p class="sec-label">Próxima gira</p>
+        <h2>${prox.data} — <em>${prox.nome}</em></h2>
+        <p>${prox.descricao}</p>
+        <p>
+          📅 <strong>${prox.dia}, ${prox.data}</strong><br>
+          🕗 <strong>${prox.hora}</strong>
+        </p>
+        <a class="btn-sol" href="#contato" style="margin-top:.5rem">
+          Falar com a casa
+        </a>
+      </div>
+    `;
+  }
+
+  function renderizarAgenda() {
+    const lista = document.getElementById('agendaLista');
+    lista.innerHTML = dados.eventos.map(evt => `
+      <div class="evento">
+        <div class="evento-data-box">
+          <div class="evento-dia">${evt.dia}</div>
+          <div class="evento-mes">${evt.mes}</div>
         </div>
-
-        <div class="prox-info">
-          <h2>${d.nome}</h2>
-          <p>${d.descricao}</p>
-          <p><strong>${d.data} • ${d.hora}</strong></p>
+        <div class="evento-sep"></div>
+        <div class="evento-info">
+          <div class="evento-semana">${evt.semana}</div>
+          <div class="evento-nome">${evt.nome}</div>
+          <div class="evento-hora">◷ ${evt.hora}</div>
         </div>
-      `;
-    }
+      </div>
+    `).join('');
+  }
 
-  });
-</script>
+  function renderizarGaleria() {
+    const grid = document.getElementById('galeriaGrid');
+    grid.innerHTML = dados.galeria.map((foto, idx) => `
+      <div class="gal-item" onclick="abrirLb(${idx})">
+        <img src="${foto.url}" alt="${foto.titulo}"/>
+        <div class="gal-overlay">
+          <div class="gal-icon-wrap">⊕</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // UI Functions
+  let galeriaAtual = 0;
   
+  window.abrirLb = function(idx){
+    galeriaAtual = idx;
+    const foto = dados.galeria[idx];
+    if (!foto) return;
+    
+    document.getElementById('lb-img').src = foto.url;
+    document.getElementById('lb-atual').textContent = idx + 1;
+    document.getElementById('lb-total').textContent = dados.galeria.length;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '0px';
+  };
+
+  window.fecharLb = function(e){
+    if (e) e.stopPropagation();
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+    galeriaAtual = 0;
+  };
+
+  window.fecharLbClick = function(e){
+    if (e.target.id === 'lightbox') {
+      fecharLb();
+    }
+  };
+
+  window.proximaFoto = function(e){
+    if (e) e.stopPropagation();
+    galeriaAtual = (galeriaAtual + 1) % dados.galeria.length;
+    abrirLb(galeriaAtual);
+  };
+
+  window.anteriorFoto = function(e){
+    if (e) e.stopPropagation();
+    galeriaAtual = (galeriaAtual - 1 + dados.galeria.length) % dados.galeria.length;
+    abrirLb(galeriaAtual);
+  };
+
+  window.fecharMenu = function(){
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileNav').classList.remove('open');
+  };
+
+  // Scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    document.getElementById('btnCanal').classList.toggle('show', window.scrollY > 300);
+  });
+
+  // Hamburger
+  const ham = document.getElementById('hamburger');
+  const mNav = document.getElementById('mobileNav');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    mNav.classList.toggle('open');
+  });
+
+  // Lightbox ESC e navegação teclado
+  document.addEventListener('keydown', e => { 
+    if(e.key==='Escape') fecharLb();
+    if(e.key==='ArrowRight') proximaFoto();
+    if(e.key==='ArrowLeft') anteriorFoto();
+  });
+
+  // Iniciar
+  carregarDados();
+</script>
+
 </body>
 </html>
-
