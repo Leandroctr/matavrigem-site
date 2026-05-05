@@ -325,6 +325,28 @@
     /* ══ AGENDA ══ */
     #agenda { background:var(--creme2); }
 
+    .agenda-banner {
+      margin-bottom: 2.5rem;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(27,58,34,.12);
+    }
+    .agenda-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      max-height: 300px;
+    }
+    @media (max-width: 768px) {
+      .agenda-banner {
+        margin-bottom: 2rem;
+      }
+      .agenda-banner img {
+        max-height: 200px;
+      }
+    }
+
     .agenda-lista {
       display:flex; flex-direction:column;
       margin-top:2.8rem;
@@ -822,6 +844,11 @@
       <p class="sec-label">Calendário</p>
       <h2 class="sec-title">Agenda de <em id="agendaTitulo">Abril</em></h2>
 
+      <!-- Banner Agenda -->
+      <div class="agenda-banner" id="agendaBanner">
+        <img src="" alt="Agenda de eventos" id="agendaBannerImg" style="display: none;"/>
+      </div>
+
       <div class="agenda-lista" id="agendaLista">
         <!-- Preenchido por JavaScript -->
       </div>
@@ -935,7 +962,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  let dados = { eventos: [], proximaGira: {}, galeria: [] };
+  let dados = { eventos: [], proximaGira: {}, galeria: [], agendaBanner: {} };
 
   // Carregar dados do Firestore em tempo real
   async function carregarDados() {
@@ -969,6 +996,15 @@
           dados.galeria.push({ id: doc.id, ...doc.data() });
         });
         renderizarGaleria();
+      });
+
+      // Agenda Banner
+      const qAgendaBanner = query(collection(db, 'agendaBanner'));
+      onSnapshot(qAgendaBanner, (snapshot) => {
+        if (!snapshot.empty) {
+          dados.agendaBanner = snapshot.docs[0].data();
+          renderizarAgendaBanner();
+        }
       });
 
     } catch (erro) {
@@ -1013,6 +1049,16 @@
   }
 
   function renderizarAgenda() {
+    // Carregar banner
+    const banner = document.getElementById('agendaBannerImg');
+    if (dados.agendaBanner && dados.agendaBanner.url) {
+      banner.src = dados.agendaBanner.url;
+      banner.style.display = 'block';
+    } else {
+      banner.style.display = 'none';
+    }
+
+    // Carregar eventos
     const lista = document.getElementById('agendaLista');
     lista.innerHTML = dados.eventos.map(evt => `
       <div class="evento">
@@ -1028,6 +1074,11 @@
         </div>
       </div>
     `).join('');
+  }
+
+  function renderizarAgendaBanner() {
+    // Esta função é chamada automaticamente quando o banner é carregado
+    // A lógica está em renderizarAgenda()
   }
 
   function renderizarGaleria() {
