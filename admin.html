@@ -48,7 +48,59 @@
     .form-group input {
       width: 100%; padding: .7rem; border: 1px solid rgba(200,168,75,.3);
       border-radius: 6px; font-family: inherit; font-size: .95rem; color: var(--texto);
-      background: var(--branco); transition: border-color .3s;
+      background: var(--branco); transition: border-color .3s; cursor: pointer;
+    }
+    .form-group input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 1.2rem;
+      background: linear-gradient(135deg, rgba(200,168,75,.08) 0%, rgba(122,82,48,.04) 100%);
+      border: 2px dashed rgba(200,168,75,.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .3s ease;
+      font-size: .9rem;
+      color: var(--texto-cl);
+      margin-bottom: 0;
+    }
+
+    .form-group input[type="file"]:hover {
+      border-color: rgba(200,168,75,.7);
+      background: linear-gradient(135deg, rgba(200,168,75,.15) 0%, rgba(122,82,48,.08) 100%);
+      box-shadow: 0 4px 12px rgba(200,168,75,.12);
+    }
+
+    .form-group input[type="file"]:focus {
+      outline: none;
+      border-color: var(--dourado);
+      background: linear-gradient(135deg, rgba(200,168,75,.2) 0%, rgba(122,82,48,.1) 100%);
+      box-shadow: 0 0 0 3px rgba(200,168,75,.15);
+    }
+
+    .form-group input[type="file"]::file-selector-button {
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-med) 100%);
+      color: var(--branco);
+      border: none;
+      padding: .7rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 1rem;
+      transition: all .3s ease;
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(27,58,34,.1);
+    }
+
+    .form-group input[type="file"]::file-selector-button:hover {
+      background: linear-gradient(135deg, var(--verde-med) 0%, var(--verde) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(27,58,34,.2);
+    }
+
+    .form-group input[type="file"]::file-selector-button:active {
+      transform: translateY(0);
     }
     .form-group input:focus {
       outline: none; border-color: var(--dourado);
